@@ -1,0 +1,10 @@
+{
+  "name": "logicflow",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "LOGICFLOW — GCSE Computer Science revision game (modular source).",
+  "scripts": {
+    "start": "python3 -m http.server 8000"
+  }
+}

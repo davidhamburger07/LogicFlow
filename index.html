@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOGICFLOW — GCSE Computer Science</title>
+<link rel="icon" href="data:,">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- HUD -->
+<div id="hud">
+  <div class="logo">LOG<span>IC</span>FLOW</div>
+  <div class="hud-center">
+    <span id="phase-badge">PHASE 1</span>
+    <div class="stat"><span class="stat-label">SCORE</span><span class="stat-value" id="score-disp">0</span></div>
+    <div class="stat"><span class="stat-label">STREAK</span><span class="stat-value" id="streak-disp">0×</span></div>
+    <div class="stat" id="lives-stat"><span class="stat-label">LIVES</span><span id="lives-display">♥♥♥</span></div>
+  </div>
+  <div class="hud-right">
+    <div id="vol-wrap">
+      <span id="vol-icon">🔊</span>
+      <input type="range" id="vol-slider" min="0" max="100" value="70">
+    </div>
+  </div>
+</div>
+
+<!-- GAME AREA -->
+<div id="game-area">
+
+  <!-- Timed / Exam Rush countdown -->
+  <div id="timer-wrap" style="display:none;">
+    <div id="timer-track"><div id="timer-fill"></div></div>
+    <span id="timer-num">20</span>
+  </div>
+
+  <!-- Question Card -->
+  <div id="question-card" style="display:none;">
+    <div id="prog-track"><div id="prog-fill"></div></div>
+    <div class="q-meta">
+      <span class="q-badge" id="q-badge">BINARY</span>
+      <span class="q-board-tag" id="q-board">AQA · OCR</span>
+      <span class="q-progress" id="q-prog">Q1 of 5</span>
+    </div>
+    <div id="q-title">—</div>
+    <div id="q-desc" style="display:none;"></div>
+  </div>
+
+  <!-- Visual Panel: canvas / swatch / sort -->
+  <div id="visual-panel">
+    <canvas id="game-canvas" height="160"></canvas>
+    <div id="colour-swatch"></div>
+    <div id="sort-visual"></div>
+  </div>
+
+  <!-- Answer input (question modules render here) -->
+  <div id="answer-area"></div>
+
+  <!-- Hint bar -->
+  <div id="hint-bar" style="display:none;">
+    <button id="hint-btn">💡 HINT</button>
+    <span id="hint-icons">💡💡💡</span>
+    <span style="font-size:10px;color:#aaa;letter-spacing:1px;" id="no-hint-note">+500 PTS BONUS FOR NO HINTS</span>
+  </div>
+
+  <!-- Hint text -->
+  <div id="hint-box"></div>
+
+  <!-- Feedback -->
+  <div id="feedback-box"></div>
+
+  <!-- Explanation (post-answer) -->
+  <div id="explanation-box">
+    <span class="expl-label">EXPLANATION</span>
+    <span id="expl-text"></span>
+  </div>
+
+  <!-- Next button -->
+  <button id="next-btn">NEXT →</button>
+</div>
+
+<!-- ══ FULL SCREENS ══════════════════════════════════ -->
+
+<!-- Start Screen -->
+<div class="fullscreen show" id="start-screen">
+  <div class="fs-eyebrow">GCSE COMPUTER SCIENCE REVISION</div>
+  <div class="fs-title">LOG<em>IC</em>FLOW</div>
+  <div class="fs-sub">Master every topic on the AQA, OCR, and Eduqas GCSE Computer Science specs. Answer questions, earn streaks, unlock knowledge.</div>
+  <button class="fs-btn" id="start-btn">POWER ON</button>
+  <div style="font-size:9px;color:#ccc;letter-spacing:2px;margin-top:4px;">ALL 10 TOPICS · FREE · FULL GCSE SPEC</div>
+</div>
+
+<!-- Main Menu -->
+<div class="fullscreen" id="main-menu">
+  <div class="menu-logo">LOG<em>IC</em>FLOW</div>
+  <div class="menu-tagline">GCSE COMPUTER SCIENCE · REVISION</div>
+  <div class="menu-actions" id="menu-actions"></div>
+  <div class="menu-vol">
+    <span id="menu-vol-icon">🔊</span>
+    <input type="range" id="menu-vol-slider" min="0" max="100" value="70">
+  </div>
+</div>
+
+<!-- Campaign Map -->
+<div class="fullscreen screen" id="campaign-map">
+  <div class="screen-head">
+    <button class="screen-back" id="camp-back">← MENU</button>
+    <div class="screen-title">CAMPAIGN</div>
+    <button class="fs-btn screen-cta" id="camp-continue">CONTINUE</button>
+  </div>
+  <div class="screen-scroll">
+    <div class="camp-trace" id="camp-trace"></div>
+  </div>
+</div>
+
+<!-- Revision Hub -->
+<div class="fullscreen screen" id="revision-hub">
+  <div class="screen-head">
+    <button class="screen-back" id="rev-back">← MENU</button>
+    <div class="screen-title">REVISION</div>
+    <span class="screen-head-spacer"></span>
+  </div>
+  <div class="screen-scroll">
+    <div class="rev-spaced" id="rev-spaced"></div>
+    <div class="rev-grid" id="rev-grid"></div>
+  </div>
+</div>
+
+<!-- Arcade Mode Picker -->
+<div class="fullscreen screen" id="arcade-modes">
+  <div class="screen-head">
+    <button class="screen-back" id="arcade-back">← MENU</button>
+    <div class="screen-title">ARCADE</div>
+    <span class="screen-head-spacer"></span>
+  </div>
+  <div class="screen-scroll"><div class="arcade-mode-list" id="arcade-mode-list"></div></div>
+</div>
+
+<!-- Arcade Topic Picker -->
+<div class="fullscreen screen" id="arcade-topics">
+  <div class="screen-head">
+    <button class="screen-back" id="arcade-topics-back">← MODES</button>
+    <div class="screen-title" id="arcade-topics-title">EXAM RUSH</div>
+    <span class="screen-head-spacer"></span>
+  </div>
+  <div class="screen-scroll"><div class="arcade-topic-grid" id="arcade-topic-grid"></div></div>
+</div>
+
+<!-- Phase Intro -->
+<div class="fullscreen" id="phase-intro">
+  <div class="pi-header">
+    <div class="pi-eyebrow" id="pi-eyebrow">PHASE 1 OF 10</div>
+    <div class="pi-title" id="pi-title">BINARY <em>BASICS</em></div>
+    <div class="pi-sub" id="pi-sub">The language of all computers</div>
+    <div class="pi-board-tags" id="pi-board-tags"></div>
+  </div>
+  <div class="pi-body" id="pi-body"></div>
+  <div class="pi-footer">
+    <button class="fs-btn" id="pi-start-btn">START PHASE →</button>
+    <div class="pi-meta" id="pi-meta">5 QUESTIONS</div>
+    <div id="hint-refill-note">💡 +1 HINT REFILLED</div>
+  </div>
+</div>
+
+<!-- Phase Complete -->
+<div class="fullscreen" id="phase-complete">
+  <div class="fs-eyebrow">PHASE COMPLETE</div>
+  <div class="fs-title">PHASE <em id="pc-num">1</em> DONE</div>
+  <div class="big-num" id="pc-score">+0</div>
+  <div class="big-label">PHASE POINTS</div>
+  <div class="hint-bonus" id="pc-hint-bonus" style="display:none;">+500</div>
+  <div class="hint-bonus-label" id="pc-hint-bonus-label" style="display:none;">NO HINT BONUS</div>
+  <div class="fs-sub" id="pc-sub"></div>
+  <button class="fs-btn" id="pc-next-btn">NEXT PHASE →</button>
+  <button class="fs-btn" id="pc-map-btn" style="background:#eee;color:#333;margin-top:0;">CAMPAIGN MAP</button>
+</div>
+
+<!-- Game Over -->
+<div class="fullscreen" id="gameover-screen">
+  <div class="fs-eyebrow" id="go-eyebrow">CIRCUIT OVERLOADED</div>
+  <div class="big-num" id="go-score">0</div>
+  <div class="big-label">FINAL SCORE</div>
+  <div class="fs-sub" id="go-msg"></div>
+  <button class="fs-btn" id="go-restart-btn">TRY AGAIN</button>
+  <button class="fs-btn" id="go-modes-btn" style="background:#eee;color:#333;margin-top:0;">CAMPAIGN MAP</button>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
