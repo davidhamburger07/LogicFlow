@@ -36,8 +36,10 @@ import { cipher } from './questions/cipher.js';
 import { trace } from './questions/trace.js';
 import { fde } from './questions/fde.js';
 import { packet } from './questions/packet.js';
+import { exam } from './questions/exam.js';
+import { generateQuestion } from './generators.js';
 
-const REGISTRY = { MC: mc, BINARY: binary, CIRCUIT: circuit, CIPHER: cipher, TRACE: trace, FDE: fde, PACKET: packet };
+const REGISTRY = { MC: mc, BINARY: binary, CIRCUIT: circuit, CIPHER: cipher, TRACE: trace, FDE: fde, PACKET: packet, EXAM: exam };
 
 // ---- session state -----------------------------------------
 let score = 0, streak = 0, lives = 3;
@@ -50,6 +52,8 @@ let launchContext = 'campaign';               // 'campaign' | 'revision' | 'spac
 let sessionPhaseIdx = 0;                       // the phase a single-phase session launched
 let playlist = [];                             // [{ phaseIdx, qIndex }] questions to serve
 let playlistPos = 0;
+let survivedCount = 0;                          // correct answers in a Survival run
+let paperMarks = 0, paperTotal = 0;             // marks tally in a Past Paper run
 
 // Timed / Exam Rush — a per-question countdown, length by question type.
 let timerInt = null, timeLeft = 0, timeTotal = 0;
@@ -57,31 +61,39 @@ const TIME_FOR = { MC: 15, BINARY: 20, CIRCUIT: 35, CIPHER: 30, TRACE: 30, FDE: 
 const DEFAULT_TIME = 20;
 
 function maxHints() { return 3; }
-function usesLives() { return launchContext === 'campaign'; }
+function usesLives() { return launchContext === 'campaign' || launchContext === 'survival'; }
 function isTimed() { return launchContext === 'timed'; }
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
 // nav handlers registered by screens.js (no import cycle)
 let nav = { toMenu() {}, toCampaign() {}, toRevision() {}, toArcade() {} };
 export function setNavHandlers(h) { nav = { ...nav, ...h }; }
 
+// abandon the current session and return to the main menu (the EXIT button).
+export function exitToMenu() {
+  stopTimer();
+  answered = true;     // stop any in-flight question module from submitting late
+  nav.toMenu();
+}
+
 // ---- cached DOM refs ---------------------------------------
 const el = {};
 function cache() {
   [
-    'score-disp', 'streak-disp', 'lives-display', 'lives-stat', 'phase-badge',
+    'score-disp', 'streak-disp', 'score-stat', 'streak-stat', 'lives-display', 'lives-stat', 'phase-badge',
     'question-card', 'q-badge', 'q-board', 'q-prog', 'q-title', 'q-desc',
     'prog-fill', 'answer-area', 'timer-wrap', 'timer-fill', 'timer-num',
     'hint-bar', 'hint-btn', 'hint-icons', 'no-hint-note', 'hint-box',
     'feedback-box', 'explanation-box', 'expl-text', 'next-btn',
-    'start-screen', 'main-menu', 'campaign-map', 'revision-hub', 'arcade-modes', 'arcade-topics',
+    'start-screen', 'main-menu', 'campaign-map', 'revision-hub', 'arcade-modes', 'arcade-topics', 'question-bank',
     'phase-intro', 'phase-complete', 'gameover-screen',
     'pi-eyebrow', 'pi-title', 'pi-sub', 'pi-board-tags', 'pi-body', 'pi-meta', 'hint-refill-note',
     'pc-num', 'pc-score', 'pc-hint-bonus', 'pc-hint-bonus-label', 'pc-sub', 'pc-next-btn', 'pc-map-btn',
-    'go-score', 'go-msg', 'go-eyebrow', 'go-restart-btn', 'go-modes-btn',
+    'go-score', 'go-msg', 'go-label', 'go-eyebrow', 'go-restart-btn', 'go-modes-btn',
   ].forEach(id => { el[id] = document.getElementById(id); });
 }
 
-const SCREENS = ['start-screen', 'main-menu', 'campaign-map', 'revision-hub', 'arcade-modes', 'arcade-topics',
+const SCREENS = ['start-screen', 'main-menu', 'campaign-map', 'revision-hub', 'arcade-modes', 'arcade-topics', 'question-bank',
   'phase-intro', 'phase-complete', 'gameover-screen'];
 export function showScreen(id) {
   SCREENS.forEach(s => el[s] && el[s].classList.toggle('show', s === id));
@@ -111,12 +123,14 @@ export function launchPhase(phaseIdx, context, skipIntro = false) {
   launchContext = context;
   sessionPhaseIdx = phaseIdx;
   currentPhaseIdx = phaseIdx;
-  playlist = PHASES[phaseIdx].questions.map((_, qi) => ({ phaseIdx, qIndex: qi }));
+  const src = (context === 'pastpaper') ? (PHASES[phaseIdx].paper || []) : PHASES[phaseIdx].questions;
+  playlist = src.map((_, qi) => ({ phaseIdx, qIndex: qi }));
   playlistPos = 0;
+  if (context === 'pastpaper') { paperMarks = 0; paperTotal = 0; }
   resetSession();
   applyContextUI();
-  // Campaign node tap teaches first (intro -> questions); Continue / revision
-  // go straight into the questions.
+  // Campaign node tap teaches first (intro -> questions); Continue / revision /
+  // past-paper go straight into the questions.
   if (context === 'campaign' && !skipIntro) showPhaseIntro();
   else startPlaylist();
 }
@@ -134,15 +148,38 @@ export function startSpacedReview(queue) {
   startPlaylist();
 }
 
+// Survival / Streak — an endless cross-topic sudden-death run of
+// quick-recall questions (MC + binary). One wrong answer ends it.
+export function startSurvival() {
+  launchContext = 'survival';
+  const pool = [];
+  PHASES.forEach((p, pi) => p.questions.forEach((q, qi) => {
+    if (q.type === 'MC' || q.type === 'BINARY') pool.push({ phaseIdx: pi, qIndex: qi });
+  }));
+  shuffle(pool);
+  playlist = pool;
+  playlistPos = 0;
+  sessionPhaseIdx = 0;
+  survivedCount = 0;
+  resetSession();
+  applyContextUI();
+  startPlaylist();
+}
+
 function resetSession() {
-  score = 0; streak = 0; lives = 3;
+  score = 0; streak = 0;
+  lives = (launchContext === 'survival') ? 1 : 3;   // Survival = sudden death
   hintsLeft = maxHints(); hintsUsedThisPhase = 0; hintRefilledFlag = false;
   phaseStartScore = 0;
   updateHUD();
 }
 function applyContextUI() {
+  const paper = (launchContext === 'pastpaper');
   el['lives-stat'].style.display = usesLives() ? 'flex' : 'none';
   el['timer-wrap'].style.display = isTimed() ? 'flex' : 'none';
+  // Past Paper tracks marks, not score/streak — hide those stats.
+  el['score-stat'].style.display = paper ? 'none' : 'flex';
+  el['streak-stat'].style.display = paper ? 'none' : 'flex';
 }
 
 // ---- phase intro (campaign only) ---------------------------
@@ -191,7 +228,11 @@ function loadQuestion() {
   currentPhaseIdx = entry.phaseIdx;
   questionIdx = entry.qIndex;
   const phase = PHASES[currentPhaseIdx];
-  currentQuestion = phase.questions[questionIdx];
+  const list = (launchContext === 'pastpaper') ? (phase.paper || []) : phase.questions;
+  const slot = list[questionIdx];
+  // a generated slot builds a FRESH instance on every load (so its answer
+  // can't be memorised); a static slot is used as-is.
+  currentQuestion = slot && slot.gen ? generateQuestion(slot.gen, slot.opts) : slot;
   answered = false;
   hintLevel = 0;
 
@@ -225,6 +266,7 @@ function loadQuestion() {
   el['no-hint-note'].style.display = hintsUsedThisPhase === 0 ? 'inline' : 'none';
   updateHintIcons();
   el['hint-btn'].disabled = hintsLeft <= 0 || hints.length === 0;
+  if (launchContext === 'pastpaper') el['hint-bar'].style.display = 'none';   // no hints in an exam
 
   showVisual(phase, currentQuestion);
   REGISTRY[currentQuestion.type].render(el['answer-area'], currentQuestion, ctx);
@@ -235,6 +277,8 @@ function loadQuestion() {
 function progressLabel() {
   if (launchContext === 'spaced-review') return `REVIEW ${playlistPos + 1} of ${playlist.length}`;
   if (launchContext === 'timed') return `RUSH ${playlistPos + 1} of ${playlist.length}`;
+  if (launchContext === 'survival') return `SURVIVED ${survivedCount}`;
+  if (launchContext === 'pastpaper') return `PAPER · Q${playlistPos + 1} of ${playlist.length}`;
   return `Q${playlistPos + 1} of ${playlist.length}`;
 }
 
@@ -265,8 +309,10 @@ function updateHUD() {
   el['score-disp'].textContent = score;
   el['streak-disp'].textContent = streak + '×';
   el['lives-display'].textContent = '♥'.repeat(Math.max(0, lives));
-  el['phase-badge'].textContent = launchContext === 'spaced-review'
-    ? 'REVIEW' : 'PHASE ' + (currentPhaseIdx + 1);
+  el['phase-badge'].textContent = launchContext === 'spaced-review' ? 'REVIEW'
+    : launchContext === 'survival' ? 'SURVIVAL'
+      : launchContext === 'pastpaper' ? 'PAST PAPER'
+        : 'PHASE ' + (currentPhaseIdx + 1);
 }
 
 function updateHintIcons() { el['hint-icons'].textContent = '💡'.repeat(Math.max(0, hintsLeft)); }
@@ -292,12 +338,25 @@ function handleResult(correct, details) {
   el['hint-bar'].style.display = 'none';
   markAnswered();
 
+  // Past Paper: self-marked, score by marks (not points/lives); no mastery record.
+  if (launchContext === 'pastpaper') {
+    const m = details.marks || 0, mx = details.maxMarks || 0;
+    paperMarks += m; paperTotal += mx;
+    el['feedback-box'].className = (mx > 0 && m > 0) ? 'ok' : 'fail';
+    el['feedback-box'].textContent = `${m} / ${mx} MARK${mx === 1 ? '' : 'S'} AWARDED`;
+    showExplanation();
+    el['next-btn'].textContent = 'NEXT →';
+    el['next-btn'].classList.add('show');
+    return;
+  }
+
   const phase = PHASES[currentPhaseIdx];
   // record EVERY answer to the per-topic store (drives mastery + misses)
   store.recordAttempt(phase.id, questionIdx, correct);
 
   if (correct) {
     streak++;
+    if (launchContext === 'survival') survivedCount++;
     const pts = 100 * (streak + 1) * phase.id;
     score += pts;
     SFX.correct();
@@ -322,13 +381,17 @@ function handleResult(correct, details) {
 }
 
 function showExplanation() {
-  el['expl-text'].innerHTML = currentQuestion.explain || '';
+  if (!currentQuestion.explain) { el['explanation-box'].classList.remove('show'); return; }
+  el['expl-text'].innerHTML = currentQuestion.explain;
   el['explanation-box'].classList.add('show');
 }
 
 export function nextQuestion() {
   SFX.next();
-  if (usesLives() && lives <= 0) { gameOver(); return; }
+  if (usesLives() && lives <= 0) {
+    if (launchContext === 'survival') survivalResults(false); else gameOver();
+    return;
+  }
   playlistPos++;
   if (playlistPos >= playlist.length) { endOfPlaylist(); return; }
   loadQuestion();
@@ -336,6 +399,8 @@ export function nextQuestion() {
 
 function endOfPlaylist() {
   if (launchContext === 'spaced-review') { nav.toRevision(); return; }
+  if (launchContext === 'survival') { survivalResults(true); return; }   // survived every question
+  if (launchContext === 'pastpaper') { paperResults(); return; }
   if (launchContext === 'campaign') {
     store.markPhaseCleared(PHASES[sessionPhaseIdx].id);   // advances the frontier
   }
@@ -402,6 +467,7 @@ function gameOver() {
   el['next-btn'].classList.remove('show');
 
   el['go-eyebrow'].textContent = 'CIRCUIT OVERLOADED';
+  el['go-label'].textContent = 'FINAL SCORE';
   el['go-score'].textContent = score;
   el['go-msg'].textContent = finalMessage();
   el['go-restart-btn'].textContent = 'TRY AGAIN';
@@ -410,6 +476,52 @@ function gameOver() {
   el['go-modes-btn'].onclick = () => nav.toCampaign();
 
   SFX.gameOver();
+  showScreen('gameover-screen');
+}
+
+// ---- survival results (sudden death / survived everything) --
+function survivalResults(cleared) {
+  stopTimer();
+  el['question-card'].style.display = 'none';
+  hideVisual();
+  el['next-btn'].classList.remove('show');
+
+  el['go-eyebrow'].textContent = cleared ? 'FLAWLESS RUN' : 'STREAK BROKEN';
+  el['go-label'].textContent = 'QUESTIONS SURVIVED';
+  el['go-score'].textContent = survivedCount;
+  el['go-msg'].textContent = cleared
+    ? `Flawless — you answered all ${survivedCount} questions without a single slip. Final score ${score}.`
+    : `You answered ${survivedCount} in a row before the streak broke. Final score ${score}.`;
+  el['go-restart-btn'].textContent = 'PLAY AGAIN';
+  el['go-restart-btn'].onclick = () => startSurvival();
+  el['go-modes-btn'].textContent = 'BACK TO ARCADE';
+  el['go-modes-btn'].onclick = () => nav.toArcade();
+
+  if (cleared) SFX.phaseComplete(); else SFX.gameOver();
+  showScreen('gameover-screen');
+}
+
+// ---- past paper results (graded) ---------------------------
+function paperResults() {
+  stopTimer();
+  el['question-card'].style.display = 'none';
+  hideVisual();
+  el['next-btn'].classList.remove('show');
+
+  const pct = paperTotal > 0 ? Math.round(100 * paperMarks / paperTotal) : 0;
+  const band = pct >= 70 ? 'Strong — you look exam-ready on this topic.'
+    : pct >= 50 ? 'A solid pass. Review the marking points you missed.'
+      : 'Keep practising — revisit the mark schemes and retake the paper.';
+  el['go-eyebrow'].textContent = 'PAPER COMPLETE';
+  el['go-label'].textContent = `MARKS AWARDED · ${pct}%`;
+  el['go-score'].textContent = `${paperMarks}/${paperTotal}`;
+  el['go-msg'].textContent = `You awarded yourself ${paperMarks} out of ${paperTotal} marks (${pct}%). ${band}`;
+  el['go-restart-btn'].textContent = 'RETAKE PAPER';
+  el['go-restart-btn'].onclick = () => launchPhase(sessionPhaseIdx, 'pastpaper');
+  el['go-modes-btn'].textContent = 'BACK TO ARCADE';
+  el['go-modes-btn'].onclick = () => nav.toArcade();
+
+  SFX.phaseComplete();
   showScreen('gameover-screen');
 }
 

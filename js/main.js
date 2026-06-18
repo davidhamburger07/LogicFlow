@@ -40,6 +40,32 @@ function wireVolume() {
   });
 }
 
+// ---- theme: light / dark, persisted, HUD + menu toggles in sync ----
+function paintTheme(theme) {
+  const dark = theme === 'dark';
+  const hudBtn = $('theme-btn');
+  if (hudBtn) hudBtn.textContent = dark ? '☀️' : '🌙';
+  const menuBtn = $('menu-theme-btn');
+  if (menuBtn) menuBtn.textContent = dark ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
+}
+function applyTheme(theme) {
+  const root = document.documentElement;
+  if (theme === 'dark') root.setAttribute('data-theme', 'dark');
+  else root.removeAttribute('data-theme');
+  paintTheme(theme);
+}
+function toggleTheme() {
+  const next = store.getTheme() === 'dark' ? 'light' : 'dark';
+  store.setTheme(next);
+  applyTheme(next);
+  SFX.uiClick();
+}
+function wireTheme() {
+  ['theme-btn', 'menu-theme-btn'].forEach(id => {
+    const b = $(id); if (b) b.addEventListener('click', toggleTheme);
+  });
+}
+
 function wire() {
   // POWER ON -> main menu (keep the power-on moment)
   $('start-btn').addEventListener('click', () => { SFX.powerOn(); screens.showMainMenu(); });
@@ -49,13 +75,21 @@ function wire() {
   $('next-btn').addEventListener('click', engine.nextQuestion);
   $('hint-btn').addEventListener('click', engine.useHint);
 
+  // exit (with confirmation)
+  const exitConfirm = $('exit-confirm');
+  $('exit-btn').addEventListener('click', () => { SFX.uiClick(); exitConfirm.classList.add('show'); });
+  $('exit-no').addEventListener('click', () => { SFX.uiClick(); exitConfirm.classList.remove('show'); });
+  $('exit-yes').addEventListener('click', () => { SFX.uiClick(); exitConfirm.classList.remove('show'); engine.exitToMenu(); });
+
   wireVolume();
+  wireTheme();
 }
 
 function boot() {
   const v = store.getVolume();
   SFX.setVol(v);
   paintVolume(v);
+  applyTheme(store.getTheme());
 
   wire();
   engine.initEngine();

@@ -19,8 +19,9 @@
 const KEY = {
   premium: 'logicflow.premium',
   volume: 'logicflow.volume',
+  theme: 'logicflow.theme',
   topicStats: 'logicflow.topicStats',
-  misses: 'logicflow.misses',
+  schedule: 'logicflow.schedule',
 };
 
 const DEFAULT_VOLUME = 70;            // matches the HUD slider default
@@ -28,7 +29,13 @@ const DEFAULT_VOLUME = 70;            // matches the HUD slider default
 // ---- mastery tuning (single source of truth) ---------------
 export const MASTERY_WINDOW = 15;     // rolling window of recent attempts per topic
 export const REVIEW_THRESHOLD = 60;   // mastery % below this flags "needs review"
-const MISS_CAP = 500;                 // cap the unresolved-misses set
+
+// ---- spaced-repetition scheduler (Leitner boxes) -----------
+// growing review intervals per box, in ms. box 0 = due immediately;
+// each successful review promotes the item to the next (longer) box.
+const BOX_INTERVALS = [0, 10 * 60e3, 24 * 3600e3, 3 * 24 * 3600e3, 7 * 24 * 3600e3, 16 * 24 * 3600e3];
+const MAX_BOX = BOX_INTERVALS.length - 1;   // a correct answer at the top box graduates the item
+const SCHEDULE_CAP = 500;
 
 // ---- low-level helpers -------------------------------------
 function readRaw(key) {
@@ -67,6 +74,17 @@ export function setVolume(v) {
   const n = Number(v);
   if (!Number.isFinite(n)) return;
   writeRaw(KEY.volume, String(Math.min(100, Math.max(0, n))));
+}
+
+// ============================================================
+// theme preference ('light' | 'dark'). Stored as a raw string so the
+// tiny inline <head> script can read it before modules load (no flash).
+// ============================================================
+export function getTheme() {
+  return readRaw(KEY.theme) === 'dark' ? 'dark' : 'light';
+}
+export function setTheme(t) {
+  writeRaw(KEY.theme, t === 'dark' ? 'dark' : 'light');
 }
 
 // ============================================================
@@ -125,9 +143,9 @@ export function getCampaignFrontier(phaseIds) {
 }
 
 // ============================================================
-// record EVERY answer (called from the engine result handler, every screen).
-// Updates the rolling mastery window AND the unresolved-misses set.
-// A question's identity is (phaseId, questionIndex).
+// record EVERY answer (called from the engine result handler, every
+// screen except Past Paper). Updates the rolling mastery window AND the
+// spaced-repetition schedule. Identity = (phaseId, questionIndex).
 // ============================================================
 export function recordAttempt(phaseId, questionIndex, isCorrect) {
   const correct = !!isCorrect;
@@ -141,24 +159,54 @@ export function recordAttempt(phaseId, questionIndex, isCorrect) {
   s[phaseId] = t;
   writeJSON(KEY.topicStats, s);
 
-  // 2) unresolved-misses set
-  const misses = getMisses();
-  const same = e => e.phaseId === phaseId && e.qIndex === questionIndex;
-  if (correct) {
-    const filtered = misses.filter(e => !same(e));      // resolved -> drop
-    if (filtered.length !== misses.length) writeJSON(KEY.misses, filtered);
-  } else if (!misses.some(same)) {
-    misses.push({ phaseId, qIndex: questionIndex, ts: Date.now() });
-    writeJSON(KEY.misses, misses.length > MISS_CAP ? misses.slice(misses.length - MISS_CAP) : misses);
-  }
+  // 2) spaced-repetition schedule
+  scheduleAttempt(phaseId, questionIndex, correct);
 }
 
+// Leitner scheduling. A WRONG answer (re)schedules the item at box 0
+// (due now). A CORRECT answer promotes a scheduled item to the next
+// (longer) box, and GRADUATES it (removes it) once answered right at the
+// top box. A correct answer to a never-missed question schedules nothing.
+function scheduleAttempt(phaseId, qIndex, correct) {
+  const sch = readSchedule();
+  const key = phaseId + ':' + qIndex;
+  if (!correct) {
+    sch[key] = { phaseId, qIndex, box: 0, due: Date.now() };
+  } else if (sch[key]) {
+    const it = sch[key];
+    if (it.box >= MAX_BOX) { delete sch[key]; }
+    else { it.box += 1; it.due = Date.now() + BOX_INTERVALS[it.box]; }
+  } else {
+    return;
+  }
+  const keys = Object.keys(sch);
+  if (keys.length > SCHEDULE_CAP) {
+    keys.sort((a, b) => sch[b].due - sch[a].due);        // drop those due furthest in the future
+    keys.slice(0, keys.length - SCHEDULE_CAP).forEach(k => delete sch[k]);
+  }
+  writeSchedule(sch);
+}
+
+function readSchedule() {
+  const s = readJSON(KEY.schedule, {});
+  return (s && typeof s === 'object' && !Array.isArray(s)) ? s : {};
+}
+function writeSchedule(s) { writeJSON(KEY.schedule, s); }
+
+// items due for review now — Spaced Review serves these.
+export function getDueReviews(now = Date.now()) {
+  return Object.values(readSchedule())
+    .filter(it => it.due <= now)
+    .map(it => ({ phaseId: it.phaseId, qIndex: it.qIndex }));
+}
+// total items currently in the schedule (due or not yet due).
+export function getScheduleSize() { return Object.keys(readSchedule()).length; }
+// all scheduled items, regardless of due date (kept for compatibility).
 export function getMisses() {
-  const m = readJSON(KEY.misses, []);
-  return Array.isArray(m) ? m : [];
+  return Object.values(readSchedule()).map(it => ({ phaseId: it.phaseId, qIndex: it.qIndex }));
 }
 
 // full progress reset (handy for testing / a future settings screen)
 export function resetProgress() {
-  try { localStorage.removeItem(KEY.topicStats); localStorage.removeItem(KEY.misses); } catch (e) {}
+  try { localStorage.removeItem(KEY.topicStats); localStorage.removeItem(KEY.schedule); } catch (e) {}
 }

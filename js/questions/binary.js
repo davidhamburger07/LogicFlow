@@ -4,11 +4,12 @@
 // Same contract as mc.js: render(answerHost, question, ctx),
 // calls ctx.onSubmit(correct, details) when the player submits.
 //
-// Builds a place-value row (1, 2, 4, 8 ... LSB on the LEFT, per
-// the project's convention), a row of toggle bit buttons, and a
-// submit button. On a wrong answer it passes the correct bit
-// string back via details.feedbackOnWrong so the engine can show
-// it in the feedback box.
+// Builds a place-value row (standard binary: MSB on the LEFT, e.g.
+// 8 4 2 1 for 4 bits — matches how GCSE exams write binary), a row
+// of toggle bit buttons, and a submit button. On a wrong answer it
+// passes the correct bit string back via details.feedbackOnWrong so
+// the engine can show it in the feedback box.
+// (Answer arrays are MSB-first: answer[0] is the most significant bit.)
 // ============================================================
 
 export const binary = {
@@ -18,13 +19,13 @@ export const binary = {
     answerHost.innerHTML = '';
     const bits = new Array(question.bits).fill(0);
 
-    // place-value row (1, 2, 4, 8 — least significant on the left)
+    // place-value row — standard MSB-on-the-left (e.g. 8 4 2 1 for 4 bits)
     const placeRow = document.createElement('div');
     placeRow.className = 'bit-place-row';
     for (let i = 0; i < question.bits; i++) {
       const lbl = document.createElement('div');
       lbl.className = 'bit-place-lbl';
-      lbl.textContent = Math.pow(2, i);
+      lbl.textContent = Math.pow(2, question.bits - 1 - i);
       placeRow.appendChild(lbl);
     }
 

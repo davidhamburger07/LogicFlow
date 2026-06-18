@@ -21,7 +21,7 @@ const vState = { phase: null, question: null, answered: false };
 
 // Question types that render their own interactive visual — the read-only
 // panel is suppressed for these (the module owns its visuals itself).
-const SELF_RENDERED = new Set(['CIRCUIT', 'CIPHER', 'TRACE', 'FDE', 'PACKET']);
+const SELF_RENDERED = new Set(['CIRCUIT', 'CIPHER', 'TRACE', 'FDE', 'PACKET', 'EXAM']);
 function ownsVisual(q) { return !!q && SELF_RENDERED.has(q.type); }
 
 // Decide which gate diagram to draw for a logic-gate question,
