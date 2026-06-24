@@ -21,8 +21,24 @@ const vState = { phase: null, question: null, answered: false };
 
 // Question types that render their own interactive visual — the read-only
 // panel is suppressed for these (the module owns its visuals itself).
-const SELF_RENDERED = new Set(['CIRCUIT', 'CIPHER', 'TRACE', 'FDE', 'PACKET', 'EXAM']);
-function ownsVisual(q) { return !!q && SELF_RENDERED.has(q.type); }
+const SELF_RENDERED = new Set(['CIRCUIT', 'CIPHER', 'TRACE', 'FDE', 'PACKET', 'EXAM', 'CODE_TRACE', 'CODE_FILL', 'CODE_BUILD', 'CODE_BUG', 'CODE_WRITE', 'NUMBER', 'PLACEVALUE', 'BINADD', 'SHIFT', 'FLIPADD', 'BINSUB', 'HEXPICK', 'SWATCH', 'CALC', 'TYPEIN', 'ORDER', 'CATEGORISE', 'RECALL', 'EXAMCOACH', 'TRUTHTABLE', 'MATCH', 'SEARCHTRACE', 'SQLBUILD', 'SERVERROOM', 'OVERFLOW', 'HEXLOCK', 'SIGNAL']);
+// A question owns/suppresses the read-only panel if it renders its own visual
+// (SELF_RENDERED), is a video watch-check, or explicitly opts out via noVisual
+// (used to drop an unhelpful/irrelevant diagram from a question).
+function ownsVisual(q) { return !!q && (SELF_RENDERED.has(q.type) || q.watchCheck || q.noVisual); }
+
+// Per-question helpful diagrams (rendered in the read-only panel when a
+// question sets `diagram: '<name>'`). These REPLACE the old decorative circuit
+// panels with something that actually teaches the point of the question.
+function twosMsbDiagram() {
+  const pvs = ['-128', '64', '32', '16', '8', '4', '2', '1'];
+  const cells = pvs.map((pv, i) =>
+    `<div class="vqd-col${i === 0 ? ' vqd-hi' : ''}"><span class="vqd-pv">${pv}</span><span class="vqd-cell">${i === 0 ? '1' : '0'}</span></div>`).join('');
+  return `<div class="vqd"><div class="vqd-cap">In two’s complement the <b>leftmost bit (MSB)</b> has a <b>negative</b> place value (−128) — that is what stores the sign.</div><div class="vqd-row">${cells}</div></div>`;
+}
+const QDIAGRAMS = {
+  'twos-msb': twosMsbDiagram(),
+};
 
 // Decide which gate diagram to draw for a logic-gate question,
 // or fall back to the phase's circuit type.
@@ -118,7 +134,7 @@ function drawCircuit(type, active, result) {
 
 function loop() {
   const phase = vState.phase;
-  if (vState.question && !ownsVisual(vState.question) && phase && phase.visual === 'canvas' && vState.answered) {
+  if (vState.question && !vState.question.diagram && phase && phase.circuit === 'gate' && vState.answered) {
     drawCircuit(gateTypeFor(phase, vState.question), true, 1);
   }
   requestAnimationFrame(loop);
@@ -127,45 +143,37 @@ function loop() {
 export function showVisual(phase, question) {
   vState.phase = phase; vState.question = question; vState.answered = false;
 
-  // Interactive question types (circuit builder, cipher wheel) own their
-  // own visual rendering — hide the read-only panel for them.
-  if (ownsVisual(question)) { hideVisual(); return; }
-
   const vp = document.getElementById('visual-panel');
   const cvs = document.getElementById('game-canvas');
   const sw = document.getElementById('colour-swatch');
   const sv = document.getElementById('sort-visual');
-  cvs.style.display = 'none'; sw.classList.remove('show'); sv.classList.remove('show');
+  const dg = document.getElementById('visual-diagram');
+  cvs.style.display = 'none'; sw.classList.remove('show'); sv.classList.remove('show'); dg.classList.remove('show');
 
-  if (phase.visual === 'canvas' && phase.circuit) {
+  // 1) a question-supplied HELPFUL diagram wins (e.g. highlight the MSB).
+  if (question && question.diagram && QDIAGRAMS[question.diagram]) {
+    dg.innerHTML = QDIAGRAMS[question.diagram]; dg.classList.add('show'); vp.classList.add('show');
+    return;
+  }
+  // 2) self-rendered / watch-check / opted-out questions show no panel.
+  if (ownsVisual(question)) { hideVisual(); return; }
+  // 3) the LOGIC-GATE diagram is the only auto-panel that genuinely helps its
+  //    questions; the old binary/cpu/sort/swatch panels were just decoration on
+  //    the remaining MC questions, so they are dropped (per the diagram audit).
+  if (phase.visual === 'canvas' && phase.circuit === 'gate') {
     cvs.style.display = 'block'; vp.classList.add('show');
     resizeCanvas();
     drawCircuit(gateTypeFor(phase, question), true, 0);
-  } else if (phase.visual === 'swatch') {
-    const hex = question.options && question.options.find(o => o.startsWith('#'));
-    const answerHex = question.answer && question.answer.startsWith('#') ? question.answer : null;
-    const swHex = answerHex || hex || '#888888';
-    sw.style.background = swHex; sw.textContent = swHex; sw.classList.add('show'); vp.classList.add('show');
-  } else if (phase.visual === 'sort') {
-    sv.innerHTML = ''; vp.classList.add('show');
-    const nums = [4, 2, 7, 1, 5];
-    nums.forEach(n => {
-      const wrap = document.createElement('div'); wrap.className = 'sort-bar-wrap';
-      const bar = document.createElement('div'); bar.className = 'sort-bar'; bar.style.height = (n * 14) + 'px';
-      const lbl = document.createElement('div'); lbl.className = 'sort-num'; lbl.textContent = n;
-      wrap.appendChild(bar); wrap.appendChild(lbl); sv.appendChild(wrap);
-    });
-    sv.classList.add('show');
-  } else {
-    vp.classList.remove('show');
+    return;
   }
+  hideVisual();
 }
 
 export function markAnswered() {
   vState.answered = true;
-  if (ownsVisual(vState.question)) return;
+  if (ownsVisual(vState.question) || (vState.question && vState.question.diagram)) return;
   const phase = vState.phase;
-  if (phase && phase.visual === 'canvas' && phase.circuit) {
+  if (phase && phase.circuit === 'gate') {
     drawCircuit(gateTypeFor(phase, vState.question), true, 1);
   }
 }

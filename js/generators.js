@@ -19,6 +19,10 @@
 function randInt(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
 function hex2(v) { return v.toString(16).toUpperCase().padStart(2, '0'); }
 
+// "guided in practice, bare in assessment" (scaffolding fades by context):
+// generators emit a guided interactive in practice, a bare input in tests.
+const ASSESS = ctx => ctx === 'unit-test' || ctx === 'mock';
+
 // MSB-first bit array, e.g. 13 -> [1,1,0,1]
 function toBitsMSB(value, bits) {
   const a = [];
@@ -62,38 +66,50 @@ function numericFallback(answer, allowNeg = false) {
     return v;
   };
 }
+// like numericFallback but returns binary strings of a fixed width (for
+// binary-arithmetic distractors).
+function binStringFallback(value, width) {
+  let d = 0;
+  return () => {
+    d++;
+    let v = Number(value) + (Math.random() < 0.5 ? d : -d);
+    if (v < 0) v = Number(value) + d;
+    return (v & ((1 << width) - 1)).toString(2).padStart(width, '0');
+  };
+}
 
 // ============================================================
 // BINARY (Phase 1)
 // ============================================================
-function binaryToDenary() {
-  const bits = 4;
+function binaryToDenary(opts, context) {
+  const bits = (opts && opts.bits) || 4;                          // opts.bits: 8 for an exam-level question
   const value = randInt(1, (1 << bits) - 1);
   const arr = toBitsMSB(value, bits);
   const str = arr.join('');
-  const misread = parseInt([...str].reverse().join(''), 2);       // LSB-left misreading
-  const flipped = value ^ (1 << randInt(0, bits - 1));            // one bit misread
-  const options = [String(value), ...pickOptions(value, [misread, flipped, value + 1, value - 1, value + 2], numericFallback(value))];
+  const pv = Array.from({ length: bits }, (_, i) => 1 << (bits - 1 - i)).join(', ');
   const on = onPlaceValues(arr);
-  return {
-    type: 'MC', badge: 'BINARY', board: 'AQA · OCR · Eduqas',
+  const base = {
+    badge: 'BINARY', board: 'AQA · OCR · Eduqas',
     title: `What is the denary value of binary ${str}?`,
-    desc: 'Place values (left→right): 8, 4, 2, 1',
-    options, answer: String(value),
-    hints: ['Add up the place values (8, 4, 2, 1) where the bit is 1.', `${str} → ${on.join(' + ') || '0'} = ${value}.`],
+    hints: [`Add up the place values (${pv}) where the bit is 1.`, `${str} → ${on.join(' + ') || '0'} = ${value}.`],
     explain: `<strong>${str}</strong> → ${arr.map((b, i) => `${b}×${1 << (bits - 1 - i)}`).join(' + ')} = <strong>${value}</strong>.`,
   };
+  // assessment: bare number pad. practice: guided place-value adder (tap lit bits to total).
+  if (ASSESS(context)) return { ...base, type: 'NUMBER', desc: 'Read the binary number and enter its denary value.', answer: value };
+  return { ...base, type: 'PLACEVALUE', desc: 'Tap each lit (1) bit to add its place value into the total.', bits: arr, signed: false };
 }
-function denaryToBinary() {
-  const bits = 4;
+function denaryToBinary(opts) {
+  const bits = (opts && opts.bits) || 4;                          // opts.bits: 8 for an exam-level question
   const value = randInt(1, (1 << bits) - 1);
   const arr = toBitsMSB(value, bits);
   const on = onPlaceValues(arr);
+  const pv = Array.from({ length: bits }, (_, i) => 1 << (bits - 1 - i)).join(', ');
   return {
     type: 'BINARY', badge: 'BINARY', board: 'AQA · OCR · Eduqas',
-    title: `Convert denary ${value} to 4-bit binary`,
-    desc: 'Place values (left→right): 8, 4, 2, 1',
+    title: `Convert denary ${value} to ${bits}-bit binary`,
+    desc: `Place values (left→right): ${pv}`,
     bits, answer: arr,
+    workings: { tool: 'place-value', bits, signed: false },
     hints: [`${value} = ${on.join(' + ')}. Which place values add up to ${value}?`, `Switch on the bits worth ${on.join(', ')}.`],
     explain: `<strong>${value} = ${on.join(' + ')}</strong> → ${arr.join('')}. Check: ${arr.map((b, i) => `${b}×${1 << (bits - 1 - i)}`).join(' + ')} = ${value}.`,
   };
@@ -101,12 +117,11 @@ function denaryToBinary() {
 function bitsValues() {
   const n = randInt(3, 8);
   const value = 2 ** n;
-  const options = [String(value), ...pickOptions(value, [2 ** (n - 1), 2 ** (n + 1), n * 2, value - 1, value + 1], numericFallback(value))];
   return {
-    type: 'MC', badge: 'BINARY', board: 'AQA · OCR · Eduqas',
+    type: 'NUMBER', badge: 'BINARY', board: 'AQA · OCR · Eduqas',
     title: `How many different values can ${n} bits store?`,
-    desc: 'Each extra bit doubles the number of combinations',
-    options, answer: String(value),
+    desc: 'Each extra bit doubles the number of combinations (2 to the power of the bits).',
+    answer: value,
     hints: [`${n} bits means 2 to the power of ${n}.`, `2^${n} = ?`],
     explain: `<strong>${n} bits = 2^${n} = ${value}</strong> different values (0 to ${value - 1}). Each extra bit doubles the number of combinations.`,
   };
@@ -115,50 +130,88 @@ function bitsValues() {
 // ============================================================
 // HEXADECIMAL (Phase 3)
 // ============================================================
-function hexToDenary() {
+function hexToDenary(opts, context) {
   const value = randInt(16, 255);
   const hx = hex2(value), hi = value >> 4, lo = value & 15;
-  const swapped = 16 * lo + hi;           // read the digits the wrong way round
-  const baseten = hi * 10 + lo;           // treated the place value as ×10 not ×16
-  const options = [String(value), ...pickOptions(value, [swapped, baseten, value + 16, value - 1], numericFallback(value))];
-  return {
-    type: 'MC', badge: 'HEX', board: 'AQA · OCR · Eduqas',
+  const hiChar = hi.toString(16).toUpperCase(), loChar = lo.toString(16).toUpperCase();
+  const base = {
+    badge: 'HEX', board: 'AQA · OCR · Eduqas',
     title: `What is the denary value of hex ${hx}?`,
-    desc: 'First digit ×16, second digit ×1 (A=10 … F=15)',
-    options, answer: String(value),
     hints: ['Multiply the first digit by 16 and add the second. A=10, B=11 … F=15.', `${hi}×16 + ${lo}×1 = ?`],
     explain: `<strong>${hx} = ${hi}×16 + ${lo}×1 = ${hi * 16} + ${lo} = ${value}.</strong>`,
   };
+  // assessment: bare number pad. practice: guided ×16 / ×1 breakdown.
+  if (ASSESS(context)) return { ...base, type: 'NUMBER', desc: 'Enter the denary value (first digit ×16, second ×1).', answer: value };
+  return {
+    ...base, type: 'CALC', desc: 'Each hex digit: A=10 … F=15. Multiply the first by 16, then add the second.',
+    formula: `${hx} = (first digit × 16) + second digit`,
+    steps: [
+      { expr: `${hi} (${hiChar}) × 16`, answer: hi * 16 },
+      { expr: `{prev} + ${lo} (${loChar})`, answer: value, unit: 'denary' },
+    ],
+  };
 }
-function denaryToHex() {
+function denaryToHex(opts, context) {
   const value = randInt(16, 255);
   const hx = hex2(value), hi = value >> 4, lo = value & 15;
-  const swapped = (lo.toString(16) + hi.toString(16)).toUpperCase();
-  const off = (((hi + 1) & 15).toString(16) + lo.toString(16)).toUpperCase();
-  const options = [hx, ...pickOptions(hx, [swapped, off], () => hex2(randInt(16, 255)))];
   return {
-    type: 'MC', badge: 'HEX', board: 'AQA · OCR · Eduqas',
+    // hex-digit picker (0–F per digit) in both contexts — it IS the natural input.
+    type: 'HEXPICK', badge: 'HEX', board: 'AQA · OCR · Eduqas',
     title: `What is denary ${value} in hexadecimal?`,
-    desc: 'Divide by 16: the quotient is the first digit, the remainder the second',
-    options, answer: hx,
+    desc: 'Set each hex digit (0–9, A–F). Divide by 16: quotient = first digit, remainder = second.',
+    answer: hx,
     hints: [`${value} ÷ 16 = ${hi} remainder ${lo}.`, `${hi} → ${hi.toString(16).toUpperCase()}, ${lo} → ${lo.toString(16).toUpperCase()} (A–F are 10–15).`],
     explain: `<strong>${value} = ${hi}×16 + ${lo} → ${hx}.</strong> (${hi} = ${hi.toString(16).toUpperCase()}, ${lo} = ${lo.toString(16).toUpperCase()}.)`,
   };
 }
 function binaryToHex() {
   const value = randInt(0, 255);
-  const bin = toBitsMSB(value, 8).join('');
+  const bin = toBitsMSB(value, 8);
   const hx = hex2(value), hi = value >> 4, lo = value & 15;
-  const swapped = (lo.toString(16) + hi.toString(16)).toUpperCase();
-  const flip = hex2(value ^ (1 << randInt(0, 7)));
-  const options = [hx, ...pickOptions(hx, [swapped, flip], () => hex2(randInt(0, 255)))];
+  return {
+    // hex picker with the NIBBLE BRIDGE: each digit shows its 4 source bits.
+    type: 'HEXPICK', badge: 'HEX', board: 'AQA · OCR · Eduqas',
+    title: `Convert binary ${bin.join('')} to hexadecimal`,
+    desc: 'Read each 4-bit nibble shown above the digit and pick its hex value.',
+    answer: hx, nibbles: [toBitsMSB(hi, 4), toBitsMSB(lo, 4)],
+    hints: ['Split the 8 bits into two nibbles (groups of 4), then convert each.', `${bin.slice(0, 4).join('')} = ${hi.toString(16).toUpperCase()}, ${bin.slice(4).join('')} = ${lo.toString(16).toUpperCase()}.`],
+    explain: `<strong>${bin.join('')}</strong> → ${bin.slice(0, 4).join('')} (${hi.toString(16).toUpperCase()}) | ${bin.slice(4).join('')} (${lo.toString(16).toUpperCase()}) → <strong>${hx}</strong>.`,
+  };
+}
+// hex -> 8-bit binary, answered by PRODUCING the bits (generative; harder than MC)
+function hexToBinary() {
+  const value = randInt(16, 255);
+  const hx = hex2(value), hi = value >> 4, lo = value & 15;
+  const arr = toBitsMSB(value, 8);
+  const hiNib = toBitsMSB(hi, 4).join(''), loNib = toBitsMSB(lo, 4).join('');
+  const hChar = hi.toString(16).toUpperCase(), lChar = lo.toString(16).toUpperCase();
+  return {
+    type: 'BINARY', badge: 'HEX', board: 'AQA · OCR · Eduqas',
+    title: `Convert hex ${hx} to 8-bit binary`,
+    desc: 'Convert each hex digit to a 4-bit nibble, then join the two nibbles.',
+    bits: 8, answer: arr,
+    workings: { tool: 'place-value', bits: 8, signed: false },
+    hints: [`Each hex digit is 4 bits: ${hChar} = ${hiNib}, ${lChar} = ${loNib}.`, `Join them: ${hiNib} ${loNib}.`],
+    explain: `<strong>${hx}</strong> → ${hChar} (${hiNib}) | ${lChar} (${loNib}) → <strong>${arr.join('')}</strong>. Convert each hex digit to 4 bits and concatenate.`,
+  };
+}
+// MULTI-STEP: add two 8-bit binary numbers, then express the result in hex.
+function addToHex() {
+  const a = randInt(20, 110), b = randInt(20, 110);             // sum <= 220 → fits 2 hex digits
+  const sum = a + b;
+  const aBin = a.toString(2).padStart(8, '0'), bBin = b.toString(2).padStart(8, '0');
+  const answer = hex2(sum);
+  const noCarry = hex2((a ^ b) & 0xFF);                         // added without carrying, then converted
+  const swapped = answer[1] + answer[0];                        // hex digits the wrong way round
+  const off = hex2((sum + 16) & 0xFF);                          // wrong high nibble
+  const options = [answer, ...pickOptions(answer, [noCarry, swapped, off], () => hex2(randInt(16, 255)))];
   return {
     type: 'MC', badge: 'HEX', board: 'AQA · OCR · Eduqas',
-    title: `Convert binary ${bin} to hexadecimal`,
-    desc: 'Split into two nibbles (groups of 4 bits) and convert each',
-    options, answer: hx,
-    hints: ['Split the 8 bits into two groups of four, then convert each nibble.', `${bin.slice(0, 4)} = ${hi.toString(16).toUpperCase()}, ${bin.slice(4)} = ${lo.toString(16).toUpperCase()}.`],
-    explain: `<strong>${bin}</strong> → ${bin.slice(0, 4)} (${hi.toString(16).toUpperCase()}) | ${bin.slice(4)} (${lo.toString(16).toUpperCase()}) → <strong>${hx}</strong>.`,
+    title: `Add the binary numbers ${aBin} + ${bBin}, then give the result in hexadecimal.`,
+    desc: 'Two steps: add the binary numbers, then convert the 8-bit result to hex (two nibbles).',
+    options, answer,
+    hints: [`Step 1 — add: ${aBin} (${a}) + ${bBin} (${b}) = ${sum}.`, `Step 2 — convert ${sum} (binary ${sum.toString(2).padStart(8, '0')}) to hex by nibbles → ${answer}.`],
+    explain: `<strong>${answer}.</strong> Step 1: ${a} + ${b} = ${sum}. Step 2: ${sum} = binary ${sum.toString(2).padStart(8, '0')} → split into nibbles ${sum.toString(2).padStart(8, '0').slice(0, 4)} | ${sum.toString(2).padStart(8, '0').slice(4)} → <strong>${answer}</strong>.`,
   };
 }
 
@@ -179,7 +232,7 @@ function logicGate() {
       type: 'MC', badge: 'LOGIC GATE', board: 'AQA · OCR · Eduqas',
       title: `NOT gate: input = ${a}. What is the output?`,
       desc: 'The NOT gate inverts (flips) its single input',
-      options: [String(out), String(1 - out), 'Undefined', 'Error'], answer: String(out),
+      options: ['0', '1'], answer: String(out),
       hints: ['NOT simply flips the bit.', `NOT ${a} = ?`],
       explain: `<strong>NOT ${a} = ${out}.</strong> The NOT gate ${GATE_INFO.NOT}.`,
     };
@@ -190,7 +243,7 @@ function logicGate() {
     type: 'MC', badge: 'LOGIC GATE', board: 'AQA · OCR · Eduqas',
     title: `${gate} gate: A = ${a}, B = ${b}. What is the output?`,
     desc: `An ${gate} gate ${GATE_INFO[gate]}`,
-    options: [String(out), String(1 - out), 'Undefined', 'Error'], answer: String(out),
+    options: ['0', '1'], answer: String(out),
     hints: [`An ${gate} gate ${GATE_INFO[gate]}.`, `${a} ${gate} ${b} = ?`],
     explain: `<strong>${a} ${gate} ${b} = ${out}.</strong> An ${gate} gate ${GATE_INFO[gate]}.`,
   };
@@ -199,35 +252,35 @@ function logicGate() {
 // ============================================================
 // TWO'S COMPLEMENT (Phase 9)
 // ============================================================
-function twosToDenary() {
+function twosToDenary(opts, context) {
   const u = randInt(1, 255);
   const signed = u >= 128 ? u - 256 : u;
   const bits = toBitsMSB(u, 8), str = bits.join('');
-  const options = [String(signed), ...pickOptions(signed, [u, -signed, signed + 1, signed - 1], numericFallback(signed, true))];
-  return {
-    type: 'MC', badge: "TWO'S COMPLEMENT", board: 'AQA · OCR',
+  const base = {
+    badge: "TWO'S COMPLEMENT", board: 'AQA · OCR',
     title: `What is the denary value of two's complement ${str}?`,
-    desc: 'Place values (left→right): -128, 64, 32, 16, 8, 4, 2, 1',
-    options, answer: String(signed),
     hints: [bits[0] ? 'The leading bit is 1, so the number is negative (the -128 column is ON).' : 'The leading bit is 0, so read it as a normal positive binary number.', `Add the ON place values: ${twosSum(bits)}.`],
     explain: `<strong>${str}</strong> → ${twosSum(bits)} = <strong>${signed}</strong>.`,
   };
+  // assessment: bare signed number pad. practice: signed place-value adder (-128 column).
+  if (ASSESS(context)) return { ...base, type: 'NUMBER', signed: true, desc: 'Enter the denary value (it may be negative).', answer: signed };
+  return { ...base, type: 'PLACEVALUE', signed: true, desc: 'Tap each lit bit to total it up — the leftmost column is worth −128.', bits };
 }
-function twosNegate() {
+function twosNegate(opts, context) {
   const v = randInt(1, 127);
   const neg = (256 - v) & 255;
-  const ans = toBitsMSB(neg, 8).join('');
-  const posStr = toBitsMSB(v, 8).join('');
+  const negArr = toBitsMSB(neg, 8);
+  const posArr = toBitsMSB(v, 8);
   const flipOnly = toBitsMSB((~v) & 255, 8).join('');
-  const options = [ans, ...pickOptions(ans, [flipOnly, posStr, toBitsMSB((neg + 1) & 255, 8).join('')], () => toBitsMSB(randInt(128, 255), 8).join(''))];
-  return {
-    type: 'MC', badge: "TWO'S COMPLEMENT", board: 'AQA · OCR',
-    title: `What is the 8-bit two's complement representation of -${v}?`,
-    desc: `Method: write +${v}, flip all the bits, then add 1`,
-    options, answer: ans,
-    hints: [`+${v} = ${posStr}.`, `Flip → ${flipOnly}, then add 1.`],
-    explain: `<strong>-${v}:</strong> +${v} = ${posStr} → flip the bits → ${flipOnly} → add 1 → <strong>${ans}</strong>.`,
+  const base = {
+    badge: "TWO'S COMPLEMENT", board: 'AQA · OCR',
+    title: `Represent −${v} in 8-bit two's complement.`,
+    hints: [`+${v} = ${posArr.join('')}.`, `Flip → ${flipOnly}, then add 1.`],
+    explain: `<strong>−${v}:</strong> +${v} = ${posArr.join('')} → flip the bits → ${flipOnly} → add 1 → <strong>${negArr.join('')}</strong>.`,
   };
+  // assessment: bare bit-toggle of the answer. practice: guided flip + 1.
+  if (ASSESS(context)) return { ...base, type: 'BINARY', desc: "Toggle the bits to give the two's complement.", bits: 8, answer: negArr };
+  return { ...base, type: 'FLIPADD', desc: 'Flip every bit, then add 1.', pos: posArr };
 }
 
 // ============================================================
@@ -307,34 +360,262 @@ function bubblePass() {
 // ============================================================
 // FILE SIZE (Phase 10)
 // ============================================================
-function fileSizeImage() {
+function fileSizeImage(opts, context) {
   const w = randInt(2, 20) * 10, h = randInt(2, 20) * 10;
   const depth = [2, 3, 4, 8][randInt(0, 3)];
   const bits = w * h * depth;
-  const options = [String(bits), ...pickOptions(bits, [w * h, bits * 8, Math.round(bits / depth), w + h + depth], numericFallback(bits))];
-  return {
-    type: 'MC', badge: 'DATA', board: 'AQA · OCR · Eduqas',
+  const base = {
+    badge: 'DATA', board: 'AQA · OCR · Eduqas',
     title: `An image is ${w} pixels wide and ${h} pixels high with a colour depth of ${depth} bits. What is its uncompressed file size in bits?`,
-    desc: 'File size (bits) = width × height × colour depth',
-    options, answer: String(bits),
     hints: ['Multiply width × height to get the number of pixels.', `${w} × ${h} × ${depth} = ?`],
     explain: `<strong>${w} × ${h} × ${depth} = ${bits} bits.</strong> File size = width × height × colour depth.`,
+  };
+  // assessment: bare number pad. practice: guided W × H × depth.
+  if (ASSESS(context)) return { ...base, type: 'NUMBER', desc: 'File size (bits) = width × height × colour depth.', unit: 'bits', answer: bits };
+  return {
+    ...base, type: 'CALC', desc: 'File size = width × height × colour depth.',
+    formula: 'size (bits) = width × height × colour depth',
+    steps: [
+      { expr: `${w} × ${h}`, answer: w * h, unit: 'pixels' },
+      { expr: `{prev} × ${depth}`, answer: bits, unit: 'bits' },
+    ],
+  };
+}
+
+// ============================================================
+// PROGRAMMING traces (CODE_TRACE) — generated fresh each load so the
+// output can't be memorised. The code is built in every board's
+// notation (AQA pseudo-code / OCR ERL / Python); the answer is the
+// same for all, computed here in JS.
+// ============================================================
+function traceQ(code, answer, desc, hints, explain) {
+  return {
+    type: 'CODE_TRACE', badge: 'TRACE', board: 'AQA · OCR · Eduqas',
+    title: 'What does this program output?', desc, code, answer: String(answer), hints, explain,
+  };
+}
+function codeArith() {
+  const ops = ['+', '-', '*'];
+  const op = ops[randInt(0, 2)];
+  let a = randInt(2, 12), b = randInt(2, 12);
+  if (op === '-' && b > a) { const t = a; a = b; b = t; }      // keep the result non-negative
+  const r = op === '+' ? a + b : op === '-' ? a - b : a * b;
+  const aqa = `a ← ${a}\nb ← ${b}\nOUTPUT a ${op} b`;
+  const py = `a = ${a}\nb = ${b}\nprint(a ${op} b)`;
+  return traceQ({ AQA: aqa, OCR: py, Eduqas: py }, r,
+    'Work out a and b, then apply the operator.',
+    [`First find a and b: a = ${a}, b = ${b}.`, `${a} ${op} ${b} = ?`],
+    `<strong>Output: ${r}.</strong> a = ${a} and b = ${b}, so a ${op} b = ${r}.`);
+}
+function codeModDiv(opts) {
+  const op = (opts && opts.op) || (Math.random() < 0.5 ? 'MOD' : 'DIV');
+  const y = randInt(2, 9);
+  const x = randInt(y + 1, 60);
+  const r = op === 'MOD' ? x % y : Math.floor(x / y);
+  const pyOp = op === 'MOD' ? '%' : '//';
+  return traceQ({ AQA: `x ← ${x}\nOUTPUT x ${op} ${y}`, OCR: `x = ${x}\nprint(x ${op} ${y})`, Eduqas: `x = ${x}\nprint(x ${pyOp} ${y})` }, r,
+    op === 'MOD' ? 'MOD gives the remainder after division.' : 'DIV gives the whole-number part of a division.',
+    [`Work out ${x} ÷ ${y}.`, op === 'MOD' ? `${x} = ${Math.floor(x / y)} × ${y} + ${r}, so the remainder is ${r}.` : `${x} ÷ ${y} = ${(x / y).toFixed(2)}, so the whole part is ${r}.`],
+    `<strong>Output: ${r}.</strong> ${x} ${op} ${y} = ${r} (${op === 'MOD' ? 'the remainder' : 'the whole-number part'}).`);
+}
+function codeForSum() {
+  const n = randInt(3, 7);
+  const sum = n * (n + 1) / 2;
+  return traceQ({
+    AQA: `total ← 0\nFOR i ← 1 TO ${n}\n  total ← total + i\nENDFOR\nOUTPUT total`,
+    OCR: `total = 0\nfor i = 1 to ${n}\n  total = total + i\nnext i\nprint(total)`,
+    Eduqas: `total = 0\nfor i in range(1, ${n + 1}):\n  total = total + i\nprint(total)`,
+  }, sum, `The loop runs with i = 1 to ${n}.`,
+    ['Add i to total each pass — make a trace table.', `1 + 2 + … + ${n} = ${sum}.`],
+    `<strong>Output: ${sum}.</strong> The loop adds 1, 2, … ${n} to total: 1 + 2 + … + ${n} = ${sum}.`);
+}
+function codeWhileCount() {
+  const limit = [16, 20, 24, 30, 40, 50, 100][randInt(0, 6)];
+  let n = 1, count = 0;
+  while (n < limit) { n *= 2; count++; }
+  return traceQ({
+    AQA: `n ← 1\ncount ← 0\nWHILE n < ${limit}\n  n ← n * 2\n  count ← count + 1\nENDWHILE\nOUTPUT count`,
+    OCR: `n = 1\ncount = 0\nwhile n < ${limit}\n  n = n * 2\n  count = count + 1\nendwhile\nprint(count)`,
+    Eduqas: `n = 1\ncount = 0\nwhile n < ${limit}:\n  n = n * 2\n  count = count + 1\nprint(count)`,
+  }, count, 'Count how many times the loop runs before n reaches the limit.',
+    ['n doubles each pass: 1, 2, 4, 8 … Track n and count.', `n must reach ${limit} or more; that takes ${count} doublings.`],
+    `<strong>Output: ${count}.</strong> n doubles each pass (1 → 2 → 4 …) and count rises each time. After ${count} passes n ≥ ${limit}, so the loop stops with count = ${count}.`);
+}
+function codeArrayIndex() {
+  const len = randInt(3, 5);
+  const arr = []; for (let i = 0; i < len; i++) arr.push(randInt(1, 30));
+  const idx = randInt(0, len - 1);
+  const lit = `[${arr.join(', ')}]`;
+  return traceQ({ AQA: `nums ← ${lit}\nOUTPUT nums[${idx}]`, OCR: `nums = ${lit}\nprint(nums[${idx}])`, Eduqas: `nums = ${lit}\nprint(nums[${idx}])` },
+    arr[idx], 'Array indexes start at 0.',
+    [`Count positions from 0: nums[0] = ${arr[0]}, nums[1] = ${arr[1]} …`, `nums[${idx}] is position ${idx}.`],
+    `<strong>Output: ${arr[idx]}.</strong> Indexes start at 0, so nums[${idx}] = ${arr[idx]}.`);
+}
+
+// ============================================================
+// DATA REPRESENTATION DEPTH — binary arithmetic + data units
+// ============================================================
+function binaryAdd(opts) {
+  const bits = (opts && opts.bits) || 4;                          // opts.bits: 8 for exam-level addition
+  const hi = (1 << bits) - 1;
+  const lo = Math.max(2, hi >> 3);
+  const a = randInt(lo, hi - lo);
+  const b = randInt(lo, hi - a);                                  // a + b <= hi → clean fixed-width result, no overflow
+  const sum = a + b;
+  const aArr = toBitsMSB(a, bits), bArr = toBitsMSB(b, bits);
+  return {
+    // carry-row addition canvas: fill the carries AND toggle the result.
+    type: 'BINADD', badge: 'BINARY ADD', board: 'AQA · OCR · Eduqas',
+    a: aArr, b: bArr,
+    title: `Add these ${bits}-bit binary numbers`,
+    desc: 'Fill the carry row and the sum, working column by column from the right.',
+    hints: ['Work right to left; carry a 1 whenever a column totals 2 (10) or 3 (11).', `${aArr.join('')} (${a}) + ${bArr.join('')} (${b}) = ${sum} = ${toBitsMSB(sum, bits).join('')}.`],
+    explain: `<strong>${aArr.join('')} + ${bArr.join('')} = ${toBitsMSB(sum, bits).join('')}.</strong> In denary that is ${a} + ${b} = ${sum}. Add each column right-to-left, carrying a 1 whenever a column totals 2 or more.`,
+  };
+}
+function binaryShift() {
+  const bits = 8;
+  const dir = Math.random() < 0.5 ? 'left' : 'right';
+  const amount = randInt(1, 2);
+  const value = (dir === 'left') ? randInt(1, 1 << (bits - amount - 1)) : randInt(1 << (amount + 1), 200);
+  const arr = toBitsMSB(value & 0xFF, bits);
+  const result = (dir === 'left') ? (value << amount) & 0xFF : (value >> amount);
+  const factor = 1 << amount;
+  const pl = amount > 1 ? 's' : '';
+  const effect = (dir === 'left') ? `multiplies the value by ${factor}` : `divides the value by ${factor} (keeping the whole-number part)`;
+  // Stage-2 concept question: what did the shift DO to the number? Correct
+  // option first (the SHIFT module shuffles); distractors are real mistakes —
+  // the opposite operation, confusing the shift COUNT with the factor, and
+  // treating a shift as an add/subtract.
+  const wrongFactor = amount === 1 ? 4 : 2;
+  const conceptOptions = (dir === 'left')
+    ? [`Multiplied it by ${factor}`, `Divided it by ${factor}`, `Multiplied it by ${wrongFactor}`, `Added ${amount} to it`]
+    : [`Divided it by ${factor}`, `Multiplied it by ${factor}`, `Divided it by ${wrongFactor}`, `Subtracted ${amount} from it`];
+  return {
+    // animated shift: press SHIFT, watch the bits slide and the value change.
+    type: 'SHIFT', badge: 'BINARY SHIFT', board: 'AQA · OCR · Eduqas',
+    bits: arr, dir, amount,
+    title: `Shift the 8-bit binary number ${dir.toUpperCase()} by ${amount} place${pl}`,
+    desc: `Press SHIFT ${dir === 'left' ? '◀' : '▶'} ${amount} time${pl} and confirm, then say what the shift did to the value.`,
+    concept: {
+      prompt: `What did shifting ${dir} by ${amount} place${pl} do to the original number?`,
+      options: conceptOptions,
+      answer: conceptOptions[0],
+    },
+    hints: [`Move every bit ${amount} place${pl} to the ${dir}, filling the gaps with 0.`, `A ${dir} shift by ${amount} ${effect}: ${value} → ${result}.`],
+    explain: `<strong>A ${dir} shift by ${amount} ${effect}: ${value} → ${result}.</strong> Every bit moves ${amount} place${pl} to the ${dir} (gaps filled with 0). That is why a ${dir} shift is a fast way to ${dir === 'left' ? 'multiply' : 'divide'} by ${factor}.`,
+  };
+}
+// 8-bit binary subtraction via two's complement (a harder, exam-level skill).
+// A > B is forced so the result is a positive 8-bit value.
+function binarySub(opts, context) {
+  const bits = 8;
+  const a = randInt(20, 200), b = randInt(5, a - 1);             // a > b → non-negative result
+  const diff = a - b;
+  const aArr = toBitsMSB(a, bits), bArr = toBitsMSB(b, bits), ansArr = toBitsMSB(diff, bits);
+  const twoC = toBitsMSB((256 - b) & 255, bits).join('');
+  const base = {
+    badge: 'BINARY SUB', board: 'AQA · OCR',
+    title: `Using two's complement, work out ${aArr.join('')} − ${bArr.join('')}.`,
+    hints: [
+      `Two's complement of ${bArr.join('')}: flip every bit, then add 1 → ${twoC}.`,
+      `${aArr.join('')} (${a}) − ${bArr.join('')} (${b}) = ${diff} = ${ansArr.join('')} in binary.`,
+    ],
+    explain: `<strong>${aArr.join('')} − ${bArr.join('')} = ${ansArr.join('')}.</strong> In denary: ${a} − ${b} = ${diff}. Method: two's complement of ${bArr.join('')} is ${twoC}; add it to ${aArr.join('')} and discard the carry out of bit 8.`,
+  };
+  // assessment: bare bit-toggle of the result. practice: full multi-step (negate B, add, discard carry).
+  if (ASSESS(context)) return { ...base, type: 'BINARY', desc: 'Toggle the bits to give the result of the subtraction.', bits, answer: ansArr };
+  return { ...base, type: 'BINSUB', desc: 'Negate B (flip + 1), then add A + (−B).', a: aArr, b: bArr };
+}
+function unitsConvert() {
+  const kinds = [
+    () => ({ q: 'How many bits are there in one byte?', a: 8, ds: [4, 16, 1000] }),
+    () => ({ q: 'How many bits are there in one nibble?', a: 4, ds: [8, 2, 16] }),
+    () => { const n = randInt(2, 8); return { q: `How many bits are there in ${n} bytes?`, a: n * 8, ds: [n * 4, n * 2, n * 16] }; },
+    () => { const n = randInt(2, 9); return { q: `How many bytes are there in ${n} kB?`, a: n * 1000, ds: [n * 1024, n * 100, n * 8] }; },
+    () => { const n = randInt(2, 9); return { q: `How many kB are there in ${n} MB?`, a: n * 1000, ds: [n * 1024, n * 100, n * 10] }; },
+    () => { const n = randInt(2, 6); return { q: `How many MB are there in ${n} GB?`, a: n * 1000, ds: [n * 1024, n * 100, n * 1000000] }; },
+  ];
+  const k = kinds[randInt(0, kinds.length - 1)]();
+  return {
+    // a single unit conversion — the number pad is the natural input.
+    type: 'NUMBER', badge: 'DATA UNITS', board: 'AQA · OCR · Eduqas',
+    title: k.q,
+    desc: 'GCSE convention: 1 byte = 8 bits, and 1 kB = 1000 B, 1 MB = 1000 kB, 1 GB = 1000 MB.',
+    answer: k.a,
+    hints: ['1 nibble = 4 bits, 1 byte = 8 bits; each step up (kB → MB → GB) is ×1000.', `The answer is ${k.a}.`],
+    explain: `<strong>${k.a}.</strong> 1 byte = 8 bits, 1 nibble = 4 bits, and each unit step up (kB, MB, GB, TB) multiplies by 1000 in the current GCSE specs (not 1024).`,
+  };
+}
+function soundFileSize(opts, context) {
+  const rate = [100, 200, 500, 1000][randInt(0, 3)];
+  const depth = [8, 16][randInt(0, 1)];
+  const seconds = randInt(2, 8);
+  const bits = rate * depth * seconds;
+  const base = {
+    badge: 'SOUND', board: 'AQA · OCR · Eduqas',
+    title: `A sound is sampled ${rate} times per second at ${depth}-bit, for ${seconds} seconds. What is the file size in bits?`,
+    hints: ['Multiply the three numbers: sample rate × bit depth × seconds.', `${rate} × ${depth} × ${seconds} = ${bits} bits.`],
+    explain: `<strong>${rate} × ${depth} × ${seconds} = ${bits} bits.</strong> Sound file size = sample rate × bit depth × duration. (To convert to bytes, divide by 8 = ${bits / 8} bytes.)`,
+  };
+  if (ASSESS(context)) return { ...base, type: 'NUMBER', desc: 'Sound size (bits) = sample rate × bit depth × duration.', unit: 'bits', answer: bits };
+  return {
+    ...base, type: 'CALC', desc: 'Sound size = sample rate × bit depth × duration (seconds).',
+    formula: 'size (bits) = sample rate × bit depth × duration',
+    steps: [
+      { expr: `${rate} × ${depth}`, answer: rate * depth },
+      { expr: `{prev} × ${seconds}`, answer: bits, unit: 'bits' },
+    ],
+  };
+}
+
+// ============================================================
+// BOOLEAN LOGIC DEPTH — truth-table completion for gates + expressions
+// ============================================================
+function boolColFallback() {
+  return () => { const s = []; for (let i = 0; i < 4; i++) s.push(Math.random() < 0.5 ? '1' : '0'); return s.join(', '); };
+}
+function boolTable() {
+  const exprs = {
+    'A AND B': (a, b) => (a && b) ? 1 : 0,
+    'A OR B': (a, b) => (a || b) ? 1 : 0,
+    'A XOR B': (a, b) => (a ^ b),
+    'NOT (A AND B)': (a, b) => (a && b) ? 0 : 1,
+    'NOT (A OR B)': (a, b) => (a || b) ? 0 : 1,
+    'A AND (NOT B)': (a, b) => (a && !b) ? 1 : 0,
+    'A OR (NOT B)': (a, b) => (a || !b) ? 1 : 0,
+  };
+  const keys = Object.keys(exprs);
+  const expr = keys[randInt(0, keys.length - 1)];
+  const rows = [[0, 0], [0, 1], [1, 0], [1, 1]];
+  const fmt = fn => rows.map(([a, b]) => fn(a, b)).join(', ');
+  const answerArr = rows.map(([a, b]) => exprs[expr](a, b));
+  return {
+    // interactive truth-table fill: toggle Q for each input row.
+    type: 'TRUTHTABLE', badge: 'TRUTH TABLE', board: 'AQA · OCR · Eduqas',
+    inputs: ['A', 'B'], rows, answer: answerArr,
+    title: `Complete the truth table for Q = ${expr}.`,
+    desc: 'Set Q (0 or 1) for each input row in turn.',
+    hints: [`Apply "${expr}" to each input row in turn.`, 'Work out Q for A=0/B=0, then 0/1, then 1/0, then 1/1.'],
+    explain: `<strong>Q = ${expr} → ${answerArr.join(', ')}.</strong> Evaluate the expression for each row (0,0)(0,1)(1,0)(1,1). Reminder: AND = 1 only if both are 1, OR = 1 if at least one is 1, XOR = 1 if the inputs differ, and NOT inverts.`,
   };
 }
 
 const GENERATORS = {
   binaryToDenary, denaryToBinary, bitsValues,
-  hexToDenary, denaryToHex, binaryToHex,
-  logicGate,
+  hexToDenary, denaryToHex, binaryToHex, hexToBinary, addToHex,
+  logicGate, boolTable,
   twosToDenary, twosNegate,
   caesarLetter, caesarDecode,
   bubbleResult, bubblePass,
   fileSizeImage,
+  binaryAdd, binaryShift, binarySub, unitsConvert, soundFileSize,
+  codeArith, codeModDiv, codeForSum, codeWhileCount, codeArrayIndex,
 };
 
-export function generateQuestion(genId, opts) {
+export function generateQuestion(genId, opts, context) {
   const fn = GENERATORS[genId];
   if (!fn) throw new Error('unknown generator: ' + genId);
-  return fn(opts || {});
+  return fn(opts || {}, context);
 }
 export { GENERATORS };

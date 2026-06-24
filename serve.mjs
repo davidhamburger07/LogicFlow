@@ -28,6 +28,7 @@ const MIME = {
   '.jpg': 'image/jpeg',
   '.ico': 'image/x-icon',
   '.woff2': 'font/woff2',
+  '.wasm': 'application/wasm', // sql.js — lets WebAssembly streaming-compile
 };
 
 const server = createServer(async (req, res) => {

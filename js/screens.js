@@ -12,6 +12,7 @@
 // ============================================================
 
 import { PHASES } from './content.js';
+import { UNITS, gcseGrade } from './units.js';
 import { generateQuestion } from './generators.js';
 import * as store from './storage.js';
 import * as engine from './engine.js';
@@ -49,6 +50,8 @@ export function initScreens() {
   document.getElementById('arcade-back').addEventListener('click', () => { SFX.uiClick(); showMainMenu(); });
   document.getElementById('arcade-topics-back').addEventListener('click', () => { SFX.uiClick(); showArcadeModes(); });
   document.getElementById('qbank-back').addEventListener('click', () => { SFX.uiClick(); showMainMenu(); });
+  document.getElementById('stats-back').addEventListener('click', () => { SFX.uiClick(); showMainMenu(); });
+  document.getElementById('settings-back').addEventListener('click', () => { SFX.uiClick(); settingsBack(); });
   // the engine calls these when a session ends
   engine.setNavHandlers({ toMenu: showMainMenu, toCampaign: showCampaign, toRevision: showRevision, toArcade: showArcadeModes });
 }
@@ -58,20 +61,30 @@ export function initScreens() {
 // ============================================================
 export function showMainMenu() {
   resetAccent();
-  const frontier = store.getCampaignFrontier(PHASE_IDS);
+  const cs = store.getCampaignState(UNITS);
+  const cur = cs.current;
   const anyCleared = PHASE_IDS.some(id => store.getTopicStats(id).cleared);
-  const frontierIdx = frontier == null ? 0 : idxOfId(frontier);
-  const contLabel = anyCleared ? `CONTINUE · PHASE ${frontierIdx + 1}` : 'START · PHASE 1';
+  let contLabel, contSub, contAction;
+  if (!cur) {
+    contLabel = 'CAMPAIGN COMPLETE'; contSub = 'Replay any unit, or revise'; contAction = showCampaign;
+  } else if (cur.kind === 'lesson') {
+    const phase = PHASES[idxOfId(cur.phaseId)];
+    contLabel = anyCleared ? 'CONTINUE LEARNING' : 'START LEARNING';
+    contSub = phase ? `Up next: ${phase.name}` : 'Begin the campaign';
+    contAction = () => engine.launchPhase(idxOfId(cur.phaseId), 'campaign', true);
+  } else {
+    contLabel = 'CONTINUE LEARNING'; contSub = 'A unit test is waiting'; contAction = showCampaign;
+  }
 
   dom.menuActions.innerHTML = '';
   dom.menuActions.append(
-    menuBtn(contLabel, 'Resume the campaign where you left off', () => engine.launchPhase(frontierIdx, 'campaign', true), 'primary'),
-    menuBtn('CAMPAIGN', 'The linear journey through all 10 topics', showCampaign),
+    menuBtn(contLabel, contSub, contAction, 'primary'),
+    menuBtn('CAMPAIGN', 'Your journey through every GCSE topic', showCampaign),
     menuBtn('REVISION HUB', 'Jump to any topic · spaced review of your misses', showRevision),
     menuBtn('ARCADE', 'Timed Exam Rush — beat the clock', showArcadeModes),
     menuBtn('QUESTION BANK', 'Browse every question & answer — review mode', showQuestionBank),
-    menuBtn('SETTINGS', 'Coming soon', null, 'disabled'),
-    menuBtn('STATS', 'Coming soon', null, 'disabled'),
+    menuBtn('STATS', 'Your progress, mastery and estimated grade', showStats),
+    menuBtn('SETTINGS', 'Theme, sound, exam board and progress', showSettings),
   );
   engine.showScreen('main-menu');
 }
@@ -84,39 +97,172 @@ function menuBtn(title, sub, onClick, variant) {
 }
 
 // ============================================================
-// campaign map (linear circuit trace)
+// campaign — the winding circuit-bus path (units -> lessons ->
+// unit test, with cumulative mock checkpoints). Reads the fully
+// annotated state from storage and renders it; it does not own the
+// unlock logic. Lessons launch into the existing campaign flow;
+// unit tests / mocks call engine entry points added in R3 / R4
+// (guarded so this screen works before those land).
 // ============================================================
 export function showCampaign() {
   resetAccent();
-  const frontier = store.getCampaignFrontier(PHASE_IDS);
-  const frontierIdx = frontier == null ? PHASES.length : idxOfId(frontier);
+  const state = store.getCampaignState(UNITS);
 
-  dom.campTrace.innerHTML = '';
-  PHASES.forEach((phase, i) => {
-    const st = store.getTopicStats(phase.id);
-    const state = st.cleared ? 'cleared' : (phase.id === frontier ? 'current' : 'ahead');
-    const reached = i <= frontierIdx;          // the trace is lit up to the frontier
-    const node = h('button', `camp-node camp-${state}${reached ? ' reached' : ''}`);
-    node.style.setProperty('--node-color', phase.color);
-    const status = st.cleared ? `CLEARED · ${st.mastery}% MASTERY`
-      : state === 'current' ? 'YOU ARE HERE'
-        : st.started ? `${st.mastery}% MASTERY` : 'NOT STARTED';
-    node.innerHTML = `
-      <span class="camp-rail"></span>
-      <span class="camp-dot">${st.cleared ? '✓' : phase.id}</span>
-      <span class="camp-info">
-        <span class="camp-name">PHASE ${phase.id} · ${phase.name}</span>
-        <span class="camp-status">${status}</span>
-      </span>`;
-    node.addEventListener('click', () => { SFX.uiClick(); engine.launchPhase(i, 'campaign'); });
-    dom.campTrace.appendChild(node);
+  const path = h('div', 'cmp');
+  path.appendChild(h('div', 'cmp-intro',
+    'Follow the signal — clear each lesson to power up the next, then pass the unit test to unlock the unit after. Replay a cleared lesson flawlessly to earn all 3 ★.'));
+
+  state.units.forEach(u => {
+    path.appendChild(unitHeader(u));
+    u.lessons.forEach((ln, i) => path.appendChild(lessonNode(u, ln, i)));
+    path.appendChild(testNode(u));
+    if (u.mock) path.appendChild(mockNode(u, u.mock));
   });
 
-  const contIdx = frontier == null ? 0 : idxOfId(frontier);
-  dom.campContinue.textContent = frontier == null ? 'REPLAY · PHASE 1' : `CONTINUE · PHASE ${contIdx + 1}`;
-  dom.campContinue.onclick = () => { SFX.uiClick(); engine.launchPhase(contIdx, 'campaign', true); };
+  dom.campTrace.innerHTML = '';
+  dom.campTrace.appendChild(path);
+  wireContinue(state);
 
   engine.showScreen('campaign-map');
+  requestAnimationFrame(() => scrollToCurrent());
+}
+
+function unitHeader(u) {
+  const cleared = u.lessons.filter(l => l.state === 'cleared').length;
+  const totalStars = u.lessons.reduce((s, l) => s + (l.crown || 0), 0);
+  const tag = u.state === 'complete' ? ' · COMPLETE' : u.state === 'locked' ? ' · LOCKED' : '';
+  const wrap = h('div', `cmp-unit ${u.state}${u.state !== 'locked' ? ' reached' : ''}`);
+  wrap.style.setProperty('--node-color', u.color);
+  wrap.innerHTML = `
+    <span class="cmp-bus"></span>
+    <span class="cmp-unit-chip">
+      <span class="cmp-unit-no">UNIT ${u.id}${tag}</span>
+      <span class="cmp-unit-name">${u.name}</span>
+      <span class="cmp-unit-blurb">${u.blurb || ''}</span>
+      <span class="cmp-unit-prog">${cleared}/${u.lessons.length} LESSONS${totalStars ? ' · ' + totalStars + ' ★' : ''}</span>
+    </span>`;
+  return wrap;
+}
+
+function starBar(crown) {
+  let s = '';
+  for (let i = 0; i < 3; i++) s += `<span class="cmp-star-${i < crown ? 'on' : 'off'}">★</span>`;
+  return `<span class="cmp-stars">${s}</span>`;
+}
+
+function lessonNode(u, ln, i) {
+  const phase = PHASES[idxOfId(ln.phaseId)];
+  const side = i % 2 === 0 ? 'side-left' : 'side-right';
+  const btn = h('button', `cmp-node cmp-lesson ${side} ${ln.state}${ln.current ? ' current' : ''}${ln.state !== 'locked' ? ' reached' : ''}`);
+  btn.style.setProperty('--node-color', u.color);
+  if (ln.current) btn.id = 'cmp-current';
+  const dot = ln.state === 'cleared' ? '✓' : ln.state === 'locked' ? '🔒' : ln.current ? '▶' : String(i + 1);
+  const clearedMeta = starBar(ln.crown) + (ln.crown >= 3
+    ? '<span class="cmp-meta cmp-mastered">★ MASTERED</span>'
+    : '<span class="cmp-meta cmp-replay">↻ REPLAY FOR ★★★</span>');
+  const meta = ln.state === 'cleared' ? clearedMeta
+    : ln.current ? '<span class="cmp-meta">▶ START</span>'
+      : ln.state === 'unlocked' ? '<span class="cmp-meta">READY</span>'
+        : '<span class="cmp-meta">LOCKED</span>';
+  btn.innerHTML = `
+    <span class="cmp-bus"></span>
+    <span class="cmp-branch"></span>
+    <span class="cmp-joint"></span>
+    <span class="cmp-dot">${dot}</span>
+    <span class="cmp-label">
+      <span class="cmp-name">${phase ? phase.name : 'LESSON'}</span>
+      ${meta}
+    </span>`;
+  btn.addEventListener('click', () => {
+    if (ln.state === 'locked') { nudge(btn); return; }
+    SFX.uiClick();
+    // first play teaches (show intro); replaying a cleared lesson skips it
+    engine.launchPhase(idxOfId(ln.phaseId), 'campaign', ln.state === 'cleared');
+  });
+  return btn;
+}
+
+function testNode(u) {
+  const t = u.test;
+  const btn = h('button', `cmp-node cmp-test ${t.state}${t.current ? ' current' : ''}${t.state !== 'locked' ? ' reached' : ''}`);
+  btn.style.setProperty('--node-color', u.color);
+  if (t.current) btn.id = 'cmp-current';
+  const badge = t.state === 'passed' ? '✓' : t.state === 'locked' ? '🔒' : '◆';
+  const meta = t.state === 'passed' ? `PASSED · BEST ${t.best}%`
+    : t.state === 'unlocked' ? 'READY ▶'
+      : 'CLEAR EVERY LESSON FIRST';
+  btn.innerHTML = `
+    <span class="cmp-bus"></span>
+    <span class="cmp-badge"><span>${badge}</span></span>
+    <span class="cmp-label">
+      <span class="cmp-name">UNIT TEST</span>
+      <span class="cmp-meta">${meta}</span>
+    </span>`;
+  btn.addEventListener('click', () => {
+    if (t.state === 'locked') { nudge(btn); return; }
+    SFX.uiClick();
+    if (engine.launchUnitTest) engine.launchUnitTest(u.id);
+    else flash('Unit tests arrive in the next update.');
+  });
+  return btn;
+}
+
+function mockNode(u, m) {
+  const btn = h('button', `cmp-node cmp-mock ${m.state}${m.state !== 'locked' ? ' reached' : ''}`);
+  btn.style.setProperty('--node-color', u.color);
+  const range = m.covers.length > 1 ? `UNITS ${m.covers[0]}–${m.covers[m.covers.length - 1]}` : `UNIT ${m.covers[0]}`;
+  const sub = m.state === 'passed' ? `GRADE ${m.grade} · BEST ${m.best}% · ${range}`
+    : m.state === 'unlocked' ? `${range} · ▶ SIT THE PAPER`
+      : `${range} · COMPLETE THE UNITS FIRST`;
+  btn.innerHTML = `
+    <span class="cmp-bus"></span>
+    <span class="cmp-mockbar">
+      <span class="cmp-mock-name">◆ ${m.name}</span>
+      <span class="cmp-mock-sub">${sub}</span>
+    </span>`;
+  btn.addEventListener('click', () => {
+    if (m.state === 'locked') { nudge(btn); return; }
+    SFX.uiClick();
+    if (engine.launchMock) engine.launchMock(m.id);
+    else flash('Mock exams arrive in an upcoming update.');
+  });
+  return btn;
+}
+
+function wireContinue(state) {
+  const btn = dom.campContinue;
+  const cur = state.current;
+  if (!cur) { btn.textContent = 'ALL CLEAR ✓'; btn.onclick = () => SFX.uiClick(); return; }
+  btn.textContent = 'CONTINUE →';
+  btn.onclick = () => {
+    SFX.uiClick();
+    if (cur.kind === 'lesson') engine.launchPhase(idxOfId(cur.phaseId), 'campaign', true);
+    else scrollToCurrent();
+  };
+}
+
+function scrollToCurrent() {
+  const node = document.getElementById('cmp-current');
+  if (node) node.scrollIntoView({ block: 'center', behavior: 'smooth' });
+}
+
+// tapping a locked node: shake it. SFX.wrong gives the "denied" cue.
+function nudge(el) {
+  if (SFX.wrong) SFX.wrong();
+  el.classList.remove('cmp-shake');
+  void el.offsetWidth;            // reflow so the animation can re-trigger
+  el.classList.add('cmp-shake');
+}
+
+// a small transient toast for flows not yet built (R3/R4)
+let toastTimer;
+function flash(msg) {
+  let t = document.getElementById('cmp-toast');
+  if (!t) { t = h('div', 'cmp-toast'); t.id = 'cmp-toast'; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
 // ============================================================
@@ -190,6 +336,7 @@ export function showArcadeModes() {
     arcadeModeCard('EXAM RUSH', 'TIMED', 'Beat the clock — every question runs on a countdown. Run out of time and it is marked wrong.', () => showArcadeTopics('timed')),
     arcadeModeCard('SURVIVAL', 'SUDDEN DEATH', 'One wrong answer ends the run — chase your longest streak across every topic.', () => engine.startSurvival()),
     arcadeModeCard('PAST PAPER', 'EXAM STYLE', 'Sit a topic as an exam paper — write answers, reveal the mark scheme, self-mark, and get a grade.', () => showArcadeTopics('pastpaper')),
+    arcadeModeCard('PRACTICAL CODING', 'WRITE CODE', 'Write real programs across the syllabus — reveal a model answer in your exam board’s notation and self-mark against the mark scheme.', () => engine.startPractical()),
   );
   engine.showScreen('arcade-modes');
 }
@@ -356,4 +503,125 @@ export function showQuestionBank() {
   const scroller = content.closest('.screen-scroll');
   if (scroller) scroller.scrollTop = 0;
   engine.showScreen('question-bank');
+}
+
+// ============================================================
+// stats — a progress report: an estimated GCSE grade, headline counts,
+// and mastery by unit/topic. Read-only; everything derives from storage.
+// ============================================================
+export function showStats() {
+  resetAccent();
+  const cs = store.getCampaignState(UNITS);
+  const rows = PHASES.map(p => ({ phase: p, st: store.getTopicStats(p.id), crown: store.getCrown(p.id) }));
+
+  const started = rows.filter(r => r.st.started);
+  const startedCount = started.length;
+  const clearedCount = rows.filter(r => r.st.cleared).length;
+  const crownsEarned = rows.reduce((s, r) => s + r.crown, 0);
+  const crownsMax = PHASES.length * 3;
+  const overall = startedCount ? Math.round(started.reduce((s, r) => s + r.st.mastery, 0) / startedCount) : null;
+  const grade = overall != null ? gcseGrade(overall) : null;
+  const dueCount = store.getDueReviews().length;
+  const scheduled = store.getScheduleSize();
+  const unitsComplete = cs.units.filter(u => u.state === 'complete').length;
+
+  const host = document.getElementById('stats-content');
+  host.innerHTML = '';
+  host.appendChild(gradeHero(grade, overall, startedCount));
+
+  const tiles = h('div', 'stats-tiles');
+  tiles.append(
+    statTile('LESSONS CLEARED', String(clearedCount), `of ${PHASES.length}`),
+    statTile('TOPICS STARTED', String(startedCount), `of ${PHASES.length}`),
+    statTile('CROWNS', String(crownsEarned), `of ${crownsMax} ★`),
+    statTile('UNITS COMPLETE', String(unitsComplete), `of ${cs.units.length}`),
+    statTile('DUE TO REVIEW', String(dueCount), scheduled ? `${scheduled} scheduled` : 'none yet'),
+  );
+  host.appendChild(tiles);
+
+  const sec = h('div', 'stats-section');
+  sec.appendChild(h('div', 'stats-section-head', 'MASTERY BY TOPIC'));
+  cs.units.forEach(u => {
+    sec.appendChild(statsUnitRow(u));
+    u.lessons.forEach(ln => sec.appendChild(statsTopicRow(ln)));
+  });
+  host.appendChild(sec);
+
+  const scroller = host.closest('.screen-scroll');
+  if (scroller) scroller.scrollTop = 0;
+  engine.showScreen('stats');
+}
+
+function gradeHero(grade, overall, startedCount) {
+  const wrap = h('div', 'stats-hero');
+  if (grade == null) {
+    wrap.classList.add('empty');
+    wrap.innerHTML = `
+      <span class="stats-hero-label">ESTIMATED GRADE</span>
+      <span class="stats-grade">—</span>
+      <span class="stats-hero-note">Answer a few questions and your estimated grade will appear here.</span>`;
+    return wrap;
+  }
+  let scale = '';
+  for (let g = 1; g <= 9; g++) scale += `<span class="stats-scale-seg${g === grade ? ' on' : ''}${g < grade ? ' filled' : ''}">${g}</span>`;
+  wrap.innerHTML = `
+    <span class="stats-hero-label">ESTIMATED GRADE</span>
+    <span class="stats-grade">${grade}</span>
+    <span class="stats-scale">${scale}</span>
+    <span class="stats-hero-note">From <strong>${overall}%</strong> average mastery across the <strong>${startedCount}</strong> topic${startedCount === 1 ? '' : 's'} you've practised — a guide based on your recent recall, not a real grade boundary.</span>`;
+  return wrap;
+}
+
+function statTile(label, value, sub) {
+  return h('div', 'stats-tile',
+    `<span class="stats-tile-val">${value}</span><span class="stats-tile-label">${label}</span><span class="stats-tile-sub">${sub}</span>`);
+}
+
+function statsUnitRow(u) {
+  const cleared = u.lessons.filter(l => l.state === 'cleared').length;
+  const test = u.test.state === 'passed' ? `test ✓ ${u.test.best}%`
+    : u.test.state === 'unlocked' ? 'test ready' : 'test locked';
+  const mock = (u.mock && u.mock.best != null) ? ` · mock grade ${u.mock.grade}` : '';
+  const row = h('div', `stats-unit ${u.state}`);
+  row.style.setProperty('--node-color', u.color);
+  row.innerHTML = `
+    <span class="stats-unit-dot"></span>
+    <span class="stats-unit-name">UNIT ${u.id} · ${u.name}</span>
+    <span class="stats-unit-meta">${cleared}/${u.lessons.length} cleared · ${test}${mock}</span>`;
+  return row;
+}
+
+function statsTopicRow(ln) {
+  const phase = PHASES[idxOfId(ln.phaseId)];
+  const pct = ln.started ? ln.mastery : 0;
+  const row = h('div', 'stats-topic' + (ln.started ? '' : ' new'));
+  row.style.setProperty('--node-color', phase ? phase.color : '#2563EB');
+  row.innerHTML = `
+    <span class="stats-topic-name">${phase ? phase.name : 'Lesson'}</span>
+    ${starBar(ln.crown)}
+    <span class="stats-bar"><span class="stats-bar-fill" style="width:${pct}%"></span></span>
+    <span class="stats-topic-pct">${ln.started ? ln.mastery + '%' : 'not started'}</span>`;
+  return row;
+}
+
+// ============================================================
+// settings — theme, sound, exam board and a progress reset. The
+// controls themselves are static DOM wired by main.js (which owns the
+// theme/volume/board setters), kept in sync wherever they appear; this
+// just shows the screen.
+// ============================================================
+// returnFn (optional): where the settings "back" button goes. When settings
+// is opened mid-game (the HUD gear), this resumes the game instead of the menu.
+let settingsReturn = null;
+export function showSettings(returnFn) {
+  settingsReturn = typeof returnFn === 'function' ? returnFn : null;
+  if (!settingsReturn) resetAccent();
+  const back = document.getElementById('settings-back');
+  if (back) back.textContent = settingsReturn ? '← BACK' : '← MENU';
+  engine.showScreen('settings');
+}
+export function settingsBack() {
+  const r = settingsReturn;
+  settingsReturn = null;
+  if (r) r(); else showMainMenu();
 }

@@ -16,13 +16,20 @@
 // accuracy) so a student can visibly recover from early mistakes.
 // ============================================================
 
+import { gcseGrade } from './units.js';
+
 const KEY = {
   premium: 'logicflow.premium',
   volume: 'logicflow.volume',
   theme: 'logicflow.theme',
+  uiScale: 'logicflow.uiscale',
+  board: 'logicflow.board',
   topicStats: 'logicflow.topicStats',
   schedule: 'logicflow.schedule',
+  campaign: 'logicflow.campaign',
 };
+
+const BOARDS = ['AQA', 'OCR', 'Eduqas', 'WJEC'];   // WJEC (Wales) uses Python, like Eduqas (its English sibling)
 
 const DEFAULT_VOLUME = 70;            // matches the HUD slider default
 
@@ -85,6 +92,30 @@ export function getTheme() {
 }
 export function setTheme(t) {
   writeRaw(KEY.theme, t === 'dark' ? 'dark' : 'light');
+}
+
+// ============================================================
+// UI size ('sm' | 'md' | 'lg'). Raw string so the inline <head> script can
+// apply the zoom before first paint (no flash). Default 'md'.
+// ============================================================
+export function getUiScale() {
+  const v = readRaw(KEY.uiScale);
+  return (v === 'sm' || v === 'lg') ? v : 'md';
+}
+export function setUiScale(s) {
+  writeRaw(KEY.uiScale, (s === 'sm' || s === 'lg') ? s : 'md');
+}
+
+// ============================================================
+// exam-board preference ('AQA' | 'OCR' | 'Eduqas'). Decides which
+// notation programming code is shown in. Default AQA.
+// ============================================================
+export function getBoard() {
+  const b = readRaw(KEY.board);
+  return BOARDS.includes(b) ? b : 'AQA';
+}
+export function setBoard(b) {
+  writeRaw(KEY.board, BOARDS.includes(b) ? b : 'AQA');
 }
 
 // ============================================================
@@ -206,7 +237,171 @@ export function getMisses() {
   return Object.values(readSchedule()).map(it => ({ phaseId: it.phaseId, qIndex: it.qIndex }));
 }
 
+// ============================================================
+// CAMPAIGN PROGRESSION (Duolingo-style units -> lessons -> tests)
+//
+// The locked path. A LESSON is one phase (its `cleared` flag lives in
+// topicStats above). On top of that we persist, in `logicflow.campaign`:
+//   - crowns[phaseId]      0–3, the lesson's "stars" (monotonic best)
+//   - tests[unitId]        { passed, best }  the Unit Test result
+//   - mocks[mockId]        { best, grade }   the cumulative Mock result
+//
+// Unlock rules (computed in getCampaignState, which takes the UNITS
+// topology so storage stays decoupled from units.js's specific data):
+//   - a unit unlocks when the previous unit is COMPLETE
+//   - lessons in a unit unlock in order (each needs the previous cleared)
+//   - a Unit Test unlocks once every lesson in its unit is cleared
+//   - a unit is COMPLETE when all its lessons are cleared AND its test
+//     is passed  (the test is the mandatory gate to the next unit)
+//   - a Mock unlocks when its unit completes; Mocks are OPTIONAL — they
+//     never gate progress and are not the "you are here" pointer
+// ============================================================
+export const UNIT_TEST_PASS = 70;   // % needed to pass a Unit Test (gates next unit)
+export const MOCK_PASS = 50;        // % at/above which a Mock is shown as "passed"
+const CROWN_SILVER = 80;            // lesson mastery for a 2nd crown
+const CROWN_GOLD = 95;              // lesson mastery (or a flawless run) for the 3rd crown
+
+function readCampaign() {
+  const c = readJSON(KEY.campaign, null);
+  const base = { crowns: {}, tests: {}, mocks: {} };
+  if (!c || typeof c !== 'object' || Array.isArray(c)) return base;
+  return {
+    crowns: (c.crowns && typeof c.crowns === 'object') ? c.crowns : {},
+    tests: (c.tests && typeof c.tests === 'object') ? c.tests : {},
+    mocks: (c.mocks && typeof c.mocks === 'object') ? c.mocks : {},
+  };
+}
+function writeCampaign(c) { writeJSON(KEY.campaign, c); }
+
+function crownFromRun(mastery, flawless) {
+  if (flawless || (mastery != null && mastery >= CROWN_GOLD)) return 3;
+  if (mastery != null && mastery >= CROWN_SILVER) return 2;
+  return 1;   // cleared at all = at least one crown
+}
+
+// a lesson's crown level (0 = never cleared)
+export function getCrown(phaseId) {
+  const c = readCampaign();
+  const v = c.crowns[phaseId];
+  return Number.isFinite(v) ? v : 0;
+}
+
+// called when a CAMPAIGN lesson is finished: marks it cleared AND bumps
+// its crown (monotonic — a worse later run can't take a crown away).
+// `opts.mastery` (0–100) + `opts.flawless` (no wrong answers) decide the
+// crown earned this run; falls back to the rolling mastery if omitted.
+export function recordLessonClear(phaseId, opts = {}) {
+  markPhaseCleared(phaseId);
+  const mastery = (opts.mastery != null) ? opts.mastery : getTopicStats(phaseId).mastery;
+  const earned = crownFromRun(mastery, !!opts.flawless);
+  const c = readCampaign();
+  c.crowns[phaseId] = Math.max(c.crowns[phaseId] || 0, earned);
+  writeCampaign(c);
+  return c.crowns[phaseId];
+}
+
+export function getUnitTest(unitId) {
+  const t = readCampaign().tests[unitId];
+  return { passed: !!(t && t.passed), best: (t && Number.isFinite(t.best)) ? t.best : 0 };
+}
+// record a Unit Test attempt (pct 0–100). Passing is sticky; best is kept.
+export function recordUnitTest(unitId, pct) {
+  const c = readCampaign();
+  const cur = c.tests[unitId] || { passed: false, best: 0 };
+  const best = Math.max(cur.best || 0, Math.round(Number(pct) || 0));
+  c.tests[unitId] = { passed: cur.passed || best >= UNIT_TEST_PASS, best };
+  writeCampaign(c);
+  return c.tests[unitId];
+}
+
+export function getMockResult(mockId) {
+  const m = readCampaign().mocks[mockId];
+  return m ? { best: m.best || 0, grade: m.grade || gcseGrade(m.best || 0) } : null;
+}
+// record a Mock attempt (pct 0–100). Keeps the best % + its GCSE grade.
+export function recordMock(mockId, pct) {
+  const c = readCampaign();
+  const cur = c.mocks[mockId] || { best: 0 };
+  const best = Math.max(cur.best || 0, Math.round(Number(pct) || 0));
+  c.mocks[mockId] = { best, grade: gcseGrade(best) };
+  writeCampaign(c);
+  return c.mocks[mockId];
+}
+
+function coversUpTo(units, unitId) {
+  const ids = [];
+  for (const u of units) { ids.push(u.id); if (u.id === unitId) break; }
+  return ids;
+}
+
+// THE campaign read API: turns the UNITS topology + saved progress into a
+// fully-annotated, ordered structure the path UI renders directly.
+// Returns { units: [...], current } where `current` = the single "you are
+// here" node (first unlocked-but-unfinished lesson or unit test), or null.
+export function getCampaignState(units) {
+  const list = Array.isArray(units) ? units : [];
+  const out = [];
+  let current = null;
+  let prevComplete = true;          // unit 1 has no predecessor → unlocked
+
+  for (const u of list) {
+    const unitUnlocked = prevComplete;
+    const lessons = [];
+    let allCleared = true;
+    let priorCleared = true;        // the previous lesson in THIS unit is cleared
+
+    for (const pid of (u.lessons || [])) {
+      const ts = getTopicStats(pid);
+      const cleared = ts.cleared;
+      let state;
+      if (!unitUnlocked) state = 'locked';
+      else if (cleared) state = 'cleared';
+      else if (priorCleared) state = 'unlocked';
+      else state = 'locked';
+      const node = { phaseId: pid, state, crown: getCrown(pid), mastery: ts.mastery, started: ts.started };
+      if (state === 'unlocked' && !current) { current = { kind: 'lesson', unitId: u.id, phaseId: pid }; node.current = true; }
+      lessons.push(node);
+      if (!cleared) { allCleared = false; priorCleared = false; }
+    }
+
+    const tr = getUnitTest(u.id);
+    let testState;
+    if (!unitUnlocked) testState = 'locked';
+    else if (tr.passed) testState = 'passed';
+    else if (allCleared) testState = 'unlocked';
+    else testState = 'locked';
+    const test = { state: testState, best: tr.best };
+    if (testState === 'unlocked' && !current) { current = { kind: 'unit-test', unitId: u.id }; test.current = true; }
+
+    const unitComplete = allCleared && tr.passed;
+
+    let mock = null;
+    if (u.mock) {
+      const mr = getMockResult(u.mock.id);
+      const passed = !!(mr && mr.best >= MOCK_PASS);
+      mock = {
+        id: u.mock.id, name: u.mock.name, covers: coversUpTo(list, u.id),
+        state: !unitComplete ? 'locked' : (passed ? 'passed' : 'unlocked'),
+        best: mr ? mr.best : null, grade: mr ? mr.grade : null,
+      };
+    }
+
+    out.push({
+      id: u.id, name: u.name, color: u.color, blurb: u.blurb,
+      state: unitComplete ? 'complete' : (unitUnlocked ? 'unlocked' : 'locked'),
+      lessons, test, mock,
+    });
+    prevComplete = unitComplete;
+  }
+
+  return { units: out, current };
+}
+
 // full progress reset (handy for testing / a future settings screen)
 export function resetProgress() {
-  try { localStorage.removeItem(KEY.topicStats); localStorage.removeItem(KEY.schedule); } catch (e) {}
+  try {
+    localStorage.removeItem(KEY.topicStats);
+    localStorage.removeItem(KEY.schedule);
+    localStorage.removeItem(KEY.campaign);
+  } catch (e) {}
 }
