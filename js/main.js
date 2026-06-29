@@ -156,7 +156,9 @@ function boot() {
   wire();
   engine.initEngine();
   screens.initScreens();
-  screens.showMainMenu();   // boot straight into the menu (no power-on screen)
+  // first-ever launch lands on the how-to-play tutorial; otherwise the menu
+  if (!store.getTutorialSeen()) screens.showTutorial(screens.showMainMenu);
+  else screens.showMainMenu();   // boot straight into the menu (no power-on screen)
 }
 
 boot();

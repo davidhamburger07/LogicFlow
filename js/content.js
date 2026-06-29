@@ -45,27 +45,25 @@ export const PHASES = [
             answer: 'Telling apart just two states (on/off) is reliable, even with electrical noise',
             explain: 'Components reliably hold <strong>two</strong> states (on/off), even with electrical noise — so binary is robust. Telling apart many voltage levels would be error-prone.' } },
         { use: ['what', 'keyFacts'] },
+        { heading: 'PLACE VALUE — WHAT EACH BIT IS WORTH',
+          html: '<div class="pi-text">Binary works like normal numbers, but each position is worth <strong>twice</strong> the one to its right. For 4 bits, left to right the place values are <strong>8, 4, 2, 1</strong>. A bit of <strong>1</strong> means “count this place value”; a <strong>0</strong> means “skip it”. The denary value is just the lit place values added up.</div><div class="pi-examples"><div class="pi-example">place values&nbsp;→&nbsp; <strong>8</strong>&nbsp; <strong>4</strong>&nbsp; <strong>2</strong>&nbsp; <strong>1</strong></div><div class="pi-example">1 1 0 1 → 8 + 4 + 0 + 1 = <strong>13</strong></div></div>',
+          q: { type: 'PLACEVALUE', bits: [1, 0, 1, 0], guided: true, explain: 'The lit bits are 8 and 2 → 8 + 2 = <strong>10</strong>.' } },
         { heading: 'STEP 1 — READING BINARY (binary → denary)',
-          html: '<div class="pi-text">Each bit has a <strong>place value</strong>. Reading left to right for 4 bits they are <strong>8, 4, 2, 1</strong> — each double the one to its right. To find the denary value, <strong>add up the place values wherever the bit is a 1</strong>.</div><div class="pi-examples"><div class="pi-example">1011 → 8 + 0 + 2 + 1 = <strong>11</strong></div></div>',
-          check: {
-            title: 'What is binary 1010 in denary?',
-            options: ['10', '8', '12', '101'],
-            answer: '10',
-            explain: '1010 → place values 8, 4, 2, 1 → 8 + 0 + 2 + 0 = <strong>10</strong>.' } },
+          html: '<div class="pi-text">To read a binary number, add up the place values where the bit is 1. The sum is laid out for you below — just work out the total.</div><div class="pi-examples"><div class="pi-example">worked example&nbsp;→&nbsp; 1011 → 8 + 2 + 1 = <strong>11</strong></div></div>',
+          q: { type: 'PLACEVALUE', bits: [1, 1, 0, 1], guided: true, explain: '8 + 4 + 1 = <strong>13</strong>.' } },
         { heading: 'STEP 2 — WRITING BINARY (denary → binary)',
-          html: '<div class="pi-text">Going the other way, start from the <strong>biggest</strong> place value. Ask: does it fit? If yes, write a <strong>1</strong> and subtract it; if no, write a <strong>0</strong>. Work down to 1.</div><div class="pi-examples"><div class="pi-example">13 → 8 fits (5 left) → 4 fits (1 left) → 2 no → 1 fits → <strong>1101</strong></div></div>',
-          check: {
-            title: 'What is denary 6 in 4-bit binary?',
-            options: ['0110', '0101', '1100', '0011'],
-            answer: '0110',
-            explain: '6 = 4 + 2 → switch on the 4 and 2 bits → <strong>0110</strong>.' } },
-        { heading: 'STEP 3 — BITS, BYTES & BIGGER',
-          html: '<div class="pi-text">Bits are grouped: <strong>4 bits = a nibble</strong>, <strong>8 bits = a byte</strong> (which stores 0–255). Bytes scale up into the units you see every day — <strong>KB → MB → GB → TB</strong>, each about 1000× bigger. Remember: storage is sold in <strong>bytes</strong>, but network speed is sold in <strong>bits</strong> (8 bits = 1 byte).</div><div class="pi-examples"><div class="pi-example">1 byte = 8 bits = stores 0 to 255</div></div>',
+          html: '<div class="pi-text">Going the other way: start from the <strong>biggest</strong> place value and ask “does it fit?”. If yes, write <strong>1</strong> and subtract it; if no, write <strong>0</strong>. Keep going until nothing is left. <em>Shortcut for numbers near the top: 255 − 221 = 34, work out 34, then flip every bit.</em> Walk through 221:</div>',
+          q: { type: 'BINBUILD', value: 221, bits: 8, explain: '221 = 128 + 64 + 16 + 8 + 4 + 1 → <strong>11011101</strong>.' } },
+        { heading: 'STEP 3 — HOW MANY VALUES CAN n BITS STORE?',
+          html: '<div class="pi-text">Each extra bit <strong>doubles</strong> the possibilities: 1 bit → 2, 2 bits → 4, 3 bits → 8 … so n bits give <strong>2ⁿ</strong> values. (Examiners want the 2ⁿ working.) Show the working for 3 bits:</div>',
+          q: { type: 'CALC', formula: 'values = 2 × 2 × 2', steps: [{ expr: '2 × 2', answer: 4 }, { expr: '{prev} × 2', answer: 8, unit: 'values' }], explain: '3 bits = 2³ = <strong>8</strong> values (000 up to 111). Careful: 2 + 4 + 8 = 14 is NOT it — that mixes up “how many values” with place values.' } },
+        { heading: 'STEP 4 — BITS, BYTES & BIGGER',
+          html: '<div class="pi-text"><strong>4 bits = a nibble</strong>, <strong>8 bits = a byte</strong> (stores 0–255). Bytes scale up: KB → MB → GB → TB, each ~1000× bigger. Storage is sold in <strong>bytes</strong>, internet speed in <strong>bits</strong> (8 bits = 1 byte).</div>',
           check: {
             title: 'How many bits are in one byte?',
             options: ['8', '4', '16', '1'],
             answer: '8',
-            explain: 'A <strong>byte is 8 bits</strong> (a nibble is 4). One byte can store 256 different values, 0–255.' } },
+            explain: 'A <strong>byte is 8 bits</strong> (a nibble is 4). One byte stores 256 values, 0–255.' } },
         { use: ['how', 'tip'] },
       ],
       examples: [
@@ -112,18 +110,13 @@ export const PHASES = [
     ],
     // computational questions are GENERATED fresh each load (no fixed
     // answer to memorise) — see js/generators.js. Standard binary (MSB-left).
+    // ORDERED so the scaffolding FADES: guided recall (tap/produce, full hints
+    // + method desc) → applied real-world & interactive → harder 8-bit → an
+    // unscaffolded written exam → a final SOLO question with no help at all.
     questions: [
-      { gen: 'binaryToDenary' },
-      { gen: 'bitsValues' },
-      { gen: 'denaryToBinary' },
-      { gen: 'binaryToDenary', opts: { bits: 8 } },
-      { gen: 'denaryToBinary', opts: { bits: 8 } },
-      { type: 'NUMBER', badge: 'REAL WORLD', board: 'AQA · OCR · Eduqas',
-        title: 'Your broadband runs at 80 megabits per second (Mb/s). There are 8 bits in 1 byte. How many megabytes (MB) does it download each second?',
-        desc: 'Convert the bit-rate to bytes — divide by 8.',
-        answer: 10,
-        hints: ['8 bits make 1 byte, so divide the megabits by 8.', '80 ÷ 8 = 10.'],
-        explain: '<strong>80 Mb/s ÷ 8 = 10 MB/s.</strong> ISPs advertise in mega<strong>bits</strong>, but files are measured in mega<strong>bytes</strong> — so your real download speed in MB is one-eighth of the headline number. That’s why a download feels slower than the advertised speed.' },
+      { gen: 'binaryToDenary' },                       // read 4-bit (tap the lit bits) — full help
+      { gen: 'denaryToBinary' },                       // write 4-bit (produce) — full help
+      { gen: 'bitsValues' },                           // 2ⁿ values — full help
       { type: 'NUMBER', badge: 'REAL WORLD', board: 'AQA · OCR · Eduqas',
         title: 'A temperature sensor sends the 8-bit reading 00101010. What number (0–255) did it send?',
         desc: 'Add the place values (128 64 32 16 8 4 2 1) wherever the bit is 1.',
@@ -140,6 +133,13 @@ export const PHASES = [
         ],
         hints: ['Place values: 128 64 32 16 8 4 2 1 — switch on the ones that add up to the target.', 'e.g. 40 = 32 + 8; 100 = 64 + 32 + 4.'],
         explain: '<strong>Each server boots when the switches add up to its exact requirement</strong> — that’s denary → binary. 12 = 8+4 = 00001100, 40 = 32+8 = 00101000, 100 = 64+32+4 = 01100100.' },
+      { gen: 'binaryToDenary', opts: { bits: 8 } },     // read 8-bit — harder, hints still on
+      { type: 'NUMBER', badge: 'REAL WORLD', board: 'AQA · OCR · Eduqas',
+        title: 'Your broadband runs at 80 megabits per second (Mb/s). There are 8 bits in 1 byte. How many megabytes (MB) does it download each second?',
+        desc: 'Convert the bit-rate to bytes — divide by 8.',
+        answer: 10,
+        hints: ['8 bits make 1 byte, so divide the megabits by 8.', '80 ÷ 8 = 10.'],
+        explain: '<strong>80 Mb/s ÷ 8 = 10 MB/s.</strong> ISPs advertise in mega<strong>bits</strong>, but files are measured in mega<strong>bytes</strong> — so your real download speed in MB is one-eighth of the headline number. That’s why a download feels slower than the advertised speed.' },
       { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 2,
         title: 'Using 4 bits, state how many different values can be represented, and show your working.',
         markScheme: [
@@ -147,6 +147,8 @@ export const PHASES = [
           '= 16 different values.',
         ],
         explain: 'For n bits there are 2ⁿ possible values, so 4 bits → 2⁴ = 16. Always show the 2ⁿ working to earn the method mark.' },
+      // FINALE — no hints, no method desc: prove you can do it on your own.
+      { gen: 'denaryToBinary', opts: { bits: 8 }, solo: true },
     ]
   },
 
@@ -307,24 +309,19 @@ export const PHASES = [
         { use: ['what', 'keyFacts'] },
         { heading: 'STEP 1 — HEX → DENARY',
           html: '<div class="pi-text">A 2-digit hex number has two columns: the left digit is worth <strong>× 16</strong>, the right digit is worth <strong>× 1</strong>. Remember the letters: <strong>A=10, B=11, C=12, D=13, E=14, F=15</strong>. Multiply each digit by its place value and add.</div><div class="pi-examples"><div class="pi-example">2A → (2 × 16) + (10 × 1) → 32 + 10 = <strong>42</strong></div></div>',
-          check: {
-            title: 'What is hex 1F in denary?',
-            options: ['31', '15', '16', '25'],
-            answer: '31',
+          q: { type: 'CALC', title: 'Convert hex 1F to denary (F = 15).',
+            formula: '1F = (1 × 16) + (F × 1)',
+            steps: [{ expr: '1 × 16', answer: 16 }, { expr: '{prev} + 15', answer: 31, unit: 'denary' }],
             explain: '1F → (1 × 16) + (15 × 1) = 16 + 15 = <strong>31</strong> (F = 15).' } },
         { heading: 'STEP 2 — DENARY → HEX',
           html: '<div class="pi-text">Going the other way: ask <strong>how many 16s fit</strong> (that is the first hex digit), then the <strong>remainder</strong> is the second digit (turn 10–15 into A–F).</div><div class="pi-examples"><div class="pi-example">60 → 60 ÷ 16 = 3 remainder 12 → 3 and C → <strong>3C</strong></div></div>',
-          check: {
-            title: 'What is denary 47 in hex?',
-            options: ['2F', '2E', '3F', '1F'],
-            answer: '2F',
+          q: { type: 'HEXPICK', answer: '2F',
+            title: 'Set the hex digits for denary 47 (47 ÷ 16 = 2 remainder 15).',
             explain: '47 ÷ 16 = 2 remainder 15 → 2 and F → <strong>2F</strong>.' } },
         { heading: 'STEP 3 — BINARY ↔ HEX (the nibble trick)',
           html: '<div class="pi-text">This is why hex exists. Split the binary into <strong>nibbles (groups of 4 bits)</strong> from the right, then convert <strong>each nibble</strong> to one hex digit (0000 = 0 … 1111 = F). No maths across the whole number — just 4 bits at a time.</div><div class="pi-examples"><div class="pi-example">11010110 → 1101 0110 → D 6 → <strong>D6</strong></div></div>',
-          check: {
-            title: 'Convert binary 1010 1111 to hex (group it into nibbles).',
-            options: ['AF', 'FA', 'A6', '9F'],
-            answer: 'AF',
+          q: { type: 'HEXPICK', answer: 'AF', nibbles: [[1, 0, 1, 0], [1, 1, 1, 1]],
+            title: 'Convert binary 1010 1111 to hex — read each nibble, then pick its digit.',
             explain: '1010 = A and 1111 = F → <strong>AF</strong>. Each 4-bit nibble becomes one hex digit.' } },
         { use: ['how', 'tip'] },
       ],
@@ -344,7 +341,7 @@ export const PHASES = [
         { term: 'FF', def: '= 255 = 1 byte' },
         { term: '0x', def: 'means hexadecimal' },
       ],
-      meta: '10 QUESTIONS — HEX CONVERSION · DECRYPTION · REAL WORLD · WRITTEN',
+      meta: '11 QUESTIONS — HEX CONVERSION · DECRYPTION · REAL WORLD · WRITTEN',
     },
     paper: [
       { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 2,
@@ -403,6 +400,8 @@ export const PHASES = [
           'It is easier for people to read and write, so there are fewer mistakes than with long binary strings.',
         ],
         explain: 'Each hex digit maps to exactly 4 bits, so hex is a much shorter, more readable way to write binary values (memory addresses, colour codes) and is less error-prone than long strings of 1s and 0s.' },
+      // FINALE — no hints, no method desc: convert to hex entirely on your own.
+      { gen: 'denaryToHex', solo: true },
     ]
   },
 
@@ -425,6 +424,32 @@ export const PHASES = [
         answer: 'The amount of RED',
         explain: 'A hex colour is <strong>#RRGGBB</strong> — the first pair is <strong>red</strong>, the second green, the third blue (each 00–FF = 0–255). So #FF0000 is full red, no green, no blue = pure red.',
       },
+      pages: [
+        { use: ['task', 'realWorld', 'video'],
+          check: {
+            title: 'From the video: in a hex colour like #FF0000, what does the FIRST pair (FF) control?',
+            options: ['The amount of RED', 'The amount of GREEN', 'The amount of BLUE', 'The brightness of the whole screen'],
+            answer: 'The amount of RED',
+            explain: 'A hex colour is <strong>#RRGGBB</strong> — the first pair is red, the second green, the third blue. So #FF0000 is full red = pure red.' } },
+        { use: ['what', 'keyFacts'] },
+        { heading: 'STEP 1 — #RRGGBB: THREE CHANNELS',
+          html: '<div class="pi-text">A colour code is <strong>#RRGGBB</strong> — three pairs of hex digits, one each for <strong>Red, Green and Blue</strong> light. Each pair runs <strong>00</strong> (off) to <strong>FF</strong> (full on = 255). Build pure red: red fully on, green and blue off.</div>',
+          q: { type: 'SWATCH', answer: 'FF0000', targetName: 'pure red',
+            title: 'Build pure red — set R to FF, leave G and B at 00.',
+            explain: 'Pure red = <strong>#FF0000</strong> — red FF (255), green 00, blue 00.' } },
+        { heading: 'STEP 2 — MIXING LIGHT (not paint)',
+          html: '<div class="pi-text">Screens mix <strong>light</strong>, not paint, so the rules differ: <strong>red + green = yellow</strong>, red + blue = magenta, green + blue = cyan. Make yellow by turning red and green fully on.</div>',
+          q: { type: 'SWATCH', answer: 'FFFF00', targetName: 'yellow',
+            title: 'Build yellow — which two channels of light mix to make it?',
+            explain: 'Yellow = <strong>#FFFF00</strong> — red + green light (additive mixing, not brown like paint).' } },
+        { heading: 'STEP 3 — HOW MANY COLOURS?',
+          html: '<div class="pi-text">Each channel is one byte = <strong>256 levels</strong> (0–255). Three channels multiply together. Work out the total — the famous “16.7 million colours” of 24-bit colour.</div>',
+          q: { type: 'CALC', title: 'How many colours can #RRGGBB show? (256 levels per channel.)',
+            formula: 'colours = R levels × G levels × B levels',
+            steps: [{ expr: '256 × 256', answer: 65536 }, { expr: '{prev} × 256', answer: 16777216, unit: 'colours' }],
+            explain: '256 × 256 × 256 = <strong>16,777,216</strong> (≈16.7 million) — that is 24-bit colour (3 bytes).' } },
+        { use: ['how', 'tip'] },
+      ],
       examples: [
         '🔴 <code>#FF0000</code> → Red=255, Green=0, Blue=0 → <strong>pure red</strong>',
         '🟢 <code>#00FF00</code> → Red=0, Green=255, Blue=0 → <strong>pure green</strong>',
@@ -440,7 +465,7 @@ export const PHASES = [
         { term: '#FFFFFF', def: 'all on = white' },
         { term: '#000000', def: 'all off = black' },
       ],
-      meta: '7 QUESTIONS — RGB MIXER · COLOUR · REAL WORLD · WRITTEN',
+      meta: '8 QUESTIONS — RGB MIXER · COLOUR · REAL WORLD · WRITTEN',
     },
     paper: [
       { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR', marks: 3,
@@ -509,6 +534,10 @@ export const PHASES = [
           'The red channel is FF (maximum, 255) while the green (00) and blue (00) channels are zero.',
         ],
         explain: 'A hex colour is written #RRGGBB. #FF0000 = red FF (255), green 00, blue 00 — only the red channel is on, so the colour is pure red.' },
+      // FINALE — no hints, no method desc: mix a colour entirely on your own.
+      { type: 'SWATCH', badge: 'COLOUR', board: 'AQA · OCR', answer: '00FFFF', targetName: 'cyan', solo: true,
+        title: 'Build cyan (#RRGGBB).',
+        explain: '<strong>Cyan = #00FFFF</strong> — green + blue light fully on, red off.' },
     ]
   },
 
@@ -1060,12 +1089,10 @@ export const PHASES = [
             answer: '11111010 — each 0 becomes 1 and each 1 becomes 0',
             explain: 'Flipping (NOT / one’s complement) inverts <strong>every</strong> bit: 0↔1. So 00000101 → <strong>11111010</strong>.' } },
         { heading: 'STEP 2 — ADD 1',
-          html: '<div class="pi-text">Then <strong>add 1</strong> to the flipped bits. The result is the <strong>two’s complement</strong> — the binary representation of the negative number.</div><div class="pi-examples"><div class="pi-example">11111010 + 1 = <strong>11111011</strong>  =  −5</div></div>',
-          check: {
-            title: 'Finish negating +5: what is 11111010 + 1?',
-            options: ['11111011 (= −5)', '11111001', '00000101', '11111111'],
-            answer: '11111011 (= −5)',
-            explain: 'Add 1 to the flipped bits: 11111010 + 1 = <strong>11111011</strong>, which represents <strong>−5</strong>. Flip, then add 1 — that is the whole method.' } },
+          html: '<div class="pi-text">Then <strong>add 1</strong> to the flipped bits. The result is the <strong>two’s complement</strong> — the binary representation of the negative number. Now do the whole thing yourself: flip every bit, then add 1.</div>',
+          q: { type: 'FLIPADD', pos: [0, 0, 0, 0, 0, 1, 0, 1],
+            title: 'Negate +5: flip every bit, then add 1.',
+            explain: '+5 = 00000101 → flip → 11111010 → add 1 → <strong>11111011</strong> = −5. Flip, then add 1 — that is the whole method.' } },
         { heading: 'WHY THE LEFTMOST BIT IS NEGATIVE',
           html: '<div class="pi-text">It works because, in two’s complement, the <strong>leftmost bit (MSB)</strong> carries a <strong>negative</strong> place value — <strong>−128</strong> for 8 bits. Reading 11111011: −128 + 64 + 32 + 16 + 8 + 0 + 2 + 1 = <strong>−5</strong>. The same 8 bits can now store both positive and negative numbers.</div><div class="pi-examples"><div class="pi-example">place values:  <strong>−128</strong>  64  32  16  8  4  2  1</div></div>' },
         { use: ['how', 'tip'] },
@@ -1086,7 +1113,7 @@ export const PHASES = [
         { term: 'NEGATE', def: 'flip all bits, add 1' },
         { term: 'LEADING 1', def: 'means negative' },
       ],
-      meta: "8 QUESTIONS — TWO'S COMPLEMENT · SUBTRACTION · REAL WORLD · WRITTEN",
+      meta: "9 QUESTIONS — TWO'S COMPLEMENT · SUBTRACTION · REAL WORLD · WRITTEN",
     },
     paper: [
       { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR', marks: 3,
@@ -1148,6 +1175,8 @@ export const PHASES = [
           'If it is 1 the number is negative; if it is 0 the number is positive or zero.',
         ],
         explain: 'In two\'s complement the leftmost bit is the sign bit (worth -128 in 8-bit). A leading 1 means the value is negative; a leading 0 means it is zero or positive.' },
+      // FINALE — no hints, no method desc: negate a number entirely on your own.
+      { gen: 'twosNegate', solo: true },
     ]
   },
 
@@ -1176,6 +1205,42 @@ export const PHASES = [
         hints: ['ASCII only had room for a small set of characters.', 'Think about emoji and non-English alphabets.'],
         explain: '<strong>ASCII</strong> only covers a small set (basic English, 7 bits). <strong>Unicode</strong> (usually stored as UTF-8) extends this to over a million characters — every language’s alphabet plus emoji — while staying backward-compatible with ASCII.',
       },
+      pages: [
+        { use: ['task', 'realWorld', 'video'],
+          check: {
+            title: 'From the video: what problem does Unicode (UTF-8) solve that ASCII could not?',
+            options: ['Representing characters from almost every language, not just basic English', 'Making every file smaller', 'Removing the need to store text as binary', 'Letting computers run without an operating system'],
+            answer: 'Representing characters from almost every language, not just basic English',
+            explain: '<strong>ASCII</strong> only covers a small set (7 bits). <strong>Unicode</strong> (UTF-8) extends this to over a million characters — every language plus emoji — while staying backward-compatible with ASCII.' } },
+        { use: ['what', 'keyFacts'] },
+        { heading: 'STEP 1 — TEXT IS JUST NUMBERS',
+          html: '<div class="pi-text">Every character is stored as a number: <strong>ASCII</strong> uses <strong>7 bits</strong> per character (\'A\' = 65, \'a\' = 97). 7 bits can only count to 127, so ASCII holds just 128 characters — fine for English, but not the world. <strong>Unicode</strong> uses more bits for over a million characters.</div>',
+          check: {
+            title: 'ASCII uses 7 bits per character. How many different characters can it represent?',
+            options: ['128 (2⁷)', '7', '256', '64'],
+            answer: '128 (2⁷)',
+            explain: '7 bits → 2⁷ = <strong>128</strong> characters (codes 0–127). That limit is exactly why Unicode was needed for other languages and emoji.' } },
+        { heading: 'STEP 2 — IMAGE FILE SIZE',
+          html: '<div class="pi-text">An image is a grid of pixels. Its size in bits is <strong>width × height × colour depth</strong> (colour depth = bits per pixel). Work out the size of a 200 × 100 image at 3-bit colour.</div>',
+          q: { type: 'CALC', title: 'Image file size: 200 wide × 100 high × 3-bit colour. Size in bits?',
+            formula: 'size (bits) = width × height × colour depth',
+            steps: [{ expr: '200 × 100', answer: 20000 }, { expr: '{prev} × 3', answer: 60000, unit: 'bits' }],
+            explain: '200 × 100 × 3 = <strong>60,000 bits</strong>. More pixels or higher colour depth → more bits.' } },
+        { heading: 'STEP 3 — SOUND FILE SIZE',
+          html: '<div class="pi-text">Sound is captured by <strong>sampling</strong> the wave many times a second. Its size in bits is <strong>sample rate × bit depth × duration</strong>. Work out a 2-second clip sampled 8,000 times a second at 8 bits per sample.</div>',
+          q: { type: 'CALC', title: 'Sound file size: 8,000 Hz × 8 bits × 2 seconds. Size in bits?',
+            formula: 'size (bits) = sample rate × bit depth × seconds',
+            steps: [{ expr: '8000 × 8', answer: 64000 }, { expr: '{prev} × 2', answer: 128000, unit: 'bits' }],
+            explain: '8,000 × 8 × 2 = <strong>128,000 bits</strong>. A higher sample rate or bit depth means better quality but a bigger file.' } },
+        { heading: 'STEP 4 — COMPRESSION',
+          html: '<div class="pi-text"><strong>Compression</strong> shrinks files. <strong>Lossy</strong> (JPEG, MP3) throws data away permanently — smaller, but you can\'t get the original back. <strong>Lossless</strong> (PNG, FLAC, ZIP) shrinks the file with no data lost — the exact original can be rebuilt.</div>',
+          check: {
+            title: 'Which type of compression lets you recover the EXACT original file?',
+            options: ['Lossless (e.g. PNG, FLAC, ZIP)', 'Lossy (e.g. JPEG, MP3)', 'Both equally', 'Neither can'],
+            answer: 'Lossless (e.g. PNG, FLAC, ZIP)',
+            explain: '<strong>Lossless</strong> reconstructs the original perfectly (PNG, FLAC, ZIP). <strong>Lossy</strong> (JPEG, MP3) permanently discards data to save more space.' } },
+        { use: ['how', 'tip'] },
+      ],
       examples: [
         '📝 <strong>ASCII:</strong> "A" = 65 = 01000001 in binary. "a" = 97 = 01100001 (lowercase = uppercase + 32)',
         '🌍 <strong>Unicode:</strong> UTF-8 is backward compatible with ASCII. Emoji like 😊 = U+1F60A',
@@ -1194,7 +1259,7 @@ export const PHASES = [
         { term: 'DATA UNITS', def: 'byte → kB → MB, ×1000' },
         { term: 'LOSSY/LOSSLESS', def: 'JPEG / PNG' },
       ],
-      meta: '14 QUESTIONS — UNITS · TEXT · IMAGES · SOUND · SIGNAL · WRITTEN',
+      meta: '15 QUESTIONS — UNITS · TEXT · IMAGES · SOUND · SIGNAL · WRITTEN',
     },
     paper: [
       { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 4,
@@ -1291,6 +1356,11 @@ export const PHASES = [
           'Increasing it allows more colours to be represented (and increases the file size).',
         ],
         explain: 'Colour depth = bits per pixel. More bits → more possible colours, but a larger file (file size = width × height × colour depth).' },
+      // FINALE — no hints, no method desc: calculate a file size on your own.
+      { type: 'NUMBER', badge: 'DATA', board: 'AQA · OCR · Eduqas', solo: true,
+        title: 'An image is 320 pixels wide, 240 high, with 8-bit colour depth. What is its size in bits?',
+        answer: 614400,
+        explain: '<strong>320 × 240 × 8 = 614,400 bits.</strong> File size = width × height × colour depth.' },
     ]
   },
 
@@ -3025,25 +3095,22 @@ export const PHASES = [
         { use: ['what', 'keyFacts'] },
         { heading: 'STEP 1 — BINARY ADDITION',
           html: '<div class="pi-text">Add column by column from the <strong>right</strong>, just like decimal — but carry whenever a column reaches 2. The cases: <strong>0+0 = 0</strong>, <strong>1+0 = 1</strong>, <strong>1+1 = 10</strong> (write 0, carry 1), <strong>1+1+1 = 11</strong> (write 1, carry 1).</div><div class="pi-examples"><div class="pi-example">0101 + 0011 → 1000   (5 + 3 = 8)</div></div>',
-          check: {
-            title: 'What is 0110 + 0011 in binary?',
-            options: ['1001', '1010', '0111', '1100'],
-            answer: '1001',
-            explain: '6 + 3 = 9 → <strong>1001</strong>. Work right to left, carrying a 1 whenever a column reaches 2.' } },
+          q: { type: 'BINADD', a: [0, 1, 1, 0], b: [0, 0, 1, 1],
+            title: 'Add these two binary numbers — fill the carries, then the sum.',
+            explain: '6 + 3 = 9 → <strong>1001</strong>. Add each column right-to-left, carrying a 1 whenever a column totals 2 or more.' } },
         { heading: 'STEP 2 — BINARY SHIFTS (× 2 and ÷ 2)',
           html: '<div class="pi-text">Sliding every bit <strong>left</strong> by one place <strong>multiplies by 2</strong>; sliding <strong>right</strong> <strong>divides by 2</strong>. The gap is filled with 0 and the bit that falls off the end is lost. Shifting n places multiplies or divides by 2ⁿ — fast maths for processors.</div><div class="pi-examples"><div class="pi-example">00000110 (6) shifted left 1 → 00001100 (12)</div></div>',
-          check: {
-            title: 'What does a LEFT shift by 1 place do to a binary number?',
-            options: ['Multiplies it by 2', 'Divides it by 2', 'Adds 1 to it', 'Reverses the bits'],
-            answer: 'Multiplies it by 2',
-            explain: 'Each bit moves to a place value twice as big, so a <strong>left shift by 1 multiplies by 2</strong> (left by n = ×2ⁿ). A right shift divides.' } },
+          q: { type: 'SHIFT', bits: [0, 0, 0, 0, 0, 1, 1, 0], dir: 'left', amount: 1,
+            title: 'Shift this number LEFT by 1 place, then say what it did.',
+            concept: { prompt: 'What did shifting left by 1 place do to the original number?',
+              options: ['Multiplied it by 2', 'Divided it by 2', 'Multiplied it by 4', 'Added 1 to it'],
+              answer: 'Multiplied it by 2' },
+            explain: '6 → 12: every bit moved one place left, so a <strong>left shift by 1 multiplies by 2</strong>.' } },
         { heading: 'STEP 3 — OVERFLOW',
           html: '<div class="pi-text">8 bits can only hold <strong>0–255</strong>. If an addition needs a 9th bit, there is nowhere to put the carry — so the value <strong>wraps around</strong> back to 0. That is an <strong>overflow error</strong> (the cause of the Pac-Man kill screen and the “255” caps in old games).</div><div class="pi-examples"><div class="pi-example">11111111 (255) + 1 → 00000000 (0, with overflow)</div></div>',
-          check: {
-            title: 'In an 8-bit register, what is 255 + 1?',
-            options: ['0 (it overflows and wraps round)', '256', '255', '128'],
-            answer: '0 (it overflows and wraps round)',
-            explain: '255 is 11111111. Add 1 and it needs a 9th bit, which is lost — so it wraps to <strong>00000000 = 0</strong>. That is overflow.' } },
+          q: { type: 'NUMBER', answer: 44,
+            title: 'In an 8-bit register (0–255), what is 200 + 100?',
+            explain: '200 + 100 = 300, but 8 bits wrap at 256, so 300 − 256 = <strong>44</strong>. The lost 9th bit is the overflow.' } },
         { use: ['how', 'tip'] },
       ],
       examples: [
@@ -3060,7 +3127,7 @@ export const PHASES = [
         { term: 'RIGHT SHIFT', def: 'divide by 2 per place' },
         { term: 'OVERFLOW', def: 'result needs too many bits' },
       ],
-      meta: '11 QUESTIONS — BINARY ADDITION · SHIFTS · OVERFLOW · WRITTEN',
+      meta: '12 QUESTIONS — BINARY ADDITION · SHIFTS · OVERFLOW · WRITTEN',
     },
     questions: [
       { gen: 'binaryAdd', opts: { bits: 8 } },
@@ -3113,6 +3180,8 @@ export const PHASES = [
           'This multiplies the value by 2.',
         ],
         explain: 'A left shift moves each bit into the next higher place value (gap filled with 0), doubling the number. Shifting left by n places multiplies by 2ⁿ; a right shift divides by 2 per place.' },
+      // FINALE — no hints, no method desc: do a shift entirely on your own.
+      { gen: 'binaryShift', solo: true },
     ]
   },
 

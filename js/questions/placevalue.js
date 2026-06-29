@@ -29,6 +29,9 @@ export const placevalue = {
     };
     const value = bits.reduce((s, b, i) => s + (b ? placeOf(i) : 0), 0);
     const counted = new Set();                   // lit-bit indices the player has collected
+    // guided (full-help): pre-collect the lit bits so the sum (8 + 2 + …) is
+    // already laid out and the player just produces the total.
+    if (question.guided) bits.forEach((b, i) => { if (b) counted.add(i); });
 
     const wrap = el('pv');
 
@@ -37,7 +40,7 @@ export const placevalue = {
       const col = el('pv-col');
       const place = el('pv-place' + (placeOf(i) < 0 ? ' pv-neg' : ''));
       place.textContent = placeOf(i);
-      const chip = el('pv-bit ' + (b ? 'lit' : 'off') + (placeOf(i) < 0 ? ' neg' : ''), b ? 'button' : 'div');
+      const chip = el('pv-bit ' + (b ? 'lit' : 'off') + (placeOf(i) < 0 ? ' neg' : '') + (b && question.guided ? ' added' : ''), b ? 'button' : 'div');
       chip.textContent = String(b);
       if (b) {
         chip.type = 'button';

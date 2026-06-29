@@ -52,6 +52,10 @@ export function initScreens() {
   document.getElementById('qbank-back').addEventListener('click', () => { SFX.uiClick(); showMainMenu(); });
   document.getElementById('stats-back').addEventListener('click', () => { SFX.uiClick(); showMainMenu(); });
   document.getElementById('settings-back').addEventListener('click', () => { SFX.uiClick(); settingsBack(); });
+  // how-to-play tutorial nav
+  document.getElementById('tut-next').addEventListener('click', () => { SFX.uiClick(); tutNext(); });
+  document.getElementById('tut-back').addEventListener('click', () => { SFX.uiClick(); tutBack(); });
+  document.getElementById('tut-skip').addEventListener('click', () => { SFX.uiClick(); tutFinish(); });
   // the engine calls these when a session ends
   engine.setNavHandlers({ toMenu: showMainMenu, toCampaign: showCampaign, toRevision: showRevision, toArcade: showArcadeModes });
 }
@@ -84,9 +88,73 @@ export function showMainMenu() {
     menuBtn('ARCADE', 'Timed Exam Rush — beat the clock', showArcadeModes),
     menuBtn('QUESTION BANK', 'Browse every question & answer — review mode', showQuestionBank),
     menuBtn('STATS', 'Your progress, mastery and estimated grade', showStats),
+    menuBtn('HOW TO PLAY', 'New here? A 60-second guide to the game', () => showTutorial(showMainMenu)),
     menuBtn('SETTINGS', 'Theme, sound, exam board and progress', showSettings),
   );
   engine.showScreen('main-menu');
+}
+
+// ============================================================
+// how-to-play tutorial (onboarding) — a short stepped walkthrough.
+// Shown once on first launch (from boot) and re-openable from the menu.
+// Self-contained: slide data + a render closure; no engine fork.
+// ============================================================
+const TUT_SLIDES = [
+  { eyebrow: 'WELCOME', heading: 'LEARN GCSE COMP-SCI BY <em>DOING</em>',
+    visual: '<div class="tut-logo">LOG<em>IC</em>FLOW</div>',
+    body: 'LOGICFLOW turns the AQA / OCR / Eduqas / WJEC spec into something you <strong>play</strong>. Every topic teaches you the method, then asks you to use it — because doing beats reading. Here’s the 60-second tour.' },
+  { eyebrow: 'THE CAMPAIGN', heading: 'FOLLOW THE SIGNAL',
+    visual: '<div class="tut-map"><span class="tut-node learn">◉<small>LEARN</small></span><span class="tut-wire"></span><span class="tut-node test">▶<small>TEST</small></span><span class="tut-wire"></span><span class="tut-node lock">🔒<small>NEXT</small></span></div>',
+    body: 'Work along the circuit, topic by topic. Each topic has a <strong style="color:#16a34a">green LEARN circle</strong> (the lesson — revisit it any time) and a <strong>blue test</strong>. Clear the test to power up the next topic and unlock the unit beyond.' },
+  { eyebrow: 'LESSONS', heading: 'TEACH, THEN <em>YOUR TURN</em>',
+    visual: '<div class="tut-card-demo"><div class="tut-demo-pv"><b class="lit">8</b><b>4</b><b class="lit">2</b><b>1</b></div><div class="tut-demo-sum">8 + 2 = <span class="tut-demo-in">?</span></div></div>',
+    body: 'A lesson explains the idea, shows a worked example, then hands you a real interactive question — build the binary, turn the cipher wheel, trace the algorithm. The help <strong>fades</strong> as you go, until you can do it solo.' },
+  { eyebrow: 'STUCK? TWO LIFELINES', heading: 'WORKING-OUT & HINTS',
+    visual: '<div class="tut-tools"><span class="tut-tool">🧮<small>WORKING OUT</small></span><span class="tut-tool">💡<small>HINT</small></span></div>',
+    body: 'On a calculation, tap <strong>🧮 WORKING OUT</strong> for a scratch helper (place-value, hex, file-size) — it never submits for you, it just helps you think. Tap <strong>💡 HINT</strong> to narrow a tricky question down.' },
+  { eyebrow: 'SCORING', heading: 'LIVES, STREAK & POINTS',
+    visual: '<div class="tut-score"><span class="tut-hearts">♥ ♥ ♥</span><span class="tut-streak">🔥 ×5</span></div>',
+    body: 'In the campaign you get <strong>3 lives</strong> — a wrong answer costs one. Chain correct answers to build a <strong>streak 🔥</strong> for bonus points, and replay a cleared topic flawlessly to earn all <strong>★★★</strong>.' },
+  { eyebrow: 'BEYOND THE CAMPAIGN', heading: 'ARCADE & REVISION',
+    visual: '<div class="tut-modes"><span class="tut-mode">⏱ TIMED</span><span class="tut-mode">💀 SURVIVAL</span><span class="tut-mode">📝 PAST PAPER</span></div>',
+    body: 'When you want a challenge, <strong>ARCADE</strong> has Timed Exam Rush, Survival and real Past Papers. The <strong>REVISION HUB</strong> quietly tracks what you get wrong and brings it back at the right moment — that spacing is what makes it stick.' },
+  { eyebrow: 'YOU’RE READY', heading: 'LET’S POWER ON',
+    visual: '<div class="tut-logo small">LOG<em>IC</em>FLOW</div><div class="tut-ready">✓ READY</div>',
+    body: 'That’s it. Start with <strong>Binary Basics</strong> and work your way through. You can reopen this guide any time from <strong>HOW TO PLAY</strong> on the menu. Good luck!' },
+];
+let tutPos = 0, tutReturn = null;
+export function showTutorial(returnFn) {
+  tutReturn = returnFn || showMainMenu;
+  tutPos = 0;
+  renderTut();
+  engine.showScreen('tutorial');
+}
+function renderTut() {
+  const s = TUT_SLIDES[tutPos];
+  document.getElementById('tut-visual').innerHTML = s.visual || '';
+  document.getElementById('tut-eyebrow').textContent = s.eyebrow || '';
+  document.getElementById('tut-heading').innerHTML = s.heading || '';
+  document.getElementById('tut-body').innerHTML = s.body || '';
+  const stage = document.getElementById('tut-stage') || document.querySelector('#tutorial .tut-stage');
+  if (stage) { stage.classList.remove('tut-in'); void stage.offsetWidth; stage.classList.add('tut-in'); }
+  const dots = document.getElementById('tut-dots');
+  dots.innerHTML = TUT_SLIDES.map((_, i) => `<span class="tut-dot${i === tutPos ? ' on' : (i < tutPos ? ' done' : '')}"></span>`).join('');
+  const back = document.getElementById('tut-back');
+  back.style.visibility = tutPos > 0 ? 'visible' : 'hidden';
+  const next = document.getElementById('tut-next');
+  const last = tutPos >= TUT_SLIDES.length - 1;
+  next.textContent = last ? "LET'S GO →" : 'NEXT →';
+  document.getElementById('tut-skip').style.visibility = last ? 'hidden' : 'visible';
+}
+function tutNext() {
+  if (tutPos >= TUT_SLIDES.length - 1) { tutFinish(); return; }
+  tutPos++; renderTut();
+}
+function tutBack() { if (tutPos > 0) { tutPos--; renderTut(); } }
+function tutFinish() {
+  store.setTutorialSeen();
+  const back = tutReturn || showMainMenu;
+  back();
 }
 function menuBtn(title, sub, onClick, variant) {
   const b = h('button', 'menu-btn' + (variant ? ' menu-btn-' + variant : ''));
@@ -153,9 +221,12 @@ function starBar(crown) {
 function lessonNode(u, ln, i) {
   const phase = PHASES[idxOfId(ln.phaseId)];
   const side = i % 2 === 0 ? 'side-left' : 'side-right';
-  const btn = h('button', `cmp-node cmp-lesson ${side} ${ln.state}${ln.current ? ' current' : ''}${ln.state !== 'locked' ? ' reached' : ''}`);
-  btn.style.setProperty('--node-color', u.color);
-  if (ln.current) btn.id = 'cmp-current';
+  // a div (not a button) so it can hold the separate LEARN button without nesting
+  const node = h('div', `cmp-node cmp-lesson ${side} ${ln.state}${ln.current ? ' current' : ''}${ln.state !== 'locked' ? ' reached' : ''}`);
+  node.style.setProperty('--node-color', u.color);
+  node.setAttribute('role', 'button');
+  node.tabIndex = ln.state === 'locked' ? -1 : 0;
+  if (ln.current) node.id = 'cmp-current';
   const dot = ln.state === 'cleared' ? '✓' : ln.state === 'locked' ? '🔒' : ln.current ? '▶' : String(i + 1);
   const clearedMeta = starBar(ln.crown) + (ln.crown >= 3
     ? '<span class="cmp-meta cmp-mastered">★ MASTERED</span>'
@@ -164,22 +235,31 @@ function lessonNode(u, ln, i) {
     : ln.current ? '<span class="cmp-meta">▶ START</span>'
       : ln.state === 'unlocked' ? '<span class="cmp-meta">READY</span>'
         : '<span class="cmp-meta">LOCKED</span>';
-  btn.innerHTML = `
+  // a separate green LEARN circle — revisit the learn pages without the questions
+  const learnBtn = ln.state !== 'locked'
+    ? `<button type="button" class="cmp-learn" title="Read the learn pages again" aria-label="Learn ${phase ? phase.name : 'this topic'} again"><span class="cmp-learn-ic">📖</span><span class="cmp-learn-tag">LEARN</span></button>`
+    : '';
+  node.innerHTML = `
     <span class="cmp-bus"></span>
     <span class="cmp-branch"></span>
     <span class="cmp-joint"></span>
     <span class="cmp-dot">${dot}</span>
+    ${learnBtn}
     <span class="cmp-label">
       <span class="cmp-name">${phase ? phase.name : 'LESSON'}</span>
       ${meta}
     </span>`;
-  btn.addEventListener('click', () => {
-    if (ln.state === 'locked') { nudge(btn); return; }
+  const launch = () => {
+    if (ln.state === 'locked') { nudge(node); return; }
     SFX.uiClick();
     // first play teaches (show intro); replaying a cleared lesson skips it
     engine.launchPhase(idxOfId(ln.phaseId), 'campaign', ln.state === 'cleared');
-  });
-  return btn;
+  };
+  node.addEventListener('click', e => { if (e.target.closest('.cmp-learn')) return; launch(); });
+  node.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('.cmp-learn')) { e.preventDefault(); launch(); } });
+  const lb = node.querySelector('.cmp-learn');
+  if (lb) lb.addEventListener('click', e => { e.stopPropagation(); SFX.uiClick(); engine.viewLesson(idxOfId(ln.phaseId)); });
+  return node;
 }
 
 function testNode(u) {

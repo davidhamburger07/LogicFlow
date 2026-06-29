@@ -27,6 +27,7 @@ const KEY = {
   topicStats: 'logicflow.topicStats',
   schedule: 'logicflow.schedule',
   campaign: 'logicflow.campaign',
+  tutorial: 'logicflow.tutorialSeen',
 };
 
 const BOARDS = ['AQA', 'OCR', 'Eduqas', 'WJEC'];   // WJEC (Wales) uses Python, like Eduqas (its English sibling)
@@ -117,6 +118,14 @@ export function getBoard() {
 export function setBoard(b) {
   writeRaw(KEY.board, BOARDS.includes(b) ? b : 'AQA');
 }
+
+// ============================================================
+// how-to-play tutorial: shown once on the very first launch, and
+// re-openable from the menu. Just a "seen" flag. Kept out of
+// resetProgress (clearing progress shouldn't re-trigger onboarding).
+// ============================================================
+export function getTutorialSeen() { return readRaw(KEY.tutorial) === 'true'; }
+export function setTutorialSeen() { writeRaw(KEY.tutorial, 'true'); }
 
 // ============================================================
 // per-topic progress

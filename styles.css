@@ -668,6 +668,27 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 .sg-restore:hover:not(:disabled) { filter: brightness(1.08); }
 .sg-restore:disabled { opacity: .5; cursor: default; }
 
+/* BINBUILD — denary -> binary, step by step */
+.bb { display: flex; flex-direction: column; gap: 14px; align-items: center; }
+.bb-grid { display: flex; gap: 5px; }
+.bb-col { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px; border: 1.5px solid transparent; }
+.bb-col.bb-current { border-color: var(--phase-color); background: var(--phase-color-light); }
+.bb-pv { font-family: var(--mono); font-size: 10px; color: var(--ink-4); }
+.bb-cell { font-family: var(--mono); font-size: 17px; width: 36px; text-align: center; padding: 9px 0; border: 1.5px solid var(--border); background: var(--panel); color: var(--ink-4); }
+.bb-cell.bb-on { color: #fff; background: var(--phase-color); border-color: var(--phase-color); }
+.bb-rem { font-family: var(--mono); font-size: 13px; color: var(--ink-3); }
+.bb-rem b { color: var(--ink); }
+.bb-prompt { font-family: var(--mono); font-size: 15px; color: var(--ink); min-height: 20px; }
+.bb-prompt b { color: var(--phase-color); }
+.bb-btns { display: flex; gap: 10px; }
+.bb-yes, .bb-no { font-family: var(--mono); font-size: 13px; letter-spacing: 1px; padding: 11px 18px; border: 1.5px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer; transition: border-color .12s, background .12s; }
+.bb-yes:hover:not(:disabled) { border-color: var(--success-ink); color: var(--success-ink); }
+.bb-no:hover:not(:disabled) { border-color: var(--error-ink); color: var(--error-ink); }
+.bb-yes:disabled, .bb-no:disabled { opacity: .5; cursor: default; }
+.bb-yes:focus-visible, .bb-no:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+.bb-fb { font-family: var(--mono); font-size: 12px; line-height: 1.5; color: var(--ink-3); min-height: 16px; text-align: center; max-width: 420px; }
+.bb-fb.bb-wrong { color: var(--error-ink); }
+
 /* CODE_WRITE — write a whole program, reveal a model answer, self-mark */
 .cw { display: flex; flex-direction: column; gap: 12px; width: 100%; }
 .cw-marks { font-size: 9px; letter-spacing: 2px; color: var(--phase-color); }
@@ -1305,9 +1326,26 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 @keyframes campPulse { 0%,100% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--node-color) 18%, transparent); }
   50% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--node-color) 6%, transparent); } }
 
+/* the green LEARN circle — revisit the learn pages, separate from the questions */
+.cmp-learn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 4;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 46px; height: 46px; border-radius: 50%; padding: 0; cursor: pointer;
+  background: var(--surface); border: 2px solid #16a34a; color: #16a34a;
+  transition: transform .12s, background .12s, color .12s; }
+.cmp-learn-ic { font-size: 15px; line-height: 1; }
+.cmp-learn-tag { font-size: 6px; letter-spacing: 1px; margin-top: 1px; }
+.cmp-learn:hover { transform: translateY(-50%) scale(1.1); background: #16a34a; color: #fff; }
+.cmp-learn:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+.side-left .cmp-learn { right: calc(50% + 100px); }
+.side-right .cmp-learn { left: calc(50% + 100px); }
+
 /* the side label */
 .cmp-label { position: absolute; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 5px;
   max-width: calc(50% - 118px); }
+/* lesson labels shift out to clear the LEARN circle */
+.cmp-lesson.side-left .cmp-label { right: calc(50% + 154px); }
+.cmp-lesson.side-right .cmp-label { left: calc(50% + 154px); }
+.cmp-lesson .cmp-label { max-width: calc(50% - 172px); }
 .side-left .cmp-label { right: calc(50% + 102px); text-align: right; align-items: flex-end; }
 .side-right .cmp-label { left: calc(50% + 102px); text-align: left; align-items: flex-start; }
 .cmp-name { font-size: 12.5px; letter-spacing: 1px; color: var(--ink); line-height: 1.35; }
@@ -1369,6 +1407,12 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
   .side-left .cmp-dot { right: calc(50% + 30px); }
   .side-right .cmp-dot { left: calc(50% + 30px); }
   .cmp-branch { width: 26px; }
+  .cmp-learn { width: 38px; height: 38px; }
+  .side-left .cmp-learn { right: calc(50% + 82px); }
+  .side-right .cmp-learn { left: calc(50% + 82px); }
+  .cmp-lesson.side-left .cmp-label { right: calc(50% + 126px); }
+  .cmp-lesson.side-right .cmp-label { left: calc(50% + 126px); }
+  .cmp-lesson .cmp-label { max-width: calc(50% - 142px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .current .cmp-dot, .cmp-test.current .cmp-badge { animation: none; }
@@ -1524,6 +1568,61 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 .pi-check-opt:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
 .pi-check-explain { font-size: 12px; line-height: 1.75; color: var(--ink-2); border-top: 1px dashed var(--phase-color); padding-top: 10px; }
 .pi-check-explain strong { color: var(--phase-color); }
+/* an interactive question embedded in a learn page (the "your turn" step) */
+.pi-q { margin-top: 18px; border: 1px solid var(--phase-color); border-left: 4px solid var(--phase-color); background: var(--phase-color-light); padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
+.pi-q-prompt { font-size: 13px; letter-spacing: .5px; color: var(--ink); line-height: 1.55; }
+.pi-q-host { display: flex; justify-content: center; }
+.pi-q-explain { font-size: 12px; line-height: 1.75; color: var(--ink-2); border-top: 1px dashed var(--phase-color); padding-top: 10px; }
+.pi-q-explain strong { color: var(--phase-color); }
+.pi-q-explain.ok { color: var(--success-ink); }
+.pi-q-explain.no { color: var(--error-ink); }
+
+/* ── HOW-TO-PLAY TUTORIAL (onboarding) ───────────────── */
+#tutorial { gap: 26px; padding: 44px 30px; }
+.tut-skip { position: absolute; top: 20px; right: 24px; background: none; border: none; font-family: var(--mono); font-size: 10px; letter-spacing: 2px; color: var(--ink-4); cursor: pointer; padding: 8px 10px; transition: color .15s; }
+.tut-skip:hover { color: var(--ink-2); }
+.tut-skip:focus-visible { outline: none; color: var(--ink-2); text-decoration: underline; }
+.tut-stage { max-width: 540px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.tut-stage.tut-in { animation: tutIn .42s cubic-bezier(.2,.7,.3,1); }
+@keyframes tutIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.tut-visual { min-height: 148px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; width: 100%; }
+.tut-eyebrow { font-size: 9px; letter-spacing: 5px; color: var(--phase-color); }
+.tut-heading { font-size: 23px; letter-spacing: 2px; line-height: 1.32; }
+.tut-heading em { font-style: normal; color: var(--phase-color); }
+.tut-body { font-size: 12px; line-height: 1.85; color: var(--ink-2); max-width: 460px; }
+.tut-body strong { color: var(--ink); }
+.tut-nav { display: flex; align-items: center; justify-content: center; gap: 22px; width: 100%; max-width: 540px; }
+.tut-back { background: none; border: 1px solid var(--border); padding: 12px 20px; font-family: var(--mono); font-size: 11px; letter-spacing: 2px; color: var(--ink-3); cursor: pointer; transition: border-color .15s, color .15s; }
+.tut-back:hover { border-color: var(--ink-3); color: var(--ink); }
+.tut-next { margin-top: 0; }
+.tut-dots { display: flex; gap: 8px; }
+.tut-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); transition: background .2s, transform .2s; }
+.tut-dot.on { background: var(--phase-color); transform: scale(1.3); }
+.tut-dot.done { background: var(--ink-4); }
+/* mini-illustrations */
+.tut-logo { font-size: 34px; letter-spacing: 7px; }
+.tut-logo em { font-style: normal; color: var(--signal); }
+.tut-logo.small { font-size: 24px; letter-spacing: 5px; }
+.tut-ready { font-size: 12px; letter-spacing: 4px; color: var(--success-ink); border: 1px solid var(--success-ink); padding: 6px 16px; }
+.tut-map { display: flex; align-items: center; gap: 4px; }
+.tut-node { width: 58px; height: 58px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 18px; border: 2px solid var(--border); background: var(--surface); gap: 2px; }
+.tut-node small { font-size: 7px; letter-spacing: 1px; color: var(--ink-4); }
+.tut-node.learn { border-color: #16a34a; color: #16a34a; }
+.tut-node.test { border-color: var(--signal); color: var(--signal); }
+.tut-node.lock { opacity: .5; }
+.tut-wire { width: 24px; height: 2px; background: var(--border); }
+.tut-card-demo { border: 1.5px solid var(--phase-color); background: var(--phase-color-light); padding: 16px 22px; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.tut-demo-pv { display: flex; gap: 12px; }
+.tut-demo-pv b { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--border); font-weight: normal; color: var(--ink-4); }
+.tut-demo-pv b.lit { border-color: var(--phase-color); background: var(--phase-color); color: #fff; }
+.tut-demo-sum { font-size: 16px; letter-spacing: 2px; }
+.tut-demo-in { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 26px; border-bottom: 2px solid var(--phase-color); color: var(--ink-4); vertical-align: middle; }
+.tut-tools, .tut-modes, .tut-score { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; justify-content: center; }
+.tut-tool { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 24px; border: 1.5px solid var(--border); padding: 12px 18px; }
+.tut-tool small { font-size: 8px; letter-spacing: 2px; color: var(--ink-4); }
+.tut-hearts { font-size: 22px; color: var(--error); letter-spacing: 4px; }
+.tut-streak { font-size: 18px; letter-spacing: 2px; color: var(--warn-ink); }
+.tut-mode { font-size: 11px; letter-spacing: 2px; border: 1.5px solid var(--border); padding: 10px 14px; color: var(--ink-2); }
 @media (max-width: 560px) { .pi-check-opts { grid-template-columns: 1fr; } }
 
 /* ── LEARN SCREEN: reveal + rich blocks ──────────────── */

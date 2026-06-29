@@ -21,7 +21,7 @@ const vState = { phase: null, question: null, answered: false };
 
 // Question types that render their own interactive visual — the read-only
 // panel is suppressed for these (the module owns its visuals itself).
-const SELF_RENDERED = new Set(['CIRCUIT', 'CIPHER', 'TRACE', 'FDE', 'PACKET', 'EXAM', 'CODE_TRACE', 'CODE_FILL', 'CODE_BUILD', 'CODE_BUG', 'CODE_WRITE', 'NUMBER', 'PLACEVALUE', 'BINADD', 'SHIFT', 'FLIPADD', 'BINSUB', 'HEXPICK', 'SWATCH', 'CALC', 'TYPEIN', 'ORDER', 'CATEGORISE', 'RECALL', 'EXAMCOACH', 'TRUTHTABLE', 'MATCH', 'SEARCHTRACE', 'SQLBUILD', 'SERVERROOM', 'OVERFLOW', 'HEXLOCK', 'SIGNAL']);
+const SELF_RENDERED = new Set(['CIRCUIT', 'CIPHER', 'TRACE', 'FDE', 'PACKET', 'EXAM', 'CODE_TRACE', 'CODE_FILL', 'CODE_BUILD', 'CODE_BUG', 'CODE_WRITE', 'NUMBER', 'PLACEVALUE', 'BINADD', 'SHIFT', 'FLIPADD', 'BINSUB', 'HEXPICK', 'SWATCH', 'CALC', 'TYPEIN', 'ORDER', 'CATEGORISE', 'RECALL', 'EXAMCOACH', 'TRUTHTABLE', 'MATCH', 'SEARCHTRACE', 'SQLBUILD', 'SERVERROOM', 'OVERFLOW', 'HEXLOCK', 'SIGNAL', 'BINBUILD']);
 // A question owns/suppresses the read-only panel if it renders its own visual
 // (SELF_RENDERED), is a video watch-check, or explicitly opts out via noVisual
 // (used to drop an unhelpful/irrelevant diagram from a question).
