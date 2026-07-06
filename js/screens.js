@@ -178,7 +178,7 @@ export function showCampaign() {
 
   const path = h('div', 'cmp');
   path.appendChild(h('div', 'cmp-intro',
-    'Follow the signal — clear each lesson to power up the next, then pass the unit test to unlock the unit after. Replay a cleared lesson flawlessly to earn all 3 ★.'));
+    'Follow the signal in order, or jump straight to any topic you need. Clear every lesson in a unit to open its unit test. Replay a cleared lesson flawlessly to earn all 3 ★.'));
 
   state.units.forEach(u => {
     path.appendChild(unitHeader(u));

@@ -23,6 +23,8 @@ const KEY = {
   volume: 'logicflow.volume',
   theme: 'logicflow.theme',
   uiScale: 'logicflow.uiscale',
+  onscreen: 'logicflow.onscreen',
+  onscreenLayout: 'logicflow.onscreenLayout',
   board: 'logicflow.board',
   topicStats: 'logicflow.topicStats',
   schedule: 'logicflow.schedule',
@@ -30,7 +32,27 @@ const KEY = {
   tutorial: 'logicflow.tutorialSeen',
 };
 
-const BOARDS = ['AQA', 'OCR', 'Eduqas', 'WJEC'];   // WJEC (Wales) uses Python, like Eduqas (its English sibling)
+const BOARDS = ['AQA', 'OCR', 'Eduqas', 'WJEC', 'Edexcel'];   // WJEC + Edexcel use Python, like Eduqas
+// Which logic gates each board's spec actually requires. OCR (J277) and
+// Edexcel (1CP2) do NOT include XOR — everyone else does. Used to flag
+// off-spec gate content so a student only revises what their exam covers.
+const GATE_SETS = {
+  AQA: ['AND', 'OR', 'NOT', 'XOR'],
+  OCR: ['AND', 'OR', 'NOT'],
+  Eduqas: ['AND', 'OR', 'NOT', 'XOR'],
+  WJEC: ['AND', 'OR', 'NOT', 'XOR'],
+  Edexcel: ['AND', 'OR', 'NOT'],
+};
+// The written shorthand each board uses for Boolean expressions. Words stay the
+// primary form everywhere; these are the SYMBOLS the exam expects a student to
+// recognise. AQA/Eduqas/WJEC use Boolean algebra ( · + overbar ⊕ );
+// OCR/Edexcel use formal logic notation ( ∧ ∨ ¬ ). 'not' is 'bar' (overbar the
+// operand) or 'pre' (¬ prefix).
+const GATE_NOTATION = {
+  algebra: { label: 'Boolean algebra', AND: '·', OR: '+', XOR: '⊕', not: 'bar' },
+  formal: { label: 'logic notation', AND: '∧', OR: '∨', not: 'pre', NOT: '¬' },
+};
+const BOARD_NOTATION = { AQA: 'algebra', Eduqas: 'algebra', WJEC: 'algebra', OCR: 'formal', Edexcel: 'formal' };
 
 const DEFAULT_VOLUME = 70;            // matches the HUD slider default
 
@@ -108,6 +130,28 @@ export function setUiScale(s) {
 }
 
 // ============================================================
+// on-screen input helper ('none' | 'numpad' | 'keyboard'). Which floating
+// on-screen key panel the student has toggled on; persists across sessions.
+// ============================================================
+export function getOnscreenMode() {
+  const v = readRaw(KEY.onscreen);
+  return (v === 'numpad' || v === 'keyboard') ? v : 'none';
+}
+export function setOnscreenMode(m) {
+  writeRaw(KEY.onscreen, (m === 'numpad' || m === 'keyboard') ? m : 'none');
+}
+// where each on-screen panel has been dragged, and whether placement is locked.
+// { locked: bool, numpad: {x,y}|null, keyboard: {x,y}|null }
+export function getOnscreenLayout() {
+  const v = readJSON(KEY.onscreenLayout, null);
+  const o = (v && typeof v === 'object') ? v : {};
+  return { locked: !!o.locked, numpad: o.numpad || null, keyboard: o.keyboard || null };
+}
+export function setOnscreenLayout(obj) {
+  writeJSON(KEY.onscreenLayout, obj || {});
+}
+
+// ============================================================
 // exam-board preference ('AQA' | 'OCR' | 'Eduqas'). Decides which
 // notation programming code is shown in. Default AQA.
 // ============================================================
@@ -118,6 +162,24 @@ export function getBoard() {
 export function setBoard(b) {
   writeRaw(KEY.board, BOARDS.includes(b) ? b : 'AQA');
 }
+// does the given board's spec require this logic gate?
+export function boardRequiresGate(gate, board = getBoard()) {
+  return (GATE_SETS[board] || GATE_SETS.AQA).includes(gate);
+}
+// the boards whose spec DOES require this gate (for "AQA/Eduqas/WJEC only" labels)
+export function boardsWithGate(gate) {
+  return BOARDS.filter(b => (GATE_SETS[b] || []).includes(gate));
+}
+// the symbol shorthand the given board uses ({label, AND, OR, XOR?, not, NOT?})
+export function getGateNotation(board = getBoard()) {
+  return GATE_NOTATION[BOARD_NOTATION[board] || 'algebra'];
+}
+// SQL data-modification (INSERT / UPDATE / DELETE) is on the AQA (and Eduqas)
+// specs; OCR / Edexcel / WJEC GCSE focus on SELECT queries, so for those boards
+// modification content is OPTIONAL EXTENSION work rather than required.
+const SQL_WRITE_BOARDS = ['AQA', 'Eduqas'];
+export function boardRequiresSqlWrite(board = getBoard()) { return SQL_WRITE_BOARDS.includes(board); }
+export function sqlWriteBoards() { return SQL_WRITE_BOARDS.slice(); }
 
 // ============================================================
 // how-to-play tutorial: shown once on the very first launch, and
@@ -187,7 +249,7 @@ export function getCampaignFrontier(phaseIds) {
 // screen except Past Paper). Updates the rolling mastery window AND the
 // spaced-repetition schedule. Identity = (phaseId, questionIndex).
 // ============================================================
-export function recordAttempt(phaseId, questionIndex, isCorrect) {
+export function recordAttempt(phaseId, questionIndex, isCorrect, opts = {}) {
   const correct = !!isCorrect;
 
   // 1) rolling mastery window + lastPlayed
@@ -199,8 +261,11 @@ export function recordAttempt(phaseId, questionIndex, isCorrect) {
   s[phaseId] = t;
   writeJSON(KEY.topicStats, s);
 
-  // 2) spaced-repetition schedule
-  scheduleAttempt(phaseId, questionIndex, correct);
+  // 2) spaced-repetition schedule. Inline lesson-flow questions pass
+  //    { schedule: false } — they update mastery but have no stable
+  //    phase.questions index for the Leitner scheduler (which the Revision
+  //    Hub serves from), so they must not be scheduled.
+  if (opts.schedule !== false) scheduleAttempt(phaseId, questionIndex, correct);
 }
 
 // Leitner scheduling. A WRONG answer (re)schedules the item at box 0
@@ -257,15 +322,18 @@ export function getMisses() {
 //
 // Unlock rules (computed in getCampaignState, which takes the UNITS
 // topology so storage stays decoupled from units.js's specific data):
-//   - a unit unlocks when the previous unit is COMPLETE
-//   - lessons in a unit unlock in order (each needs the previous cleared)
-//   - a Unit Test unlocks once every lesson in its unit is cleared
+//   - the campaign is OPEN: every unit and every lesson is playable in
+//     any order (it's a revision tool — never wall off a topic a student
+//     needs today). The linear order survives as a RECOMMENDATION: the
+//     "you are here" pointer + CONTINUE still walk the path in sequence.
+//   - a Unit Test still unlocks only once every lesson in its unit is
+//     cleared (a test over unlearned content helps nobody)
 //   - a unit is COMPLETE when all its lessons are cleared AND its test
-//     is passed  (the test is the mandatory gate to the next unit)
+//     is passed
 //   - a Mock unlocks when its unit completes; Mocks are OPTIONAL — they
 //     never gate progress and are not the "you are here" pointer
 // ============================================================
-export const UNIT_TEST_PASS = 70;   // % needed to pass a Unit Test (gates next unit)
+export const UNIT_TEST_PASS = 70;   // % needed to pass a Unit Test
 export const MOCK_PASS = 50;        // % at/above which a Mock is shown as "passed"
 const CROWN_SILVER = 80;            // lesson mastery for a 2nd crown
 const CROWN_GOLD = 95;              // lesson mastery (or a flawless run) for the 3rd crown
@@ -351,32 +419,25 @@ export function getCampaignState(units) {
   const list = Array.isArray(units) ? units : [];
   const out = [];
   let current = null;
-  let prevComplete = true;          // unit 1 has no predecessor → unlocked
 
   for (const u of list) {
-    const unitUnlocked = prevComplete;
     const lessons = [];
     let allCleared = true;
-    let priorCleared = true;        // the previous lesson in THIS unit is cleared
 
     for (const pid of (u.lessons || [])) {
       const ts = getTopicStats(pid);
       const cleared = ts.cleared;
-      let state;
-      if (!unitUnlocked) state = 'locked';
-      else if (cleared) state = 'cleared';
-      else if (priorCleared) state = 'unlocked';
-      else state = 'locked';
+      // open campaign: every lesson is playable — cleared or ready, never locked
+      const state = cleared ? 'cleared' : 'unlocked';
       const node = { phaseId: pid, state, crown: getCrown(pid), mastery: ts.mastery, started: ts.started };
       if (state === 'unlocked' && !current) { current = { kind: 'lesson', unitId: u.id, phaseId: pid }; node.current = true; }
       lessons.push(node);
-      if (!cleared) { allCleared = false; priorCleared = false; }
+      if (!cleared) allCleared = false;
     }
 
     const tr = getUnitTest(u.id);
     let testState;
-    if (!unitUnlocked) testState = 'locked';
-    else if (tr.passed) testState = 'passed';
+    if (tr.passed) testState = 'passed';
     else if (allCleared) testState = 'unlocked';
     else testState = 'locked';
     const test = { state: testState, best: tr.best };
@@ -397,10 +458,9 @@ export function getCampaignState(units) {
 
     out.push({
       id: u.id, name: u.name, color: u.color, blurb: u.blurb,
-      state: unitComplete ? 'complete' : (unitUnlocked ? 'unlocked' : 'locked'),
+      state: unitComplete ? 'complete' : 'unlocked',
       lessons, test, mock,
     });
-    prevComplete = unitComplete;
   }
 
   return { units: out, current };

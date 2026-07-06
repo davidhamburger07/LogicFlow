@@ -16,6 +16,8 @@
 // as written in real GCSE exams. Answer arrays are MSB-first.
 // ============================================================
 
+import { getBoard } from './storage.js';
+
 function randInt(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
 function hex2(v) { return v.toString(16).toUpperCase().padStart(2, '0'); }
 
@@ -459,13 +461,30 @@ function binaryAdd(opts) {
   const bits = (opts && opts.bits) || 4;                          // opts.bits: 8 for exam-level addition
   const hi = (1 << bits) - 1;
   const lo = Math.max(2, hi >> 3);
+  // AQA assesses adding up to THREE binary numbers; OCR/Edexcel/Eduqas only two.
+  const three = getBoard() === 'AQA' && bits === 8 && !(opts && opts.two);
+  if (three) {
+    const a = randInt(lo, hi - 2 * lo);
+    const b = randInt(lo, hi - a - lo);
+    const c = randInt(lo, hi - a - b);                            // a + b + c <= hi → clean 8-bit result, no overflow
+    const sum = a + b + c;
+    const aArr = toBitsMSB(a, bits), bArr = toBitsMSB(b, bits), cArr = toBitsMSB(c, bits);
+    return {
+      type: 'BINADD', badge: 'BINARY ADD ×3', board: 'AQA', enforceCarry: true,
+      a: aArr, b: bArr, c: cArr,
+      title: `AQA: add these THREE ${bits}-bit binary numbers`,
+      desc: 'Fill the carry row and the sum. Three 1s in a column write 1 and carry 1 — with a carry in, a column can even carry 2.',
+      hints: ['Work right to left: 1 + 1 + 1 = 11 (write 1, carry 1). With a carried-in 1 a column can total 4 → write 0, carry 2.', `${a} + ${b} + ${c} = ${sum} = ${toBitsMSB(sum, bits).join('')}.`],
+      explain: `<strong>${aArr.join('')} + ${bArr.join('')} + ${cArr.join('')} = ${toBitsMSB(sum, bits).join('')}.</strong> In denary that is ${a} + ${b} + ${c} = ${sum}. Add each column right-to-left; three 1s make 11 (write 1, carry 1).`,
+    };
+  }
   const a = randInt(lo, hi - lo);
   const b = randInt(lo, hi - a);                                  // a + b <= hi → clean fixed-width result, no overflow
   const sum = a + b;
   const aArr = toBitsMSB(a, bits), bArr = toBitsMSB(b, bits);
   return {
     // carry-row addition canvas: fill the carries AND toggle the result.
-    type: 'BINADD', badge: 'BINARY ADD', board: 'AQA · OCR · Eduqas',
+    type: 'BINADD', badge: 'BINARY ADD', board: 'AQA · OCR · Eduqas', enforceCarry: true,
     a: aArr, b: bArr,
     title: `Add these ${bits}-bit binary numbers`,
     desc: 'Fill the carry row and the sum, working column by column from the right.',

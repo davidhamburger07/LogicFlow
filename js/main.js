@@ -15,6 +15,7 @@ import * as engine from './engine.js';
 import * as screens from './screens.js';
 import { SFX } from './sound.js';
 import * as store from './storage.js';
+import { initOnscreenKeys, toggleOnscreen } from './onscreenkeys.js';
 
 function $(id) { return document.getElementById(id); }
 
@@ -131,12 +132,19 @@ function wire() {
     screens.showMainMenu();   // re-render the menu from the now-cleared progress
   });
 
+  // on-screen input helpers: toggle the floating numpad / keyboard panels
+  $('numpad-btn').addEventListener('click', () => { SFX.uiClick(); toggleOnscreen('numpad'); });
+  $('keyboard-btn').addEventListener('click', () => { SFX.uiClick(); toggleOnscreen('keyboard'); });
+
   // in-game settings: the HUD gear pauses the timer, opens settings, and the
-  // settings "back" resumes the game right where it left off.
+  // settings "back" resumes the game right where it left off — restoring the
+  // screen it was opened from (a lesson `phase-intro` or graded gameplay `null`),
+  // not always `null` (which would drop a lesson onto the empty game area).
   $('settings-btn').addEventListener('click', () => {
     SFX.uiClick();
+    const from = engine.getCurrentScreen();
     engine.pauseTimer();
-    screens.showSettings(() => { engine.showScreen(null); engine.resumeTimer(); });
+    screens.showSettings(() => { engine.showScreen(from); engine.resumeTimer(); });
   });
 
   wireVolume();
@@ -154,6 +162,7 @@ function boot() {
   paintBoard(store.getBoard());
 
   wire();
+  initOnscreenKeys();
   engine.initEngine();
   screens.initScreens();
   // first-ever launch lands on the how-to-play tutorial; otherwise the menu

@@ -30,16 +30,25 @@ export const flipadd = {
     const pos = question.pos.slice();          // the original (positive) bits
     const n = pos.length;
     const flippedBits = pos.map(b => 1 - b);   // one's complement
-    let isFlipped = false, committed = false;
+    let cur = pos.slice(), committed = false;  // the bits as the player has flipped them
 
     const wrap = el('fa');
 
     const step1 = el('fa-step');
     if (!question.embedded) step1.appendChild(el('fa-step-label')).textContent = 'STEP 1 — flip every bit';
-    step1.appendChild(el('fa-explain')).innerHTML = 'Flipping inverts <b>every</b> bit — each <b>0 → 1</b> and each <b>1 → 0</b>. That is the <b>NOT</b> operation (the "one’s complement"). Adding 1 to it next gives the two’s complement. Use UNFLIP to compare.';
+    step1.appendChild(el('fa-explain')).innerHTML = '<b>Tap each bit to invert it</b> (0 → 1 and 1 → 0) — that is the <b>NOT</b> operation (the "one’s complement"). Flip them all, then add 1 to get the two’s complement. (Or use <b>FLIP ALL</b> as a shortcut.)';
 
     const bitRow = el('fa-bits');
-    const cells = pos.map(b => { const c = el('fa-bit' + (b ? ' on' : '')); c.textContent = String(b); bitRow.appendChild(c); return c; });
+    const cells = pos.map((b, i) => {
+      const c = el('fa-bit' + (b ? ' on' : ''), 'button'); c.type = 'button'; c.textContent = String(b); c.dataset.col = String(i);
+      c.addEventListener('click', () => {
+        if (committed) return;
+        cur[i] ^= 1; paintCell(c, cur[i], true);
+        (ctx.sfx.bitClick || ctx.sfx.uiClick)();
+        setTimeout(refresh, 120);
+      });
+      bitRow.appendChild(c); return c;
+    });
     step1.appendChild(bitRow);
 
     const compare = el('fa-compare');
@@ -63,32 +72,38 @@ export const flipadd = {
     wrap.appendChild(step2);
     host.appendChild(wrap);
 
-    function setBits(arr, animate) {
-      cells.forEach((c, i) => {
-        if (animate) { c.classList.add('flipping'); setTimeout(() => { c.textContent = String(arr[i]); c.classList.toggle('on', !!arr[i]); c.classList.remove('flipping'); }, 110); }
-        else { c.textContent = String(arr[i]); c.classList.toggle('on', !!arr[i]); }
-      });
+    function paintCell(c, v, animate) {
+      if (animate) { c.classList.add('flipping'); setTimeout(() => { c.textContent = String(v); c.classList.toggle('on', !!v); c.classList.remove('flipping'); }, 110); }
+      else { c.textContent = String(v); c.classList.toggle('on', !!v); }
+    }
+    const allFlipped = () => cur.every((b, i) => b === flippedBits[i]);
+    function refresh() {
+      const done = allFlipped();
+      addBtn.disabled = !done;
+      compare.style.visibility = done ? 'visible' : 'hidden';
+      flipBtn.textContent = done ? '↩ UNFLIP (compare)' : '⇄ FLIP ALL BITS';
     }
 
-    // FLIP <-> UNFLIP: free to toggle so the player can SEE what changed
+    // FLIP ALL <-> UNFLIP shortcut — set every bit at once, then refresh
     flipBtn.addEventListener('click', () => {
       if (committed) return;
-      isFlipped = !isFlipped;
-      setBits(isFlipped ? flippedBits : pos, true);
+      cur = (allFlipped() ? pos : flippedBits).slice();
+      cells.forEach((c, i) => paintCell(c, cur[i], true));
       (ctx.sfx.bitClick || ctx.sfx.uiClick)();
-      flipBtn.textContent = isFlipped ? '↩ UNFLIP (compare)' : '⇄ FLIP ALL BITS';
-      compare.style.visibility = isFlipped ? 'visible' : 'hidden';
-      addBtn.disabled = !isFlipped;            // can only proceed once flipped
+      setTimeout(refresh, 120);
     });
 
     // commit to the flipped value and reveal the +1 step
     addBtn.addEventListener('click', () => {
-      if (committed || !isFlipped) return;
+      if (committed || !allFlipped()) return;
       committed = true;
       flipBtn.disabled = true; addBtn.disabled = true;
+      cells.forEach(c => { c.disabled = true; });   // lock the flipped bits
       step2.style.display = 'flex';
       const one = new Array(n).fill(0); one[n - 1] = 1;
-      binadd.render(addHost, { type: 'BINADD', a: flippedBits.slice(), b: one }, ctx);   // result = two's complement
+      // enforce the carry row (practise the method) but HIDE the overflow flag —
+      // the carry out of the MSB is discarded normally in two's complement.
+      binadd.render(addHost, { type: 'BINADD', a: flippedBits.slice(), b: one, enforceCarry: true, hideOverflow: true }, ctx);   // result = two's complement
     });
   },
 };

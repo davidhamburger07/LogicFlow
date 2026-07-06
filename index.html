@@ -15,7 +15,6 @@
 <!-- HUD -->
 <div id="hud">
   <div class="hud-left">
-    <button id="exit-btn" title="Exit to the main menu">✕ EXIT</button>
     <div class="logo" id="logo-btn" role="button" tabindex="0" title="Back to the main menu">LOG<span>IC</span>FLOW</div>
   </div>
   <div class="hud-center">
@@ -26,11 +25,14 @@
   </div>
   <div class="hud-right">
     <button id="settings-btn" title="Settings" aria-label="Settings">⚙</button>
+    <button id="numpad-btn" title="On-screen number pad" aria-label="Toggle the on-screen number pad" aria-pressed="false">🔢</button>
+    <button id="keyboard-btn" title="On-screen keyboard" aria-label="Toggle the on-screen keyboard" aria-pressed="false">⌨️</button>
     <button id="theme-btn" title="Toggle light / dark mode" aria-label="Toggle light / dark mode">🌙</button>
     <div id="vol-wrap">
       <span id="vol-icon">🔊</span>
       <input type="range" id="vol-slider" min="0" max="100" value="70">
     </div>
+    <button id="exit-btn" title="Exit to the main menu">✕ EXIT</button>
   </div>
 </div>
 
@@ -53,6 +55,7 @@
     </div>
     <div id="q-title">—</div>
     <div id="q-desc" style="display:none;"></div>
+    <div id="q-enrich" style="display:none;"></div>
   </div>
 
   <!-- Visual Panel: canvas / swatch / sort -->
@@ -103,12 +106,13 @@
   <div class="menu-actions" id="menu-actions"></div>
   <div class="menu-board" id="menu-board">
     <span class="menu-board-label">EXAM BOARD</span>
-    <span class="menu-board-hint">Sets the code notation in the programming lessons — AQA pseudo-code, OCR reference language, or Python (Eduqas &amp; WJEC). Every other topic is the same for all boards.</span>
+    <span class="menu-board-hint">Tailors the lessons to your spec — programming notation (AQA pseudo-code, OCR reference language, or Python for Eduqas / WJEC / Edexcel) and which logic gates you need (XOR isn&rsquo;t on the OCR or Edexcel spec).</span>
     <div class="menu-board-opts">
       <button class="board-opt" data-board="AQA">AQA</button>
       <button class="board-opt" data-board="OCR">OCR</button>
       <button class="board-opt" data-board="Eduqas">Eduqas</button>
       <button class="board-opt" data-board="WJEC">WJEC</button>
+      <button class="board-opt" data-board="Edexcel">Edexcel</button>
     </div>
   </div>
   <button class="menu-theme-toggle" id="menu-theme-btn">🌙 DARK MODE</button>
@@ -224,6 +228,7 @@
           <button class="board-opt" data-board="OCR">OCR</button>
           <button class="board-opt" data-board="Eduqas">Eduqas</button>
           <button class="board-opt" data-board="WJEC">WJEC</button>
+          <button class="board-opt" data-board="Edexcel">Edexcel</button>
         </div>
       </div>
       <div class="settings-group">
@@ -368,6 +373,29 @@
     </div>
   </div>
   <canvas id="sp-canvas"></canvas>
+</div>
+
+<!-- On-page WORKING OUT layer (lesson flow): transparent full-page canvas
+     (draw anywhere) + a docked side toolbar. Question stays visible. -->
+<div id="workpad" aria-hidden="true">
+  <canvas id="wp-canvas"></canvas>
+  <div class="wp-bar" id="wp-bar">
+    <span class="wp-title">WORKING OUT</span>
+    <button class="wp-draw" id="wp-draw">✏ DRAW</button>
+    <div class="wp-group">
+      <button class="wp-tool" data-tool="pen" title="Pen">✏</button>
+      <button class="wp-tool" data-tool="highlighter" title="Highlighter">▮</button>
+      <button class="wp-tool" data-tool="text" title="Text">T</button>
+      <button class="wp-tool" data-tool="eraser" title="Eraser">⌫</button>
+    </div>
+    <div class="wp-group wp-colours" id="wp-colours"></div>
+    <div class="wp-group wp-sizes">
+      <button class="wp-size" data-size="0">S</button>
+      <button class="wp-size" data-size="1">M</button>
+      <button class="wp-size" data-size="2">L</button>
+    </div>
+    <button class="wp-tool-btn" id="wp-clear">CLEAR</button>
+  </div>
 </div>
 
 <script type="module" src="js/main.js"></script>

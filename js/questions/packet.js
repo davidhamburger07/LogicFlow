@@ -44,6 +44,7 @@ export const packet = {
     let hopsLeft = question.ttl;
     let path = [question.source];
     let locked = false;
+    const walk = !!question.walk;   // WATCH mode: a NEXT button auto-routes the packet (non-graded)
 
     const wrap = el('packet');
     const status = el('packet-status');
@@ -56,7 +57,7 @@ export const packet = {
       b.innerHTML = `<span class="packet-node-label">${n.label || n.id}</span>`;
       if (n.id === question.source) b.classList.add('is-source');
       if (n.id === question.dest) b.classList.add('is-dest');
-      b.addEventListener('click', () => hop(n.id));
+      if (!walk) b.addEventListener('click', () => hop(n.id));
       stage.appendChild(b); nodeEls[n.id] = b;
     });
     const hint = el('packet-hintline');
@@ -90,7 +91,7 @@ export const packet = {
     function refresh() {
       Object.values(nodeEls).forEach(b => b.classList.remove('reachable', 'current'));
       nodeEls[current].classList.add('current');
-      if (!locked) adj[current].forEach(id => nodeEls[id].classList.add('reachable'));
+      if (!locked && !walk) adj[current].forEach(id => nodeEls[id].classList.add('reachable'));
       status.innerHTML = `<span class="packet-stat">DEST: <strong>${question.dest}</strong></span>`
         + `<span class="packet-stat packet-hops${hopsLeft <= 1 ? ' low' : ''}">HOPS LEFT: <strong>${hopsLeft}</strong></span>`;
       draw();
@@ -116,6 +117,40 @@ export const packet = {
         return;
       }
       refresh();
+    }
+
+    // WATCH mode: auto-route the packet along the shortest working path, one
+    // hop per NEXT press, narrating how it dodges the down link.
+    function shortestPath(src, dst) {
+      const prev = {}, seen = new Set([src]), queue = [src];
+      while (queue.length) { const u = queue.shift(); if (u === dst) break; adj[u].forEach(v => { if (!seen.has(v)) { seen.add(v); prev[v] = u; queue.push(v); } }); }
+      if (src !== dst && !(dst in prev)) return [src];
+      const p = [dst]; let c = dst; while (c !== src) { c = prev[c]; p.unshift(c); } return p;
+    }
+    if (walk) {
+      hint.style.display = 'none';
+      const route = shortestPath(question.source, question.dest);
+      let pos = 0, wdone = false;
+      const note = el('packet-note');
+      note.innerHTML = `The packet must reach <b>${question.dest}</b>, but a link is <b>down</b> (dashed red). Watch it <b>route around</b> the failure — press <b>NEXT STEP</b>.`;
+      const btn = el('packet-next', 'button'); btn.type = 'button'; btn.textContent = '▶ NEXT STEP';
+      btn.addEventListener('click', () => {
+        if (wdone || pos >= route.length - 1) return;
+        const to = route[pos + 1];
+        current = to; path.push(to); hopsLeft--; pos++;
+        ctx.sfx.bitClick(true); refresh();
+        if (to === question.dest) {
+          wdone = true; locked = true; wrap.classList.add('locked');
+          nodeEls[to].classList.add('arrived'); refresh();
+          note.innerHTML = `Arrived at <b>${question.dest}</b> — the packet <b>routed around</b> the dead link and got through. That resilience is the whole point of packet switching.`;
+          btn.textContent = '✓ DONE'; btn.disabled = true;
+          ctx.sfx.zap(); ctx.onSubmit(true, {});
+        } else {
+          const left = route.length - 1 - pos;
+          note.innerHTML = `Hop to <b>${to}</b> — skipping the down link. <b>${left}</b> hop${left === 1 ? '' : 's'} to go.`;
+        }
+      });
+      wrap.append(note, btn);
     }
 
     refresh();

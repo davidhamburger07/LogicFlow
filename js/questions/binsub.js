@@ -60,7 +60,8 @@ export const binsub = {
           return;
         }
         s2.style.display = 'flex';
-        binadd.render(s2host, { type: 'BINADD', a: A.slice(), b: negB.slice() }, ctx);   // result = A - B
+        // enforce the carry row; hide overflow — the MSB carry is discarded in two's complement
+        binadd.render(s2host, { type: 'BINADD', a: A.slice(), b: negB.slice(), enforceCarry: true, hideOverflow: true }, ctx);   // result = A - B
       },
     };
 

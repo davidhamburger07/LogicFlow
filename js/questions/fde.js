@@ -44,9 +44,10 @@ export const fde = {
     if (detach) { detach(); detach = null; }
     host.innerHTML = '';
     const steps = question.steps;
+    const walk = !!question.walk;   // WATCH mode: a NEXT button auto-plays each move (non-graded)
     let pos = 0, locked = false;
 
-    const wrap = el('fde');
+    const wrap = el('fde' + (walk ? ' fde-walk' : ''));
     const stageBar = el('fde-stages');
     STAGES.forEach(s => { const c = el('fde-stage-chip'); c.dataset.stage = s; c.textContent = s; stageBar.appendChild(c); });
     const prompt = el('fde-prompt');
@@ -57,7 +58,7 @@ export const fde = {
       const b = el('fde-comp', 'button'); b.type = 'button'; b.dataset.id = id;
       b.style.left = (c.x * 100) + '%'; b.style.top = c.y + 'px';
       b.innerHTML = `<span class="fde-comp-label">${c.label}</span><span class="fde-comp-sub">${c.sub}</span>`;
-      b.addEventListener('click', () => choose(id));
+      if (!walk) b.addEventListener('click', () => choose(id));
       stage.appendChild(b); comps[id] = b;
     });
     const log = el('fde-log');
@@ -81,11 +82,14 @@ export const fde = {
       requestAnimationFrame(() => { dot.style.left = (b.x * 100) + '%'; dot.style.top = b.y + 'px'; });
       setTimeout(() => dot.remove(), 520);
     }
+    const narrate = s => s.say || (s.from === s.answer
+      ? `${LAYOUT[s.from].label} is incremented (${s.note || '+1'}).`
+      : `${LAYOUT[s.from].label} → ${LAYOUT[s.answer].label}.`);
     function setStep() {
       const s = steps[pos];
       stageBar.querySelectorAll('.fde-stage-chip').forEach(ch => ch.classList.toggle('active', ch.dataset.stage === s.stage));
-      prompt.innerHTML = `<span class="fde-stage-tag">${s.stage}</span>${s.prompt}`;
-      prog.textContent = `STEP ${pos + 1} OF ${steps.length}`;
+      prompt.innerHTML = `<span class="fde-stage-tag">${s.stage}</span>${walk ? narrate(s) : s.prompt}`;
+      prog.textContent = walk ? `STEP ${pos + 1} OF ${steps.length} — press NEXT` : `STEP ${pos + 1} OF ${steps.length}`;
       Object.values(comps).forEach(b => b.classList.remove('source'));
       if (comps[s.from]) comps[s.from].classList.add('source');   // the source register glows
     }
@@ -114,6 +118,36 @@ export const fde = {
       } else {
         setStep();
       }
+    }
+
+    // WATCH mode: a NEXT STEP button plays each move for the student, no grading.
+    let nextBtn = null;
+    function playStep() {
+      if (locked) return;
+      const s = steps[pos];
+      comps[s.answer].classList.add('done');
+      if (comps[s.from]) comps[s.from].classList.remove('source');
+      pulse(s.from, s.answer);
+      ctx.sfx.bitClick(true);
+      const li = el('fde-log-item');
+      li.textContent = s.note || (s.from === s.answer ? `${s.answer} + 1` : `${s.from} → ${s.answer}`);
+      log.appendChild(li);
+      pos++;
+      if (pos >= steps.length) {
+        locked = true; wrap.classList.add('locked');
+        prompt.innerHTML = `<span class="fde-stage-tag">DONE</span>That is one full pass — now it is your turn to drive it.`;
+        prog.textContent = '✓ COMPLETE';
+        nextBtn.textContent = '✓ DONE'; nextBtn.disabled = true;
+        ctx.sfx.zap();
+        ctx.onSubmit(true, {});
+      } else {
+        setStep();
+      }
+    }
+    if (walk) {
+      nextBtn = el('fde-next', 'button'); nextBtn.type = 'button'; nextBtn.textContent = '▶ NEXT STEP';
+      nextBtn.addEventListener('click', playStep);
+      wrap.appendChild(nextBtn);
     }
 
     drawSkeleton();

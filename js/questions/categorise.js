@@ -16,6 +16,8 @@
 //     badge, board, title, desc, hints, explain }
 // ============================================================
 
+import { forBoard } from './codeview.js';
+
 function el(cls, tag = 'div') { const e = document.createElement(tag); if (cls) e.className = cls; return e; }
 
 export const categorise = {
@@ -23,7 +25,13 @@ export const categorise = {
 
   render(host, question, ctx) {
     host.innerHTML = '';
-    const bins = question.bins.slice();
+    // A bin is usually a plain string. It may instead be a { AQA, OCR, … } map
+    // for board-specific WORDING (e.g. "Erroneous" for AQA, "Invalid" for OCR):
+    // the matching KEY stays board-agnostic (the AQA/first value, which items'
+    // `bin` reference), while the displayed LABEL is resolved for the board.
+    const binDefs = question.bins.map(b => (b && typeof b === 'object' && !Array.isArray(b))
+      ? { key: b.AQA || Object.values(b)[0], label: forBoard(b) }
+      : { key: b, label: b });
     const items = question.items.map(it => ({ text: it.text, bin: it.bin, chosen: null }));
 
     const wrap = el('cg');
@@ -32,12 +40,12 @@ export const categorise = {
       const row = el('cg-row');
       row.appendChild(el('cg-item')).textContent = it.text;
       const opts = el('cg-opts');
-      bins.forEach(b => {
-        const btn = el('cg-bin', 'button'); btn.type = 'button'; btn.textContent = b;
+      binDefs.forEach(def => {
+        const btn = el('cg-bin', 'button'); btn.type = 'button'; btn.textContent = def.label; btn.dataset.bin = def.key;
         btn.addEventListener('click', () => {
           if (ctx.isAnswered()) return;
-          it.chosen = b;
-          opts.querySelectorAll('.cg-bin').forEach(x => x.classList.toggle('on', x.textContent === b));
+          it.chosen = def.key;
+          opts.querySelectorAll('.cg-bin').forEach(x => x.classList.toggle('on', x.dataset.bin === def.key));
           (ctx.sfx.uiClick || ctx.sfx.bitClick)();
         });
         opts.appendChild(btn);
@@ -58,7 +66,7 @@ export const categorise = {
       rows.forEach((r, i) => {
         const right = items[i].chosen === items[i].bin;
         r.row.classList.add(right ? 'cg-ok' : 'cg-bad');
-        if (!right) r.opts.querySelectorAll('.cg-bin').forEach(x => { if (x.textContent === items[i].bin) x.classList.add('cg-correct'); });
+        if (!right) r.opts.querySelectorAll('.cg-bin').forEach(x => { if (x.dataset.bin === items[i].bin) x.classList.add('cg-correct'); });
       });
       if (correct) ctx.sfx.zap(); else ctx.sfx.wrong();
       ctx.onSubmit(correct, correct ? {} : { feedbackOnWrong: 'Check the marked rows — the correct group is outlined in green.' });

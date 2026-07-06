@@ -12,7 +12,7 @@ import { getBoard } from '../storage.js';
 
 export { getBoard };
 
-export const NOTATION = { AQA: 'AQA pseudo-code', OCR: 'OCR reference language', Eduqas: 'Python (Eduqas)', WJEC: 'Python (WJEC)' };
+export const NOTATION = { AQA: 'AQA pseudo-code', OCR: 'OCR reference language', Eduqas: 'Python (Eduqas)', WJEC: 'Python (WJEC)', Edexcel: 'Python (Edexcel)' };
 
 const KEYWORDS = new Set([
   'IF', 'THEN', 'ELSE', 'ELSEIF', 'ELIF', 'ENDIF', 'WHILE', 'ENDWHILE', 'FOR', 'TO', 'STEP', 'NEXT', 'ENDFOR',
@@ -53,8 +53,8 @@ export function codePanel(code) {
 export function forBoard(val, board = getBoard()) {
   if (val == null) return val;
   if (typeof val !== 'object' || Array.isArray(val)) return val;   // primitives + arrays are board-agnostic
-  // a { AQA, OCR, Eduqas } map is per-board; WJEC uses the same Python as Eduqas
-  return val[board] || (board === 'WJEC' && val.Eduqas) || val.AQA || Object.values(val)[0];
+  // a { AQA, OCR, Eduqas } map is per-board; WJEC + Edexcel use the same Python as Eduqas
+  return val[board] || ((board === 'WJEC' || board === 'Edexcel') && val.Eduqas) || val.AQA || Object.values(val)[0];
 }
 
 // a small caption naming the notation — only when the code is board-specific

@@ -73,10 +73,12 @@ export const calc = {
     }
 
     function checkActive() {
-      if (ctx.isAnswered() || failed) return;
+      if (ctx.isAnswered()) return;
       const r = rows[active];
+      if (r.input.value.trim() === '') { r.input.classList.remove('cl-shake'); void r.input.offsetWidth; r.input.classList.add('cl-shake'); return; }
       const correct = Number(clean(r.input.value)) === Number(r.st.answer);
       if (correct) {
+        r.row.classList.remove('cl-wrong');
         active++;
         if (active >= rows.length) {
           paint();
@@ -85,12 +87,13 @@ export const calc = {
           ctx.onSubmit(true, {});
         } else { (ctx.sfx.uiClick || ctx.sfx.bitClick)(); paint(); }
       } else {
-        failed = true;
+        // forgiving: this is a teaching surface, so a wrong step is flagged and
+        // RETRIED in place (it never fails the whole question or reveals the
+        // answers — that "fail and show 8 × 2 = 16" was confusing).
         r.row.classList.add('cl-wrong');
-        rows.forEach((x, i) => { x.row.style.display = 'flex'; x.input.style.display = 'none'; x.check.style.display = 'none'; x.val.style.display = ''; x.exprEl.textContent = exprText(i); x.input.disabled = true; x.check.disabled = true; });
-        const last = steps[steps.length - 1];
+        r.input.classList.remove('cl-shake'); void r.input.offsetWidth; r.input.classList.add('cl-shake');
+        r.input.select();
         ctx.sfx.wrong();
-        ctx.onSubmit(false, { feedbackOnWrong: `Work through it step by step — the answer is ${last.answer}${last.unit ? ' ' + last.unit : ''}.` });
       }
     }
 

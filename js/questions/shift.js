@@ -39,17 +39,24 @@ export const shift = {
     let animating = false;
 
     const wrap = el('sh');
-    const valLine = el('sh-val');
+    // place-value header (128 64 32 …) — stays put while the bits slide beneath it
+    const places = Array.from({ length: n }, (_, i) => 1 << (n - 1 - i));
+    const pvRow = el('sh-pv-row');
+    places.forEach(p => { const c = el('sh-pv'); c.textContent = p; pvRow.appendChild(c); });
     const row = el('sh-row');
     const cells = [];
     for (let i = 0; i < n; i++) { const c = el('sh-cell'); cells.push(c); row.appendChild(c); }
     const paintCells = () => cur.forEach((b, i) => { cells[i].textContent = String(b); cells[i].classList.toggle('on', !!b); });
+    // workings: show the lit place values summed, so the ÷2 / ×2 effect is visible
+    const valLine = el('sh-val');
     const paintVal = () => {
-      valLine.innerHTML = `value: <b>${toVal(cur)}</b>`
+      const lit = cur.map((b, i) => (b ? places[i] : 0)).filter(v => v);
+      const expr = lit.length ? lit.join(' + ') : '0';
+      valLine.innerHTML = `<span class="sh-work">${expr} = <b>${toVal(cur)}</b></span>`
         + (count ? ` <span class="sh-count">(${count} of ${amount} shift${amount === 1 ? '' : 's'} ${dir})</span>` : '');
     };
     paintCells(); paintVal();
-    wrap.append(valLine, row);
+    wrap.append(pvRow, row, valLine);
 
     function doShift() {
       if (ctx.isAnswered() || animating) return;

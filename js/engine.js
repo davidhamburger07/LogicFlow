@@ -43,6 +43,7 @@ import { codetrace } from './questions/codetrace.js';
 import { codefill } from './questions/codefill.js';
 import { codebuild } from './questions/codebuild.js';
 import { codebug } from './questions/codebug.js';
+import { codefix } from './questions/codefix.js';
 import { codewrite } from './questions/codewrite.js';
 import { number } from './questions/number.js';
 import { placevalue } from './questions/placevalue.js';
@@ -62,15 +63,46 @@ import { truthtable } from './questions/truthtable.js';
 import { match } from './questions/match.js';
 import { searchtrace } from './questions/searchtrace.js';
 import { sqlbuild } from './questions/sqlbuild.js';
+import { dbdetective } from './questions/dbdetective.js';
+import { sqledit } from './questions/sqledit.js';
+import { argue } from './questions/argue.js';
+import { cpusim } from './questions/cpusim.js';
+import { hwstore } from './questions/hwstore.js';
+import { imgslider } from './questions/imgslider.js';
+import { rle } from './questions/rle.js';
+import { iproute } from './questions/iproute.js';
+import { phish } from './questions/phish.js';
+import { osmem } from './questions/osmem.js';
+import { translate } from './questions/translate.js';
+import { aitrain } from './questions/aitrain.js';
 import { serverroom } from './questions/serverroom.js';
 import { overflowdoor } from './questions/overflowdoor.js';
 import { hexlock } from './questions/hexlock.js';
 import { signalrestore } from './questions/signalrestore.js';
 import { binbuild } from './questions/binbuild.js';
+import { workings } from './questions/workings.js';
+import { stepadd } from './questions/stepadd.js';
+import { gridmul } from './questions/gridmul.js';
+import { busstop } from './questions/busstop.js';
+import { bitmap } from './questions/bitmap.js';
+import { gateout } from './questions/gateout.js';
+import { ttwalk } from './questions/ttwalk.js';
+import { notate } from './questions/notate.js';
+import { circtable } from './questions/circtable.js';
+import { binread } from './questions/binread.js';
+import { hexread } from './questions/hexread.js';
+import { signbuild } from './questions/signbuild.js';
+import { rangecheck } from './questions/rangecheck.js';
+import { inserttrace } from './questions/inserttrace.js';
+import { mergetrace } from './questions/mergetrace.js';
+import { qatest } from './questions/qatest.js';
 import { generateQuestion } from './generators.js';
 import { initSketchpad, toggleSketchpad, closeSketchpad } from './sketchpad.js';
+import { initWorkpad, showWorkpad, hideWorkpad } from './workpad.js';
+import { SVG_DIAGRAMS } from './diagrams.js';
+import { notationTableHtml } from './notation.js';
 
-export const REGISTRY = { MC: mc, BINARY: binary, CIRCUIT: circuit, CIPHER: cipher, TRACE: trace, FDE: fde, PACKET: packet, EXAM: exam, CODE_TRACE: codetrace, CODE_FILL: codefill, CODE_BUILD: codebuild, CODE_BUG: codebug, CODE_WRITE: codewrite, NUMBER: number, PLACEVALUE: placevalue, BINADD: binadd, SHIFT: shift, FLIPADD: flipadd, BINSUB: binsub, HEXPICK: hexpick, SWATCH: swatch, CALC: calc, TYPEIN: typein, ORDER: order, CATEGORISE: categorise, RECALL: recall, EXAMCOACH: examcoach, TRUTHTABLE: truthtable, MATCH: match, SEARCHTRACE: searchtrace, SQLBUILD: sqlbuild, SERVERROOM: serverroom, OVERFLOW: overflowdoor, HEXLOCK: hexlock, SIGNAL: signalrestore, BINBUILD: binbuild };
+export const REGISTRY = { MC: mc, BINARY: binary, CIRCUIT: circuit, CIPHER: cipher, TRACE: trace, FDE: fde, PACKET: packet, EXAM: exam, CODE_TRACE: codetrace, CODE_FILL: codefill, CODE_BUILD: codebuild, CODE_BUG: codebug, CODE_FIX: codefix, CODE_WRITE: codewrite, NUMBER: number, PLACEVALUE: placevalue, BINADD: binadd, SHIFT: shift, FLIPADD: flipadd, BINSUB: binsub, HEXPICK: hexpick, SWATCH: swatch, CALC: calc, TYPEIN: typein, ORDER: order, CATEGORISE: categorise, RECALL: recall, EXAMCOACH: examcoach, TRUTHTABLE: truthtable, MATCH: match, SEARCHTRACE: searchtrace, SQLBUILD: sqlbuild, DBDETECTIVE: dbdetective, SQLEDIT: sqledit, ARGUE: argue, CPUSIM: cpusim, HWSTORE: hwstore, IMGSLIDER: imgslider, RLE: rle, IPROUTE: iproute, PHISH: phish, OSMEM: osmem, TRANSLATE: translate, AITRAIN: aitrain, SERVERROOM: serverroom, OVERFLOW: overflowdoor, HEXLOCK: hexlock, SIGNAL: signalrestore, BINBUILD: binbuild, WORKINGS: workings, STEPADD: stepadd, GRIDMUL: gridmul, BUSSTOP: busstop, BITMAP: bitmap, GATEOUT: gateout, TTWALK: ttwalk, NOTATE: notate, CIRCTABLE: circtable, BINREAD: binread, HEXREAD: hexread, SIGNBUILD: signbuild, RANGECHECK: rangecheck, INSERTTRACE: inserttrace, MERGETRACE: mergetrace, QATEST: qatest };
 
 // phase id -> index in PHASES (for building unit-test playlists by lesson id)
 const PHASE_IDX_BY_ID = {};
@@ -95,7 +127,7 @@ let runWrong = 0;                               // wrong answers this lesson run
 
 // Timed / Exam Rush — a per-question countdown, length by question type.
 let timerInt = null, timeLeft = 0, timeTotal = 0;
-const TIME_FOR = { MC: 15, BINARY: 20, CIRCUIT: 35, CIPHER: 30, TRACE: 30, FDE: 35, PACKET: 30 };
+const TIME_FOR = { MC: 15, BINARY: 20, CIRCUIT: 35, CIPHER: 30, TRACE: 30, FDE: 35, PACKET: 30, SQLBUILD: 45, DBDETECTIVE: 75, SQLEDIT: 45, ARGUE: 150, CPUSIM: 90, HWSTORE: 90, IMGSLIDER: 60, RLE: 60, IPROUTE: 75, PHISH: 75, OSMEM: 75, TRANSLATE: 60, AITRAIN: 75 };
 const DEFAULT_TIME = 20;
 
 function maxHints() { return 3; }
@@ -105,6 +137,19 @@ function isUnitTest() { return launchContext === 'unit-test'; }
 function isMock() { return launchContext === 'mock'; }
 function noHints() { return launchContext === 'pastpaper' || launchContext === 'unit-test' || launchContext === 'mock'; }
 function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+// Is this question off the current board's spec (→ show the optional-extension
+// banner)? Two ways a question opts in:
+//   • writeCommand: true          → SQL modification (required for AQA/Eduqas)
+//   • reqBoards: ['OCR', …]       → required for those boards, optional for others
+//     (pair with enrichLabel for the banner wording)
+// Returns { label, req } when it should be marked optional here, else null.
+function boardEnrich(q) {
+  if (!q) return null;
+  if (q.writeCommand && !store.boardRequiresSqlWrite()) return { label: 'INSERT / UPDATE / DELETE', req: store.sqlWriteBoards() };
+  if (Array.isArray(q.reqBoards) && !q.reqBoards.includes(store.getBoard())) return { label: q.enrichLabel || 'This topic', req: q.reqBoards };
+  return null;
+}
 
 // nav handlers registered by screens.js (no import cycle)
 let nav = { toMenu() {}, toCampaign() {}, toRevision() {}, toArcade() {} };
@@ -122,7 +167,7 @@ const el = {};
 function cache() {
   [
     'score-disp', 'streak-disp', 'score-stat', 'streak-stat', 'lives-display', 'lives-stat', 'phase-badge',
-    'question-card', 'q-badge', 'q-board', 'q-prog', 'q-title', 'q-desc',
+    'question-card', 'q-badge', 'q-board', 'q-prog', 'q-title', 'q-desc', 'q-enrich',
     'prog-fill', 'answer-area', 'workings-bar', 'workings-btn', 'timer-wrap', 'timer-fill', 'timer-num',
     'hint-bar', 'hint-btn', 'hint-icons', 'no-hint-note', 'hint-box',
     'feedback-box', 'explanation-box', 'expl-text', 'next-btn',
@@ -136,8 +181,21 @@ function cache() {
 
 const SCREENS = ['main-menu', 'campaign-map', 'revision-hub', 'arcade-modes', 'arcade-topics', 'question-bank', 'stats', 'settings', 'tutorial',
   'phase-intro', 'phase-complete', 'gameover-screen'];
+let curScreenId = null;   // the full-screen overlay showing now (null = graded gameplay / game area)
+export function getCurrentScreen() { return curScreenId; }
 export function showScreen(id) {
+  curScreenId = id;
   if (id) closeSketchpad();   // the scratch pad is only for the question view
+  if (id && id !== 'phase-intro') hideWorkpad();   // leaving the lesson flow hides the working layer
+  // HUD shows during a level (phase-intro) and graded gameplay (id === null);
+  // hidden on the menu and other nav screens. Lessons are formative, so the
+  // score/streak/lives stats are hidden there (controls only).
+  const hud = document.getElementById('hud');
+  if (hud) {
+    const onLevel = id === 'phase-intro';
+    hud.classList.toggle('hud-active', onLevel || id === null);
+    hud.classList.toggle('hud-controls-only', onLevel);
+  }
   SCREENS.forEach(s => el[s] && el[s].classList.toggle('show', s === id));
 }
 export function getEl(id) { return el[id]; }   // screens.js renders into its own divs
@@ -156,6 +214,7 @@ export function initEngine() {
   cache();
   initVisual();
   initSketchpad();
+  initWorkpad();
   // no power-on screen — main.js boots straight into the main menu
 }
 
@@ -179,8 +238,10 @@ export function launchPhase(phaseIdx, context, skipIntro = false) {
   resetSession();
   applyContextUI();
   // Campaign node tap teaches first (intro -> questions); Continue / revision /
-  // past-paper go straight into the questions.
-  if (context === 'campaign' && !skipIntro) showPhaseIntro();
+  // past-paper go straight into the questions. A continuous-flow topic IS the
+  // lesson (no separate test), so it always plays the flow in campaign — even
+  // from "Continue" (skipIntro), which would otherwise run the old test.
+  if (context === 'campaign' && (!skipIntro || PHASES[phaseIdx].intro.continuous)) showPhaseIntro();
   else startPlaylist();
 }
 
@@ -337,6 +398,8 @@ function applyContextUI() {
 // override with an authored `intro.pages` sequence for bespoke depth.
 let lessonPages = [], lessonPos = 0, lessonCheckPending = false, lessonDone = new Set();
 let lessonReview = false;   // true when the lesson is opened for review (learn-only)
+let lessonContinuous = false;   // true for the "one continuous flow" topics (teach + practise +
+                                // solo exam, no separate scored test) — finishing clears the topic
 
 // show ONLY the learn pages for a topic (no questions), returning to the
 // campaign map at the end. The campaign map's green LEARN node calls this so
@@ -359,6 +422,7 @@ function showPhaseIntro() {
   el['pi-meta'].textContent = phase.intro.meta;
   el['pi-board-tags'].innerHTML = phase.boards.map(b => `<span class="pi-board-tag">${b}</span>`).join('');
 
+  lessonContinuous = !lessonReview && !!phase.intro.continuous;
   lessonPages = buildLessonPages(phase);
   lessonPos = 0; lessonDone = new Set();
   renderLessonPage();
@@ -393,13 +457,22 @@ function exampleBlock(intro, i, label) {
 function buildLessonPages(phase) {
   const intro = phase.intro;
   if (Array.isArray(intro.pages) && intro.pages.length) {
-    return intro.pages.map(p => {
+    return intro.pages.filter(p => !p.onlyBoards || p.onlyBoards.includes(store.getBoard())).map(p => {
       const parts = [];
+      // board-conditional spec flag: content for a gate the player's board doesn't require
+      if (p.specGate && !store.boardRequiresGate(p.specGate)) {
+        const withGate = store.boardsWithGate(p.specGate).join(', ');
+        parts.push(`<div class="pi-specnote">⚠ <strong>${p.specGate}</strong> is not on your <strong>${store.getBoard()}</strong> spec — treat this as <strong>optional enrichment</strong> (it's required for ${withGate}). You can skip it, or learn it for extra confidence.</div>`);
+      }
       (p.use || []).forEach(k => { const b = standardBlock(k, intro); if (b) parts.push(b); });
       if (p.example != null) parts.push(exampleBlock(intro, p.example, p.heading));
-      else if (p.html) parts.push(p.heading ? section(p.heading, p.html) : p.html);
-      else if (p.heading) parts.push(`<div class="pi-section-label">${p.heading}</div>`);
-      return { html: parts.join(''), check: p.check, q: p.q };
+      else if (p.html) parts.push(p.heading ? `<div class="pi-section"><div class="pi-heading">${p.heading}</div>${p.html}</div>` : p.html);
+      else if (p.heading) parts.push(`<div class="pi-heading">${p.heading}</div>`);
+      // dynamic board-shorthand reference table (adapts to the player's exam board)
+      if (p.boardNotation) parts.push(`<div class="pi-diagram">${notationTableHtml()}</div>`);
+      // per-page SVG diagram(s) (more visual content): `diagram: '<key>'` or an array
+      if (p.diagram) [].concat(p.diagram).forEach(key => { const d = SVG_DIAGRAMS[key] || DIAGRAMS[key]; if (d) parts.push(`<div class="pi-diagram">${d}</div>`); });
+      return { html: parts.join(''), check: p.check, q: p.q, part: p.part };
     }).filter(pg => pg.html || pg.check || pg.q);
   }
   // auto-paginate: why+watch · what+facts · one example per page · exam tips
@@ -461,8 +534,8 @@ function renderLessonQuestion(host, q) {
   lessonCheckPending = !already;
   const reg = REGISTRY[q.type];
   if (!reg) { lessonCheckPending = false; return; }
-  const box = document.createElement('div'); box.className = 'pi-q';
-  box.innerHTML = '<div class="pi-check-badge">▶ YOUR TURN</div>'
+  const box = document.createElement('div'); box.className = 'pi-q' + (q.exam ? ' pi-q-exam' : '');
+  box.innerHTML = `<div class="pi-check-badge${q.exam ? ' pi-exam-badge' : ''}">${q.exam ? '🎓 EXAM QUESTION · work it out on your own' : (q.walk ? '▶ STEP THROUGH IT' : '▶ YOUR TURN')}</div>`
     + (q.title ? `<div class="pi-q-prompt">${q.title}</div>` : '');
   const qhost = document.createElement('div'); qhost.className = 'pi-q-host';
   box.appendChild(qhost);
@@ -473,12 +546,18 @@ function renderLessonQuestion(host, q) {
     onSubmit: (correct, details) => {
       if (answered) return;
       answered = true; lessonDone.add(lessonPos); lessonCheckPending = false;
+      // continuous-flow questions feed topic mastery (but not the per-question
+      // Leitner scheduler — they have no stable phase.questions index).
+      if (lessonContinuous) store.recordAttempt(PHASES[currentPhaseIdx].id, 'L' + lessonPos, correct, { schedule: false });
       const sb = document.getElementById('pi-start-btn'); if (sb) sb.disabled = false;
       if (correct) SFX.correct(); else SFX.wrong();
-      const ex = document.createElement('div');
-      ex.className = 'pi-q-explain ' + (correct ? 'ok' : 'no');
-      ex.innerHTML = (correct ? '✓ ' : '✗ ') + (q.explain || (details && details.feedbackOnWrong) || (correct ? 'Correct.' : 'Not quite.'));
-      box.appendChild(ex);
+      // a walkthrough (STEPADD) shows its own answer — no need for a "Correct" line
+      if (!q.walk) {
+        const ex = document.createElement('div');
+        ex.className = 'pi-q-explain ' + (correct ? 'ok' : 'no');
+        ex.innerHTML = (correct ? '✓ ' : '✗ ') + (q.explain || (details && details.feedbackOnWrong) || (correct ? 'Correct.' : 'Not quite.'));
+        box.appendChild(ex);
+      }
     },
     sfx: SFX,
   });
@@ -486,18 +565,26 @@ function renderLessonQuestion(host, q) {
 
 function renderLessonPage() {
   const page = lessonPages[lessonPos];
-  el['pi-body'].innerHTML = `<div class="pi-reveal" style="--i:0">${page.html}</div>`;
-  const body = el['pi-body'].firstElementChild;
+  closeSketchpad();   // fresh page — hide any working layer / scratch pad
+  const partHtml = page.part ? `<div class="pi-part">${page.part}</div>` : '';
+  el['pi-body'].innerHTML = partHtml + `<div class="pi-reveal" style="--i:0">${page.html}</div>`;
+  const body = el['pi-body'].querySelector('.pi-reveal');
   wireLessonMedia(body);
   lessonCheckPending = false;
   if (page.check) { lessonCheckPending = !lessonDone.has(lessonPos); renderLessonCheck(body, page.check, lessonDone.has(lessonPos)); }
   if (page.q) renderLessonQuestion(body, page.q);
+  // the on-page WORKING OUT layer is offered on the working questions
+  if (page.q) showWorkpad(); else hideWorkpad();
   const dots = document.getElementById('pi-dots');
   if (dots) dots.innerHTML = lessonPages.map((_, i) => `<span class="pi-dot${i === lessonPos ? ' on' : (i < lessonPos ? ' done' : '')}"></span>`).join('');
   const back = document.getElementById('pi-back-btn');
   if (back) back.style.visibility = lessonPos > 0 ? 'visible' : 'hidden';
   const start = document.getElementById('pi-start-btn');
-  if (start) { const last = lessonPos >= lessonPages.length - 1; start.textContent = last ? (lessonReview ? '← BACK TO MAP' : 'START PHASE →') : 'NEXT →'; start.disabled = lessonCheckPending; }
+  if (start) {
+    const last = lessonPos >= lessonPages.length - 1;
+    start.textContent = last ? (lessonReview ? '← BACK TO MAP' : (lessonContinuous ? 'FINISH →' : 'START PHASE →')) : 'NEXT →';
+    start.disabled = lessonCheckPending;
+  }
   const pi = document.getElementById('phase-intro'); if (pi) pi.scrollTop = 0;
 }
 
@@ -509,6 +596,9 @@ export function lessonAdvance() {
     // review mode (opened from the green LEARN node) -> back to the map,
     // not into the questions. Return false so main.js skips the read-confirm.
     if (lessonReview) { lessonReview = false; nav.toCampaign(); return false; }
+    // continuous-flow topic: the flow IS the whole topic (teach + practise +
+    // solo exam), so finishing it clears the topic — there's no separate test.
+    if (lessonContinuous) { finishContinuousFlow(); return false; }
     return true;
   }
   lessonPos++; renderLessonPage(); SFX.uiClick();
@@ -516,6 +606,17 @@ export function lessonAdvance() {
 }
 export function lessonBack() {
   if (lessonPos > 0) { lessonPos--; renderLessonPage(); SFX.uiClick(); }
+}
+
+// finish a continuous-flow topic: mark it cleared and return to the campaign
+// map. Formative — there are no lives, so completion (not a flawless run) is
+// what clears it; mastery comes from the in-flow questions already recorded.
+function finishContinuousFlow() {
+  lessonContinuous = false;
+  closeSketchpad(); hideWorkpad();
+  store.recordLessonClear(PHASES[sessionPhaseIdx].id, { flawless: false });
+  SFX.zap();
+  nav.toCampaign();
 }
 
 // pi-start-btn -> begin the question playlist
@@ -567,6 +668,26 @@ function loadQuestion() {
     el['q-desc'].style.display = 'none';
   }
 
+  // Board slider — some content is on one board's spec but only optional
+  // enrichment for others (SQL INSERT/UPDATE/DELETE for AQA/Eduqas; OCR-only
+  // Freedom of Information / Creative Commons; AQA's open-source emphasis). The
+  // question is NEVER hidden: off-spec boards get a clear "optional extension"
+  // banner + a SKIP button so it's genuinely opt-in.
+  el['q-enrich'].innerHTML = '';
+  const enrich = boardEnrich(currentQuestion);
+  if (enrich) {
+    el['q-enrich'].style.display = 'block';
+    const note = document.createElement('div');
+    note.className = 'q-enrich-note';
+    note.innerHTML = `⚠ <strong>${enrich.label}</strong> isn't on the <strong>${store.getBoard()}</strong> spec — this is an <strong>optional extension task</strong> (required for ${enrich.req.join(', ')}). Have a go for extra confidence, or skip it.`;
+    const skip = document.createElement('button');
+    skip.type = 'button'; skip.className = 'q-enrich-skip'; skip.textContent = 'SKIP — not on my spec →';
+    skip.addEventListener('click', () => { if (!answered) nextQuestion(); });
+    el['q-enrich'].append(note, skip);
+  } else {
+    el['q-enrich'].style.display = 'none';
+  }
+
   el['prog-fill'].style.width = ((playlistPos + 1) / playlist.length * 100) + '%';
   updateHUD();
 
@@ -580,7 +701,7 @@ function loadQuestion() {
   el['no-hint-note'].style.display = hintsUsedThisPhase === 0 ? 'inline' : 'none';
   updateHintIcons();
   el['hint-btn'].disabled = hintsLeft <= 0 || hints.length === 0;
-  if (noHints() || currentQuestion.solo || currentQuestion.type === 'EXAM' || currentQuestion.type === 'CODE_WRITE' || currentQuestion.type === 'EXAMCOACH') el['hint-bar'].style.display = 'none';   // no hints in an exam / unit test / code-write / coached exam / solo (zero-help) question
+  if (noHints() || currentQuestion.solo || currentQuestion.type === 'EXAM' || currentQuestion.type === 'CODE_WRITE' || currentQuestion.type === 'EXAMCOACH' || currentQuestion.type === 'ARGUE') el['hint-bar'].style.display = 'none';   // no hints in an exam / unit test / code-write / coached exam / argument-builder / solo (zero-help) question
 
   showVisual(phase, currentQuestion);
   REGISTRY[currentQuestion.type].render(el['answer-area'], currentQuestion, ctx);
