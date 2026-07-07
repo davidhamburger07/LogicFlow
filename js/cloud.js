@@ -17,11 +17,11 @@
 // tool). Locally it stays in "unavailable / local-only" mode by design.
 // ============================================================
 import * as store from './storage.js';
+import { initSdk } from './crazygames.js';
 
-const SDK_SRC = 'https://sdk.crazygames.com/crazygames-sdk-v3.js';
 const CLOUD_KEY = 'logicflow.save';   // the single blob we store in the CrazyGames data module
 
-let sdk = null;             // window.CrazyGames.SDK, once initialised
+let sdk = null;             // window.CrazyGames.SDK, once initialised (shared owner: crazygames.js)
 let available = false;      // account/cloud features available (true only on CrazyGames)
 let signedIn = false;
 let user = null;
@@ -32,38 +32,11 @@ export function getStatus() { return { available, signedIn, username: (user && u
 export function onStatus(fn) { listeners.add(fn); try { fn(getStatus()); } catch (e) {} return () => listeners.delete(fn); }
 function notify() { const s = getStatus(); listeners.forEach(fn => { try { fn(s); } catch (e) {} }); }
 
-function isLocalHost() {
-  const h = location.hostname;
-  return h === 'localhost' || h === '127.0.0.1' || h === '' || h === '[::1]';
-}
-
-// Load the SDK script on demand. Resolves to the SDK object, or null if it
-// can't be loaded (offline / blocked / timed out).
-function loadSdk(timeout = 6000) {
-  return new Promise(resolve => {
-    if (window.CrazyGames && window.CrazyGames.SDK) return resolve(window.CrazyGames.SDK);
-    let settled = false;
-    const finish = () => { if (settled) return; settled = true; resolve((window.CrazyGames && window.CrazyGames.SDK) || null); };
-    const s = document.createElement('script');
-    s.src = SDK_SRC; s.async = true;
-    s.onload = finish;
-    s.onerror = () => { if (!settled) { settled = true; resolve(null); } };
-    document.head.appendChild(s);
-    setTimeout(finish, timeout);
-  });
-}
-
 export async function initCloud() {
   try {
-    // use a preloaded SDK (real script tag, or an injected mock) if present;
-    // otherwise fetch it — but never fetch during local dev, so localhost stays
-    // clean and deterministic (cloud is a CrazyGames-only feature anyway).
-    if (window.CrazyGames && window.CrazyGames.SDK) sdk = window.CrazyGames.SDK;
-    else if (!isLocalHost()) sdk = await loadSdk();
-    else sdk = null;
-
+    // reuse the shared SDK (crazygames.js owns loading + init; null off-platform)
+    sdk = await initSdk();
     if (!sdk) { notify(); return; }
-    try { await sdk.init(); } catch (e) {}
 
     try { available = !!(await Promise.resolve(sdk.user.isUserAccountAvailable)); }
     catch (e) { available = false; }

@@ -16,6 +16,7 @@ import * as screens from './screens.js';
 import { SFX } from './sound.js';
 import * as store from './storage.js';
 import * as cloud from './cloud.js';
+import * as cg from './crazygames.js';
 import { initOnscreenKeys, toggleOnscreen } from './onscreenkeys.js';
 
 function $(id) { return document.getElementById(id); }
@@ -253,8 +254,9 @@ function boot() {
   if (!store.getTutorialSeen()) screens.showTutorial(screens.showMainMenu);
   else screens.showMainMenu();   // boot straight into the menu (no power-on screen)
 
-  // cloud save: async, non-blocking. On CrazyGames this hydrates progress from
-  // the player's account and keeps it synced; everywhere else it no-ops.
+  // CrazyGames SDK: init (non-blocking), signal the game has loaded, then start
+  // cloud save. Off CrazyGames all of this no-ops and the game runs local-only.
+  cg.initSdk().then(() => cg.gameLoadingStop());
   cloud.initCloud();
 }
 

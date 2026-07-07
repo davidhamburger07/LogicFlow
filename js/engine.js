@@ -75,6 +75,7 @@ import { phish } from './questions/phish.js';
 import { osmem } from './questions/osmem.js';
 import { translate } from './questions/translate.js';
 import { aitrain } from './questions/aitrain.js';
+import * as cg from './crazygames.js';
 import { serverroom } from './questions/serverroom.js';
 import { overflowdoor } from './questions/overflowdoor.js';
 import { hexlock } from './questions/hexlock.js';
@@ -197,6 +198,11 @@ export function showScreen(id) {
     hud.classList.toggle('hud-controls-only', onLevel);
   }
   SCREENS.forEach(s => el[s] && el[s].classList.toggle('show', s === id));
+  // CrazyGames: gameplay is active in a lesson (phase-intro) or a graded
+  // question (id === null); menus/results are "not gameplay" (lets the SDK
+  // time interstitials). happytime marks a clear positive beat.
+  cg.setGameplay(id === null || id === 'phase-intro');
+  if (id === 'phase-complete') cg.happytime();
 }
 export function getEl(id) { return el[id]; }   // screens.js renders into its own divs
 

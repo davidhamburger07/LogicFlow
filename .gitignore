@@ -13,6 +13,10 @@ debug_*.mjs
 # Dev server log (node serve.mjs > server.log)
 server.log
 
+# Build output for CrazyGames upload (regenerate with `node build.mjs`)
+dist/
+*.zip
+
 # Stray accidental files — safe to delete from disk too (see note)
 # /LogicFlow/ is an empty nested git repo from an accidental `git init`
 # /3.11 is stray `uvx` help text saved to a file
