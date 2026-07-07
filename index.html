@@ -231,6 +231,41 @@
           <button class="board-opt" data-board="Edexcel">Edexcel</button>
         </div>
       </div>
+      <div class="settings-group" id="settings-cloud-group">
+        <div class="settings-label">CLOUD SAVE</div>
+        <div class="settings-desc settings-desc-block" id="settings-cloud-desc">Cloud save switches on automatically when you play on CrazyGames.</div>
+        <div class="settings-row" id="settings-cloud-row" hidden>
+          <span class="settings-desc" id="settings-cloud-status"></span>
+          <div class="settings-btn-row">
+            <button class="settings-btn" id="settings-cloud-signin">SIGN IN</button>
+          </div>
+        </div>
+      </div>
+      <div class="settings-group">
+        <div class="settings-label">BACK UP &amp; RESTORE</div>
+        <div class="settings-desc settings-desc-block">Your progress is saved on this device. Make a <strong>backup code</strong> to move it to another device — or to restore it if your browser data is ever cleared.</div>
+        <div class="settings-row">
+          <span class="settings-desc">Save a copy of your progress.</span>
+          <div class="settings-btn-row">
+            <button class="settings-btn" id="settings-backup-copy">COPY CODE</button>
+            <button class="settings-btn" id="settings-backup-file">DOWNLOAD FILE</button>
+          </div>
+        </div>
+        <textarea class="settings-code" id="settings-backup-out" readonly hidden aria-label="Your backup code"></textarea>
+        <div class="settings-row">
+          <span class="settings-desc">Restore from a backup. This replaces the progress on this device.</span>
+          <div class="settings-btn-row">
+            <button class="settings-btn" id="settings-restore-toggle">RESTORE FROM CODE</button>
+            <button class="settings-btn" id="settings-restore-file">UPLOAD FILE</button>
+            <input type="file" id="settings-restore-input" accept=".lfsave,.txt,.json,text/plain,application/json" hidden>
+          </div>
+        </div>
+        <div class="settings-restore-panel" id="settings-restore-panel" hidden>
+          <textarea class="settings-code" id="settings-restore-in" placeholder="Paste your backup code here…" aria-label="Paste backup code"></textarea>
+          <button class="settings-btn settings-btn-primary" id="settings-restore-go">RESTORE</button>
+        </div>
+        <div class="settings-backup-msg" id="settings-backup-msg" role="status"></div>
+      </div>
       <div class="settings-group">
         <div class="settings-label">PROGRESS</div>
         <div class="settings-row">

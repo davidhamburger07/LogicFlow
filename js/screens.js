@@ -102,25 +102,37 @@ export function showMainMenu() {
 const TUT_SLIDES = [
   { eyebrow: 'WELCOME', heading: 'LEARN GCSE COMP-SCI BY <em>DOING</em>',
     visual: '<div class="tut-logo">LOG<em>IC</em>FLOW</div>',
-    body: 'LOGICFLOW turns the AQA / OCR / Eduqas / WJEC spec into something you <strong>play</strong>. Every topic teaches you the method, then asks you to use it — because doing beats reading. Here’s the 60-second tour.' },
-  { eyebrow: 'THE CAMPAIGN', heading: 'FOLLOW THE SIGNAL',
+    body: 'LOGICFLOW turns the AQA, OCR, Eduqas, WJEC and Edexcel spec into something you <strong>play</strong>. Every topic teaches the method, then makes you use it — because doing beats reading. Here’s the quick tour.' },
+  { eyebrow: 'FIRST, YOUR SPEC', heading: 'SET YOUR <em>EXAM BOARD</em>',
+    visual: '<div class="tut-boards"><span class="tut-board on">AQA</span><span class="tut-board">OCR</span><span class="tut-board">Eduqas</span><span class="tut-board">WJEC</span><span class="tut-board">Edexcel</span></div>',
+    body: 'Pick your board on the menu — <strong>AQA</strong>, <strong>OCR</strong>, <strong>Eduqas</strong>, <strong>WJEC</strong> or <strong>Edexcel</strong>. The lessons then switch to your board’s <strong>programming notation</strong> and cover the exact topics and logic gates it examines. Set it once and everything follows.' },
+  { eyebrow: 'THE CAMPAIGN', heading: 'FOLLOW THE <em>SIGNAL</em>',
     visual: '<div class="tut-map"><span class="tut-node learn">◉<small>LEARN</small></span><span class="tut-wire"></span><span class="tut-node test">▶<small>TEST</small></span><span class="tut-wire"></span><span class="tut-node lock">🔒<small>NEXT</small></span></div>',
-    body: 'Work along the circuit, topic by topic. Each topic has a <strong style="color:#16a34a">green LEARN circle</strong> (the lesson — revisit it any time) and a <strong>blue test</strong>. Clear the test to power up the next topic and unlock the unit beyond.' },
-  { eyebrow: 'LESSONS', heading: 'TEACH, THEN <em>YOUR TURN</em>',
+    body: 'Work along the circuit, unit by unit. Each topic has a <strong style="color:#16a34a">green lesson</strong> to learn from and a <strong>blue test</strong> to clear. Finish a unit’s topics to open its <strong>unit test</strong>, with <strong>mock checkpoints</strong> to tie it together — or jump straight to any topic you need.' },
+  { eyebrow: 'INSIDE A LESSON', heading: 'TEACH, THEN <em>YOUR TURN</em>',
     visual: '<div class="tut-card-demo"><div class="tut-demo-pv"><b class="lit">8</b><b>4</b><b class="lit">2</b><b>1</b></div><div class="tut-demo-sum">8 + 2 = <span class="tut-demo-in">?</span></div></div>',
-    body: 'A lesson explains the idea, shows a worked example, then hands you a real interactive question — build the binary, turn the cipher wheel, trace the algorithm. The help <strong>fades</strong> as you go, until you can do it solo.' },
-  { eyebrow: 'STUCK? TWO LIFELINES', heading: 'WORKING-OUT & HINTS',
+    body: 'A lesson explains the idea, walks through a worked example, then hands you a real question to try. The scaffolding <strong>fades</strong> as you go — guided at first, then all you.' },
+  { eyebrow: 'THE INTERACTIONS', heading: 'BUILD IT, DON’T <em>PICK IT</em>',
+    visual: '<div class="tut-mechanics">'
+      + '<span class="tut-mech"><span class="tut-mech-ico">📦</span><small>ROUTE PACKETS</small></span>'
+      + '<span class="tut-mech"><span class="tut-mech-ico">🎣</span><small>SPOT PHISHING</small></span>'
+      + '<span class="tut-mech"><span class="tut-mech-ico">⚙️</span><small>WIRE THE CPU</small></span>'
+      + '<span class="tut-mech"><span class="tut-mech-ico">🧠</span><small>MANAGE MEMORY</small></span>'
+      + '<span class="tut-mech"><span class="tut-mech-ico">🔐</span><small>CRACK CIPHERS</small></span>'
+      + '<span class="tut-mech"><span class="tut-mech-ico">🔀</span><small>TRACE SORTS</small></span></div>',
+    body: 'Most questions make you <strong>produce</strong> the answer, not choose from A–D. You’ll route packets as the router, spot a phishing email, wire up the CPU, manage the computer’s memory, crack a cipher, trace a sort — a hand-built mini-game per topic. That effort is what makes it stick.' },
+  { eyebrow: 'STUCK? TWO LIFELINES', heading: 'WORKING-OUT & <em>HINTS</em>',
     visual: '<div class="tut-tools"><span class="tut-tool">🧮<small>WORKING OUT</small></span><span class="tut-tool">💡<small>HINT</small></span></div>',
-    body: 'On a calculation, tap <strong>🧮 WORKING OUT</strong> for a scratch helper (place-value, hex, file-size) — it never submits for you, it just helps you think. Tap <strong>💡 HINT</strong> to narrow a tricky question down.' },
-  { eyebrow: 'SCORING', heading: 'LIVES, STREAK & POINTS',
-    visual: '<div class="tut-score"><span class="tut-hearts">♥ ♥ ♥</span><span class="tut-streak">🔥 ×5</span></div>',
-    body: 'In the campaign you get <strong>3 lives</strong> — a wrong answer costs one. Chain correct answers to build a <strong>streak 🔥</strong> for bonus points, and replay a cleared topic flawlessly to earn all <strong>★★★</strong>.' },
-  { eyebrow: 'BEYOND THE CAMPAIGN', heading: 'ARCADE & REVISION',
+    body: 'On a calculation, open <strong>🧮 WORKING OUT</strong> for a scratch pad — place-value, hex, file-size — that helps you think but never answers for you. Stuck on the question itself? A <strong>💡 HINT</strong> narrows it down.' },
+  { eyebrow: 'SCORING', heading: 'LIVES, STREAK & <em>STARS</em>',
+    visual: '<div class="tut-score"><span class="tut-hearts">♥ ♥ ♥</span><span class="tut-streak">🔥 ×5</span><span class="tut-stars">★ ★ ★</span></div>',
+    body: 'In the campaign you get <strong>3 lives</strong> — a wrong answer costs one. Chain correct answers for a <strong>streak 🔥</strong> and bonus points, and replay a cleared topic flawlessly to earn all <strong>★★★</strong>.' },
+  { eyebrow: 'BEYOND THE CAMPAIGN', heading: 'ARCADE & <em>REVISION</em>',
     visual: '<div class="tut-modes"><span class="tut-mode">⏱ TIMED</span><span class="tut-mode">💀 SURVIVAL</span><span class="tut-mode">📝 PAST PAPER</span></div>',
-    body: 'When you want a challenge, <strong>ARCADE</strong> has Timed Exam Rush, Survival and real Past Papers. The <strong>REVISION HUB</strong> quietly tracks what you get wrong and brings it back at the right moment — that spacing is what makes it stick.' },
-  { eyebrow: 'YOU’RE READY', heading: 'LET’S POWER ON',
+    body: 'Want a challenge? <strong>ARCADE</strong> has Timed Exam Rush, Survival and real Past Papers. The <strong>REVISION HUB</strong> tracks what you get wrong and brings it back at the right moment, and the <strong>QUESTION BANK</strong> lets you browse every question. That spacing is what makes revision stick.' },
+  { eyebrow: 'YOU’RE READY', heading: 'LET’S <em>POWER ON</em>',
     visual: '<div class="tut-logo small">LOG<em>IC</em>FLOW</div><div class="tut-ready">✓ READY</div>',
-    body: 'That’s it. Start with <strong>Binary Basics</strong> and work your way through. You can reopen this guide any time from <strong>HOW TO PLAY</strong> on the menu. Good luck!' },
+    body: 'That’s it. Start with <strong>Binary Basics</strong> and follow the signal. You can reopen this guide any time from <strong>HOW TO PLAY</strong> on the menu — good luck.' },
 ];
 let tutPos = 0, tutReturn = null;
 export function showTutorial(returnFn) {

@@ -15,6 +15,7 @@ import * as engine from './engine.js';
 import * as screens from './screens.js';
 import { SFX } from './sound.js';
 import * as store from './storage.js';
+import * as cloud from './cloud.js';
 import { initOnscreenKeys, toggleOnscreen } from './onscreenkeys.js';
 
 function $(id) { return document.getElementById(id); }
@@ -98,6 +99,84 @@ function wireBoard() {
     btn.addEventListener('click', () => { SFX.uiClick(); store.setBoard(btn.dataset.board); paintBoard(store.getBoard()); }));
 }
 
+// ---- back up & restore (Settings) — the save/restore code route ----
+function wireBackup() {
+  const out = $('settings-backup-out');
+  const panel = $('settings-restore-panel');
+  const input = $('settings-restore-in');
+  const msg = $('settings-backup-msg');
+  const setMsg = (t, kind) => { msg.textContent = t; msg.className = 'settings-backup-msg' + (kind ? ' settings-backup-msg-' + kind : ''); };
+
+  $('settings-backup-copy').addEventListener('click', async () => {
+    SFX.uiClick();
+    const code = store.exportSave();
+    out.value = code; out.hidden = false;
+    try { await navigator.clipboard.writeText(code); setMsg('✓ Backup code copied — paste it somewhere safe, or on another device.', 'ok'); }
+    catch (e) { out.focus(); out.select(); setMsg('Select the code above and copy it (Ctrl+C).', ''); }
+  });
+
+  $('settings-backup-file').addEventListener('click', () => {
+    SFX.uiClick();
+    const code = store.exportSave();
+    const date = new Date().toISOString().slice(0, 10);
+    const blob = new Blob([code], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `logicflow-backup-${date}.lfsave`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setMsg('✓ Backup file downloaded — keep it safe.', 'ok');
+  });
+
+  $('settings-restore-toggle').addEventListener('click', () => {
+    SFX.uiClick();
+    panel.hidden = !panel.hidden;
+    if (!panel.hidden) input.focus();
+  });
+
+  $('settings-restore-file').addEventListener('click', () => { SFX.uiClick(); $('settings-restore-input').click(); });
+  $('settings-restore-input').addEventListener('change', e => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => { input.value = String(reader.result || '').trim(); panel.hidden = false; setMsg('File loaded — press RESTORE to apply it.', ''); };
+    reader.onerror = () => setMsg('✗ Could not read that file.', 'err');
+    reader.readAsText(file);
+    e.target.value = '';   // let the same file be picked again
+  });
+
+  $('settings-restore-go').addEventListener('click', () => {
+    SFX.uiClick();
+    const res = store.importSave(input.value);
+    if (!res.ok) { setMsg('✗ ' + res.error, 'err'); return; }
+    setMsg('✓ Progress restored — reloading…', 'ok');
+    setTimeout(() => location.reload(), 850);
+  });
+}
+
+// ---- cloud save (Settings) — CrazyGames account sync status ----
+function wireCloud() {
+  const desc = $('settings-cloud-desc');
+  const row = $('settings-cloud-row');
+  const statusEl = $('settings-cloud-status');
+  const signin = $('settings-cloud-signin');
+  signin.addEventListener('click', async () => { SFX.uiClick(); await cloud.promptSignIn(); });
+  cloud.onStatus(st => {
+    if (!st.available) {
+      desc.innerHTML = 'Cloud save switches on automatically when you play on <strong>CrazyGames</strong> — your progress then follows your account across devices. On this page it is saved locally, so use the backup code below to move it between devices.';
+      row.hidden = true;
+    } else if (st.signedIn) {
+      desc.innerHTML = 'Your progress is <strong>synced to your CrazyGames account</strong> — it follows you across devices automatically.';
+      statusEl.textContent = '✓ Signed in' + (st.username ? ' as ' + st.username : '');
+      row.hidden = false; signin.hidden = true;
+    } else {
+      desc.innerHTML = 'Sign in to save your progress to your <strong>CrazyGames account</strong> and sync it across every device.';
+      statusEl.textContent = 'Not signed in.';
+      row.hidden = false; signin.hidden = false;
+    }
+  });
+}
+
 function wire() {
   // question flow
   $('next-btn').addEventListener('click', engine.nextQuestion);
@@ -121,6 +200,11 @@ function wire() {
   logoBtn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openExit(); } });
   $('exit-no').addEventListener('click', () => { SFX.uiClick(); exitConfirm.classList.remove('show'); });
   $('exit-yes').addEventListener('click', () => { SFX.uiClick(); exitConfirm.classList.remove('show'); engine.exitToMenu(); });
+
+  // back up & restore (Settings): a portable code + file, and restore
+  wireBackup();
+  // cloud save (Settings): CrazyGames account sync status + sign-in
+  wireCloud();
 
   // reset progress (Settings) — destructive, so confirm first
   const resetConfirm = $('reset-confirm');
@@ -168,6 +252,10 @@ function boot() {
   // first-ever launch lands on the how-to-play tutorial; otherwise the menu
   if (!store.getTutorialSeen()) screens.showTutorial(screens.showMainMenu);
   else screens.showMainMenu();   // boot straight into the menu (no power-on screen)
+
+  // cloud save: async, non-blocking. On CrazyGames this hydrates progress from
+  // the player's account and keeps it synced; everywhere else it no-ops.
+  cloud.initCloud();
 }
 
 boot();

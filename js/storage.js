@@ -474,3 +474,68 @@ export function resetProgress() {
     localStorage.removeItem(KEY.campaign);
   } catch (e) {}
 }
+
+// ============================================================
+// backup & restore — the whole persisted state as one portable
+// code, so a player can move it to another device or restore it
+// after their browser data is cleared. One of two save routes (the
+// other is CrazyGames cloud save). Format: "LOGICFLOW-1:<base64(JSON)>"
+// — a readable header + version, then a UTF-8-safe base64 blob that
+// survives copy/paste. Import is version-checked and key-whitelisted
+// so a pasted code can only ever write LogicFlow's own keys.
+// ============================================================
+const SAVE_TAG = 'LOGICFLOW';
+const SAVE_VERSION = 1;
+
+// btoa/atob only handle latin1 — round-trip through UTF-8 so any
+// characters in the data survive.
+function b64encode(str) {
+  try { return btoa(unescape(encodeURIComponent(str))); } catch (e) { return btoa(str); }
+}
+function b64decode(str) {
+  try { return decodeURIComponent(escape(atob(str))); } catch (e) { return atob(str); }
+}
+
+// A snapshot of every persisted key, as a plain object (used by both the
+// backup code and, later, the cloud sync).
+export function snapshotState() {
+  const data = {};
+  Object.values(KEY).forEach(k => { const raw = readRaw(k); if (raw !== null) data[k] = raw; });
+  return data;
+}
+
+// Write a snapshot back, but only LogicFlow's own known keys, and only
+// string values — so a malformed or malicious code can't inject arbitrary
+// localStorage. Returns how many keys were applied.
+export function applyState(data) {
+  if (!data || typeof data !== 'object') return 0;
+  const allowed = new Set(Object.values(KEY));
+  let count = 0;
+  Object.entries(data).forEach(([k, v]) => {
+    if (allowed.has(k) && typeof v === 'string') { writeRaw(k, v); count++; }
+  });
+  return count;
+}
+
+export function exportSave() {
+  const blob = { app: SAVE_TAG, v: SAVE_VERSION, ts: Date.now(), data: snapshotState() };
+  return `${SAVE_TAG}-${SAVE_VERSION}:` + b64encode(JSON.stringify(blob));
+}
+
+export function importSave(code) {
+  if (typeof code !== 'string' || !code.trim()) return { ok: false, error: 'The backup code is empty — paste it in first.' };
+  let payload = code.trim();
+  const colon = payload.indexOf(':');   // tolerate the "LOGICFLOW-1:" header
+  if (colon !== -1 && /^LOGICFLOW-\d+$/i.test(payload.slice(0, colon))) payload = payload.slice(colon + 1);
+  payload = payload.replace(/\s+/g, '');   // strip any newlines added by copy/paste
+  let blob;
+  try { blob = JSON.parse(b64decode(payload)); }
+  catch (e) { return { ok: false, error: 'That doesn\'t look like a LogicFlow backup code.' }; }
+  if (!blob || blob.app !== SAVE_TAG || typeof blob.data !== 'object' || blob.data === null) {
+    return { ok: false, error: 'That doesn\'t look like a LogicFlow backup code.' };
+  }
+  if (Number(blob.v) > SAVE_VERSION) return { ok: false, error: 'That backup was made by a newer version of the game.' };
+  const count = applyState(blob.data);
+  if (!count) return { ok: false, error: 'The backup contained no progress to restore.' };
+  return { ok: true, count, ts: blob.ts };
+}

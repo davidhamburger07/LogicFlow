@@ -2375,6 +2375,23 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
   background: var(--surface); color: var(--error-ink); border: 1.5px solid var(--error-ink); transition: background .12s, color .12s; }
 .settings-reset:hover { background: var(--error-ink); color: #fff; }
 .settings-seg:focus-visible, .settings-reset:focus-visible, #settings-board .board-opt:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+/* the [hidden] attribute must always win, even over display:flex containers */
+[hidden] { display: none !important; }
+/* back up & restore */
+.settings-btn-row { display: flex; gap: 8px; flex-wrap: wrap; flex: 0 0 auto; }
+.settings-btn { font-family: var(--mono); font-size: 11px; letter-spacing: 1px; padding: 9px 15px; cursor: pointer;
+  background: var(--surface); color: var(--signal); border: 1.5px solid var(--signal); transition: background .12s, color .12s, filter .12s; }
+.settings-btn:hover { background: var(--signal); color: #fff; }
+.settings-btn:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+.settings-btn-primary { background: var(--signal); color: #fff; align-self: flex-start; }
+.settings-btn-primary:hover { filter: brightness(1.1); }
+.settings-code { width: 100%; min-height: 62px; resize: vertical; font-family: var(--mono); font-size: 10px; line-height: 1.5;
+  color: var(--ink-2); background: var(--panel); border: 1px solid var(--border); padding: 9px 11px; word-break: break-all; }
+.settings-code:focus-visible { outline: 2px solid var(--signal); outline-offset: 1px; }
+.settings-restore-panel { display: flex; flex-direction: column; gap: 9px; }
+.settings-backup-msg { font-family: var(--mono); font-size: 11px; line-height: 1.5; min-height: 15px; color: var(--ink-3); }
+.settings-backup-msg-ok { color: var(--success-ink); }
+.settings-backup-msg-err { color: var(--error-ink); }
 
 /* PHASE INTRO */
 /* justify-content: flex-start is essential — the .fullscreen base centres
@@ -2535,7 +2552,17 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 .tut-tool small { font-size: 8px; letter-spacing: 2px; color: var(--ink-4); }
 .tut-hearts { font-size: 22px; color: var(--error); letter-spacing: 4px; }
 .tut-streak { font-size: 18px; letter-spacing: 2px; color: var(--warn-ink); }
+.tut-stars { font-size: 18px; letter-spacing: 3px; color: var(--warn-ink); }
 .tut-mode { font-size: 11px; letter-spacing: 2px; border: 1.5px solid var(--border); padding: 10px 14px; color: var(--ink-2); }
+/* exam-board chip selector — like picking a chip on the board */
+.tut-boards { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; justify-content: center; }
+.tut-board { font-family: var(--mono); font-size: 11px; letter-spacing: 1px; padding: 9px 12px; border: 1.5px solid var(--border); color: var(--ink-4); background: var(--surface); }
+.tut-board.on { border-color: var(--phase-color); color: var(--phase-color); background: var(--phase-color-light); box-shadow: 0 0 0 3px var(--phase-color-light); }
+/* the interactions — a small board of components, one mini-game per topic */
+.tut-mechanics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; width: 100%; max-width: 330px; }
+.tut-mech { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 11px 6px; border: 1px solid var(--border); background: var(--surface); }
+.tut-mech-ico { font-size: 21px; line-height: 1; }
+.tut-mech small { font-size: 7.5px; letter-spacing: 1px; color: var(--ink-4); text-align: center; line-height: 1.35; }
 @media (max-width: 560px) { .pi-check-opts { grid-template-columns: 1fr; } }
 
 /* ── LEARN SCREEN: reveal + rich blocks ──────────────── */
