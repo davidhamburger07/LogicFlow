@@ -132,7 +132,10 @@ const TIME_FOR = { MC: 15, BINARY: 20, CIRCUIT: 35, CIPHER: 30, TRACE: 30, FDE: 
 const DEFAULT_TIME = 20;
 
 function maxHints() { return 3; }
-function usesLives() { return launchContext === 'campaign' || launchContext === 'survival'; }
+// The campaign is a no-fail revision tool — no lives, no game-over (a wrong
+// answer just gives feedback and you carry on, still recorded for mastery +
+// spaced review). Only arcade Survival is sudden-death.
+function usesLives() { return launchContext === 'survival'; }
 function isTimed() { return launchContext === 'timed'; }
 function isUnitTest() { return launchContext === 'unit-test'; }
 function isMock() { return launchContext === 'mock'; }

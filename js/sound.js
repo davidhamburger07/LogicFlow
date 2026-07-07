@@ -52,6 +52,7 @@ export const SFX = (() => {
   return {
     setVol(v) { vol = v / 100; if (masterGain) masterGain.gain.value = muted ? 0 : vol; },
     toggleMute() { muted = !muted; if (masterGain) masterGain.gain.value = muted ? 0 : vol; return muted; },
+    setMuted(m) { muted = !!m; if (masterGain) masterGain.gain.value = muted ? 0 : vol; },
     isMuted() { return muted; },
     powerOn() { seq([[110, .08, { type: 'square', gain: .12 }], [220, .08, { type: 'square', gain: .12 }], [440, .12, { type: 'square', gain: .15 }], [880, .18, { type: 'sine', gain: .18 }]], .07); },
     correct() { seq([[523, .06, { type: 'sine', gain: .22 }], [659, .06, { type: 'sine', gain: .22 }], [784, .14, { type: 'sine', gain: .25 }]], .07); },

@@ -12,12 +12,19 @@
 // never fetched on localhost so dev stays clean and deterministic.
 // ============================================================
 
+import { SFX } from './sound.js';
+
 const SDK_SRC = 'https://sdk.crazygames.com/crazygames-sdk-v3.js';
+const AD_INTERVAL = 20 * 60 * 1000;   // show a midgame (interstitial) ad every 20 min of play
 
 let sdk = null;
 let sdkPromise = null;
 let desiredGameplay = false;   // does the current screen count as gameplay?
 let gameplayOn = false;        // have we told the SDK gameplay is active?
+let playMs = 0;                // accumulated gameplay time since the last ad
+let playStartedAt = 0;         // when the current gameplay stretch began
+let adInProgress = false;
+let priorMute = false;
 
 function isLocalHost() {
   const h = location.hostname;
@@ -72,10 +79,29 @@ export function setGameplay(on) { desiredGameplay = !!on; applyGameplay(); }
 function applyGameplay() {
   const shouldPlay = desiredGameplay && document.visibilityState !== 'hidden';
   if (shouldPlay && !gameplayOn) {
+    playStartedAt = Date.now();
     try { if (sdk && sdk.game && sdk.game.gameplayStart) sdk.game.gameplayStart(); } catch (e) {}
     gameplayOn = true;
   } else if (!shouldPlay && gameplayOn) {
+    if (playStartedAt) playMs += Date.now() - playStartedAt;   // banked play time
     try { if (sdk && sdk.game && sdk.game.gameplayStop) sdk.game.gameplayStop(); } catch (e) {}
     gameplayOn = false;
+    maybeShowAd();   // this gameplay-off point is a natural break — the only place we interrupt
   }
 }
+
+// Show an interstitial once ~20 min of play has banked, and only at a break
+// (leaving a lesson/question for a menu/results). CrazyGames also caps midgame
+// ads to 1 per 3 min, so this never over-shows. No-op without the SDK.
+function maybeShowAd() {
+  if (playMs < AD_INTERVAL || adInProgress || !sdk || !sdk.ad || !sdk.ad.requestAd) return;
+  adInProgress = true;
+  try {
+    sdk.ad.requestAd('midgame', {
+      adStarted: () => { priorMute = SFX.isMuted(); SFX.setMuted(true); },   // mute during the ad
+      adFinished: () => { endAd(); },
+      adError: () => { endAd(); },   // unfilled / cooldown — carry on, reset the timer
+    });
+  } catch (e) { endAd(); }
+}
+function endAd() { SFX.setMuted(priorMute); adInProgress = false; playMs = 0; }
