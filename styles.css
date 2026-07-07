@@ -2429,6 +2429,7 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 .course-tag.play { color: #fff; background: var(--signal); border-color: var(--signal); }
 .course-tag.owned { color: var(--success-ink); border-color: var(--success-ink); }
 .course-tag.locked { color: var(--signal); border-color: var(--signal); }
+.course-tag.free { color: #fff; background: var(--success-ink); border-color: var(--success-ink); }
 .course-card.course-play { border-color: var(--signal); }
 .course-card.course-disabled { opacity: .62; cursor: default; }
 .course-card.course-disabled .course-icon { filter: grayscale(1); }

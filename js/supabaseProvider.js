@@ -16,6 +16,7 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 let client = null;
 let session = null;
 let cachedOwned = [];
+let freeUsed = false;
 const authListeners = new Set();
 
 async function getClient() {
@@ -26,7 +27,10 @@ async function getClient() {
 }
 
 // The entitlement provider handed to courses.setEntitlementProvider().
-export const provider = { ownedIds() { return cachedOwned.slice(); } };
+export const provider = {
+  ownedIds() { return cachedOwned.slice(); },
+  freeTokenUsed() { return freeUsed; },   // has this account already claimed its one free course?
+};
 
 export function currentUser() {
   if (!session || !session.user) return null;
@@ -37,11 +41,13 @@ function emitAuth() { const u = currentUser(); authListeners.forEach(fn => { try
 
 async function refreshEntitlements() {
   try {
-    if (!session) { cachedOwned = []; return; }
+    if (!session) { cachedOwned = []; freeUsed = false; return; }
     const c = await getClient();
-    const { data, error } = await c.from('entitlements').select('course_id');
-    cachedOwned = error ? [] : (data || []).map(r => r.course_id);
-  } catch (e) { cachedOwned = []; }
+    const { data, error } = await c.from('entitlements').select('course_id, source');
+    const rows = error ? [] : (data || []);
+    cachedOwned = rows.map(r => r.course_id);
+    freeUsed = rows.some(r => r.source === 'free_token');
+  } catch (e) { cachedOwned = []; freeUsed = false; }
 }
 export function refresh() { return refreshEntitlements(); }
 
@@ -73,4 +79,17 @@ export async function claimFreeCourse(courseId) {
     if (!error) await refreshEntitlements();
     return { ok: !error, error: error && error.message };
   } catch (e) { return { ok: false, error: 'Could not reach the server.' }; }
+}
+
+// Start a Stripe Checkout for a paid course. The Edge Function creates the
+// session (server-side, with the price + user/course metadata); on success we
+// redirect to Stripe. The webhook grants the entitlement after payment.
+export async function startCheckout(courseId) {
+  try {
+    const c = await getClient();
+    const { data, error } = await c.functions.invoke('create-checkout-session', { body: { course_id: courseId } });
+    if (error || !data || !data.url) return { ok: false, error: (error && error.message) || 'Checkout is unavailable right now.' };
+    window.location.href = data.url;
+    return { ok: true };
+  } catch (e) { return { ok: false, error: 'Could not start checkout.' }; }
 }

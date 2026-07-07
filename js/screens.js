@@ -115,17 +115,22 @@ export function showCourses() {
   if (bar) dom.coursesIntro.prepend(bar);
 
   dom.coursesGrid.innerHTML = '';
+  const user = authApi && authApi.currentUser ? authApi.currentUser() : null;
   courses.COURSES.forEach(c => {
     const state = courses.courseState(c);   // 'play' | 'owned' | 'locked' | 'soon'
     const card = h('button', 'course-card course-' + state);
     card.type = 'button';
-    let tag;
-    if (state === 'play') tag = '<span class="course-tag play">▶ PLAY</span>';
+    let tag, action = null;
+    if (state === 'play') { tag = '<span class="course-tag play">▶ PLAY</span>'; action = () => { courses.setActiveCourse(c.id); showCampaign(); }; }
     else if (state === 'owned') tag = '<span class="course-tag owned">✓ OWNED · building</span>';
-    else if (state === 'locked') tag = `<span class="course-tag locked">🔒 ${courses.UNLOCK_PRICE}</span>`;
-    else tag = '<span class="course-tag soon">🔒 SOON</span>';
+    else if (state === 'soon') tag = '<span class="course-tag soon">🔒 SOON</span>';
+    else {   // 'locked' = built but not owned (standalone site: claim free, buy, or sign in)
+      if (!user) { tag = '<span class="course-tag locked">🔒 SIGN IN</span>'; action = () => openAuth(); }
+      else if (!courses.freeTokenUsed()) { tag = '<span class="course-tag free">✦ GET FREE</span>'; action = async () => { await authApi.claimFreeCourse(c.id); refreshAfterAuth(); }; }
+      else { tag = `<span class="course-tag locked">🔒 ${courses.UNLOCK_PRICE}</span>`; action = () => authApi.startCheckout(c.id); }
+    }
     card.innerHTML = `<span class="course-icon">${c.icon}</span><span class="course-name">${c.name}</span>${tag}`;
-    if (state === 'play') card.addEventListener('click', () => { SFX.uiClick(); courses.setActiveCourse(c.id); showCampaign(); });
+    if (action) card.addEventListener('click', () => { SFX.uiClick(); action(); });
     else { card.disabled = true; card.classList.add('course-disabled'); }
     dom.coursesGrid.appendChild(card);
   });

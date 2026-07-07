@@ -268,6 +268,9 @@ function boot() {
       courses.setEntitlementProvider(sp.provider);
       screens.setAuthApi(sp);
       await sp.initSupabase();
+      // returning from a Stripe checkout — the webhook granted the course, so
+      // re-read entitlements before the first render.
+      if (/[?&]unlocked=/.test(location.search)) await sp.refresh();
       screens.refreshAfterAuth();
     }).catch(() => { /* backend unreachable → stay on the local provider */ });
   }

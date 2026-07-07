@@ -66,6 +66,9 @@ export function setEntitlementProvider(p) { provider = (p && typeof p.ownedIds =
 
 export function ownsCourse(id) { return provider.ownedIds().includes(id); }
 
+// Has this account already spent its one free course? (false without a backend.)
+export function freeTokenUsed() { return typeof provider.freeTokenUsed === 'function' ? !!provider.freeTokenUsed() : false; }
+
 // What the Courses screen should show for a card:
 //   'play'   — owned + built (you can play it now)      → Computer Science
 //   'owned'  — owned but not built yet
