@@ -14,6 +14,7 @@
 import * as engine from './engine.js';
 import * as screens from './screens.js';
 import { SFX } from './sound.js';
+import { MUSIC } from './music.js';
 import * as store from './storage.js';
 import * as cloud from './cloud.js';
 import * as cg from './crazygames.js';
@@ -34,8 +35,29 @@ function paintVolume(value) {
 function setVolume(value) {
   const v = Number(value);
   SFX.setVol(v);
+  MUSIC.setVol(v);
   store.setVolume(v);
   paintVolume(v);
+}
+
+// ---- background music: setting + first-gesture start (autoplay policy) ----
+function paintMusic(on) {
+  document.querySelectorAll('#settings-music .settings-seg').forEach(b =>
+    b.classList.toggle('active', (b.dataset.music === 'on') === on));
+}
+function wireMusic() {
+  document.querySelectorAll('#settings-music .settings-seg').forEach(b =>
+    b.addEventListener('click', () => {
+      SFX.uiClick();
+      const on = b.dataset.music === 'on';
+      store.setMusicOn(on);
+      paintMusic(on);
+      if (on) MUSIC.start(); else MUSIC.stop();   // the click is a valid gesture
+    }));
+  // browsers block audio before a user gesture — start on the first one
+  const kick = () => { if (store.getMusicOn()) MUSIC.start(); };
+  window.addEventListener('pointerdown', kick, { once: true });
+  window.addEventListener('keydown', kick, { once: true });
 }
 function wireVolume() {
   VOL_SLIDERS.forEach(id => {
@@ -43,7 +65,7 @@ function wireVolume() {
   });
   VOL_ICONS.forEach(id => {
     const i = $(id);
-    if (i) i.addEventListener('click', () => { SFX.toggleMute(); paintVolume($('vol-slider').value); });
+    if (i) i.addEventListener('click', () => { MUSIC.setMuted(SFX.toggleMute()); paintVolume($('vol-slider').value); });
   });
 }
 
@@ -204,6 +226,8 @@ function wire() {
   $('exit-no').addEventListener('click', () => { SFX.uiClick(); exitConfirm.classList.remove('show'); });
   $('exit-yes').addEventListener('click', () => { SFX.uiClick(); exitConfirm.classList.remove('show'); engine.exitToMenu(); });
 
+  // background music: settings toggle + first-gesture start
+  wireMusic();
   // back up & restore (Settings): a portable code + file, and restore
   wireBackup();
   // cloud save (Settings): CrazyGames account sync status + sign-in
@@ -243,7 +267,9 @@ function wire() {
 function boot() {
   const v = store.getVolume();
   SFX.setVol(v);
+  MUSIC.setVol(v);
   paintVolume(v);
+  paintMusic(store.getMusicOn());
   applyTheme(store.getTheme());
   applyUiScale(store.getUiScale());
   paintBoard(store.getBoard());

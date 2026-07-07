@@ -32,6 +32,7 @@ const KEY = {
   tutorial: 'logicflow.tutorialSeen',
   courses: 'logicflow.courses',       // owned course ids (the free base course is implicit)
   activeCourse: 'logicflow.activeCourse',
+  music: 'logicflow.music',           // background music on/off (default on)
 };
 
 const BOARDS = ['AQA', 'OCR', 'Eduqas', 'WJEC', 'Edexcel'];   // WJEC + Edexcel use Python, like Eduqas
@@ -476,6 +477,12 @@ export function resetProgress() {
     localStorage.removeItem(KEY.campaign);
   } catch (e) {}
 }
+
+// ============================================================
+// background music preference (default ON)
+// ============================================================
+export function getMusicOn() { return readRaw(KEY.music) !== 'off'; }
+export function setMusicOn(on) { writeRaw(KEY.music, on ? 'on' : 'off'); }
 
 // ============================================================
 // course entitlements — the LOCAL provider's store. Which extra courses this

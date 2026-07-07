@@ -13,6 +13,7 @@
 // ============================================================
 
 import { SFX } from './sound.js';
+import { MUSIC } from './music.js';
 
 const SDK_SRC = 'https://sdk.crazygames.com/crazygames-sdk-v3.js';
 const AD_INTERVAL = 20 * 60 * 1000;   // show a midgame (interstitial) ad every 20 min of play
@@ -98,10 +99,10 @@ function maybeShowAd() {
   adInProgress = true;
   try {
     sdk.ad.requestAd('midgame', {
-      adStarted: () => { priorMute = SFX.isMuted(); SFX.setMuted(true); },   // mute during the ad
+      adStarted: () => { priorMute = SFX.isMuted(); SFX.setMuted(true); MUSIC.setMuted(true); },   // silence during the ad
       adFinished: () => { endAd(); },
       adError: () => { endAd(); },   // unfilled / cooldown — carry on, reset the timer
     });
   } catch (e) { endAd(); }
 }
-function endAd() { SFX.setMuted(priorMute); adInProgress = false; playMs = 0; }
+function endAd() { SFX.setMuted(priorMute); MUSIC.setMuted(priorMute); adInProgress = false; playMs = 0; }

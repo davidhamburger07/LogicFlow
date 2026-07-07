@@ -2928,3 +2928,17 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 .qb-reroll { font-size: 9px; letter-spacing: 1px; background: none; border: 1px solid var(--border); color: var(--ink-3); font-family: var(--mono); padding: 5px 10px; cursor: pointer; transition: border-color .12s, color .12s; }
 .qb-reroll:hover { border-color: var(--node-color); color: var(--node-color); }
 .qb-gen-samples { display: flex; flex-direction: column; gap: 6px; }
+
+/* ── REDUCED MOTION (accessibility floor) ─────────────────────
+   Near-zero durations rather than `animation: none`, so animations with
+   fill modes still land on their end state (content stays visible); the
+   static border/box-shadow cues carry the meaning everywhere a pulse is
+   removed. Targeted rules above remain harmless under this. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
