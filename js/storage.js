@@ -30,6 +30,8 @@ const KEY = {
   schedule: 'logicflow.schedule',
   campaign: 'logicflow.campaign',
   tutorial: 'logicflow.tutorialSeen',
+  courses: 'logicflow.courses',       // owned course ids (the free base course is implicit)
+  activeCourse: 'logicflow.activeCourse',
 };
 
 const BOARDS = ['AQA', 'OCR', 'Eduqas', 'WJEC', 'Edexcel'];   // WJEC + Edexcel use Python, like Eduqas
@@ -474,6 +476,19 @@ export function resetProgress() {
     localStorage.removeItem(KEY.campaign);
   } catch (e) {}
 }
+
+// ============================================================
+// course entitlements — the LOCAL provider's store. Which extra courses this
+// device has unlocked (the base course is always free, added by courses.js).
+// This is NOT a security boundary — real entitlements are enforced server-side
+// (Supabase RLS + server-delivered content). Kept here so it rides the backup
+// code + cloud save, and so courses.js has a single storage seam to swap.
+// ============================================================
+export function getOwnedCourses() { const v = readJSON(KEY.courses, []); return Array.isArray(v) ? v : []; }
+export function setOwnedCourses(ids) { writeJSON(KEY.courses, Array.isArray(ids) ? ids : []); }
+export function addOwnedCourse(id) { const s = new Set(getOwnedCourses()); s.add(id); setOwnedCourses([...s]); }
+export function getActiveCourse() { return readRaw(KEY.activeCourse) || null; }
+export function setActiveCourse(id) { if (id) writeRaw(KEY.activeCourse, String(id)); }
 
 // ============================================================
 // backup & restore — the whole persisted state as one portable

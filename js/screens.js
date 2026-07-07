@@ -17,6 +17,7 @@ import { generateQuestion } from './generators.js';
 import * as store from './storage.js';
 import * as engine from './engine.js';
 import { SFX } from './sound.js';
+import * as courses from './courses.js';
 
 const PHASE_IDS = PHASES.map(p => p.id);
 const PHASE_IDX_BY_ID = {};
@@ -44,6 +45,8 @@ export function initScreens() {
     revGrid: document.getElementById('rev-grid'),
     arcadeModeList: document.getElementById('arcade-mode-list'),
     arcadeTopicGrid: document.getElementById('arcade-topic-grid'),
+    coursesGrid: document.getElementById('courses-grid'),
+    coursesIntro: document.getElementById('courses-intro'),
   };
   document.getElementById('camp-back').addEventListener('click', () => { SFX.uiClick(); showMainMenu(); });
   document.getElementById('rev-back').addEventListener('click', () => { SFX.uiClick(); showMainMenu(); });
@@ -51,6 +54,7 @@ export function initScreens() {
   document.getElementById('arcade-topics-back').addEventListener('click', () => { SFX.uiClick(); showArcadeModes(); });
   document.getElementById('qbank-back').addEventListener('click', () => { SFX.uiClick(); showMainMenu(); });
   document.getElementById('stats-back').addEventListener('click', () => { SFX.uiClick(); showMainMenu(); });
+  document.getElementById('courses-back').addEventListener('click', () => { SFX.uiClick(); showMainMenu(); });
   document.getElementById('settings-back').addEventListener('click', () => { SFX.uiClick(); settingsBack(); });
   // how-to-play tutorial nav
   document.getElementById('tut-next').addEventListener('click', () => { SFX.uiClick(); tutNext(); });
@@ -83,6 +87,7 @@ export function showMainMenu() {
   dom.menuActions.innerHTML = '';
   dom.menuActions.append(
     menuBtn(contLabel, contSub, contAction, 'primary'),
+    menuBtn('COURSES', 'Computer Science — with every GCSE subject coming soon', showCourses),
     menuBtn('CAMPAIGN', 'Your journey through every GCSE topic', showCampaign),
     menuBtn('REVISION HUB', 'Jump to any topic · spaced review of your misses', showRevision),
     menuBtn('ARCADE', 'Timed Exam Rush — beat the clock', showArcadeModes),
@@ -92,6 +97,37 @@ export function showMainMenu() {
     menuBtn('SETTINGS', 'Theme, sound, exam board and progress', showSettings),
   );
   engine.showScreen('main-menu');
+}
+
+// ============================================================
+// courses — pick your GCSE subject. Computer Science is built and free; every
+// other subject appears here so players see what's coming. Real unlock/payment
+// is server-side (Supabase + Stripe) on the standalone site; this screen just
+// reflects entitlement state via courses.js.
+// ============================================================
+export function showCourses() {
+  resetAccent();
+  dom.coursesIntro.innerHTML =
+    '<div class="courses-lead">Pick your subject.</div>'
+    + '<div class="courses-sub"><strong>Computer Science</strong> is ready to play now. Every other GCSE subject is on the way — you\'ll be able to add one free and unlock more later.</div>';
+
+  dom.coursesGrid.innerHTML = '';
+  courses.COURSES.forEach(c => {
+    const state = courses.courseState(c);   // 'play' | 'owned' | 'locked' | 'soon'
+    const card = h('button', 'course-card course-' + state);
+    card.type = 'button';
+    let tag;
+    if (state === 'play') tag = '<span class="course-tag play">▶ PLAY</span>';
+    else if (state === 'owned') tag = '<span class="course-tag owned">✓ OWNED · building</span>';
+    else if (state === 'locked') tag = `<span class="course-tag locked">🔒 ${courses.UNLOCK_PRICE}</span>`;
+    else tag = '<span class="course-tag soon">🔒 SOON</span>';
+    card.innerHTML = `<span class="course-icon">${c.icon}</span><span class="course-name">${c.name}</span>${tag}`;
+    if (state === 'play') card.addEventListener('click', () => { SFX.uiClick(); courses.setActiveCourse(c.id); showCampaign(); });
+    else { card.disabled = true; card.classList.add('course-disabled'); }
+    dom.coursesGrid.appendChild(card);
+  });
+
+  engine.showScreen('courses');
 }
 
 // ============================================================
