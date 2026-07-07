@@ -77,11 +77,11 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 #exit-btn:hover { border-color: var(--error); color: var(--error); }
 
 /* confirmation modal */
-#exit-confirm, #read-confirm, #reset-confirm {
+#exit-confirm, #read-confirm, #reset-confirm, #auth-modal {
   display: none; position: fixed; inset: 0; z-index: 300;
   background: rgba(17, 17, 17, 0.45); align-items: center; justify-content: center; padding: 20px;
 }
-#exit-confirm.show, #read-confirm.show, #reset-confirm.show { display: flex; }
+#exit-confirm.show, #read-confirm.show, #reset-confirm.show, #auth-modal.show { display: flex; }
 .modal-box {
   background: var(--surface); border: 1px solid var(--border); padding: 30px 34px; max-width: 380px; width: 100%;
   text-align: center; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
@@ -92,6 +92,25 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 .modal-actions .fs-btn { margin-top: 0; width: 100%; }
 .modal-actions .modal-cancel { background: var(--panel); color: var(--ink); border: 1px solid var(--border); }
 .modal-actions .modal-cancel:hover { background: var(--border); }
+/* auth modal (standalone site accounts) */
+.auth-tabs { display: flex; border: 1px solid var(--border); }
+.auth-tab { flex: 1; padding: 9px; background: var(--surface); border: none; font-family: var(--mono); font-size: 11px; letter-spacing: 1px; color: var(--ink-3); cursor: pointer; }
+.auth-tab.on { background: var(--signal); color: #fff; }
+.auth-field { display: flex; flex-direction: column; gap: 5px; text-align: left; }
+.auth-field label { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; color: var(--ink-4); }
+.auth-field input { font-family: var(--mono); font-size: 13px; padding: 10px 11px; border: 1px solid var(--border); background: var(--panel); color: var(--ink); }
+.auth-field input:focus-visible { outline: 2px solid var(--signal); outline-offset: 1px; }
+.auth-msg { font-family: var(--mono); font-size: 11px; line-height: 1.5; min-height: 15px; }
+.auth-msg-err { color: var(--error-ink); } .auth-msg-ok { color: var(--success-ink); }
+/* account bar on the Courses screen */
+.account-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  border: 1px solid var(--border); border-left: 3px solid var(--signal); background: var(--surface); padding: 11px 14px; margin-bottom: 18px; }
+.account-bar-text { font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); }
+.account-bar-text strong { color: var(--ink); }
+.account-btn { font-family: var(--mono); font-size: 11px; letter-spacing: 1px; padding: 8px 14px; cursor: pointer;
+  background: var(--signal); color: #fff; border: 1.5px solid var(--signal); transition: filter .12s; }
+.account-btn:hover { filter: brightness(1.08); }
+.account-btn.ghost { background: var(--surface); color: var(--signal); }
 
 /* MAIN GAME AREA */
 #game-area {

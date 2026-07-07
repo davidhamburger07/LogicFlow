@@ -55,6 +55,7 @@ export function initScreens() {
   document.getElementById('qbank-back').addEventListener('click', () => { SFX.uiClick(); showMainMenu(); });
   document.getElementById('stats-back').addEventListener('click', () => { SFX.uiClick(); showMainMenu(); });
   document.getElementById('courses-back').addEventListener('click', () => { SFX.uiClick(); showMainMenu(); });
+  wireAuth();
   document.getElementById('settings-back').addEventListener('click', () => { SFX.uiClick(); settingsBack(); });
   // how-to-play tutorial nav
   document.getElementById('tut-next').addEventListener('click', () => { SFX.uiClick(); tutNext(); });
@@ -110,6 +111,8 @@ export function showCourses() {
   dom.coursesIntro.innerHTML =
     '<div class="courses-lead">Pick your subject.</div>'
     + '<div class="courses-sub"><strong>Computer Science</strong> is ready to play now. Every other GCSE subject is on the way — you\'ll be able to add one free and unlock more later.</div>';
+  const bar = accountBar();   // standalone site only (when an auth backend is wired)
+  if (bar) dom.coursesIntro.prepend(bar);
 
   dom.coursesGrid.innerHTML = '';
   courses.COURSES.forEach(c => {
@@ -128,6 +131,73 @@ export function showCourses() {
   });
 
   engine.showScreen('courses');
+}
+
+// ---- accounts (standalone site only; null on dev + the free CrazyGames build) ----
+let authApi = null;
+let authMode = 'in';
+export function setAuthApi(api) { authApi = api; if (api && api.onAuth) api.onAuth(() => refreshAfterAuth()); }
+
+// re-render the visible course/menu screens when the account state changes
+export function refreshAfterAuth() {
+  if (document.getElementById('courses').classList.contains('show')) showCourses();
+  else if (document.getElementById('main-menu').classList.contains('show')) showMainMenu();
+}
+
+function accountBar() {
+  if (!authApi) return null;
+  const u = authApi.currentUser ? authApi.currentUser() : null;
+  const bar = h('div', 'account-bar');
+  const text = h('span', 'account-bar-text');
+  const btn = h('button', 'account-btn');
+  btn.type = 'button';
+  if (u) {
+    text.innerHTML = `Signed in as <strong>${escapeHtml(u.email)}</strong>${u.verified ? '' : ' · unverified (check your email)'}`;
+    btn.classList.add('ghost'); btn.textContent = 'SIGN OUT';
+    btn.addEventListener('click', async () => { SFX.uiClick(); await authApi.signOut(); refreshAfterAuth(); });
+  } else {
+    text.textContent = 'Sign in to save your progress across devices and unlock courses.';
+    btn.textContent = 'SIGN IN';
+    btn.addEventListener('click', () => { SFX.uiClick(); openAuth(); });
+  }
+  bar.append(text, btn);
+  return bar;
+}
+
+function authMsg(text, kind) { const m = document.getElementById('auth-msg'); m.textContent = text || ''; m.className = 'auth-msg' + (kind ? ' auth-msg-' + kind : ''); }
+function authSetMode(m) {
+  authMode = m;
+  document.getElementById('auth-tab-in').classList.toggle('on', m === 'in');
+  document.getElementById('auth-tab-up').classList.toggle('on', m === 'up');
+  document.getElementById('auth-title').textContent = m === 'in' ? 'SIGN IN' : 'CREATE ACCOUNT';
+  document.getElementById('auth-submit').textContent = m === 'in' ? 'SIGN IN' : 'CREATE ACCOUNT';
+  authMsg('');
+}
+export function openAuth() {
+  authSetMode('in');
+  document.getElementById('auth-email').value = '';
+  document.getElementById('auth-password').value = '';
+  document.getElementById('auth-modal').classList.add('show');
+  document.getElementById('auth-email').focus();
+}
+function closeAuth() { document.getElementById('auth-modal').classList.remove('show'); }
+async function authSubmit() {
+  if (!authApi) return;
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  if (!email || !password) { authMsg('Enter your email and password.', 'err'); return; }
+  const btn = document.getElementById('auth-submit'); btn.disabled = true; authMsg('Working…');
+  const res = authMode === 'in' ? await authApi.signIn(email, password) : await authApi.signUp(email, password);
+  btn.disabled = false;
+  if (!res || !res.ok) { authMsg((res && res.error) || 'Something went wrong.', 'err'); return; }
+  if (authMode === 'up') { authSetMode('in'); authMsg('Account created — check your email to confirm, then sign in.', 'ok'); return; }
+  closeAuth();   // signed in; onAuth re-renders
+}
+function wireAuth() {
+  document.getElementById('auth-tab-in').addEventListener('click', () => { SFX.uiClick(); authSetMode('in'); });
+  document.getElementById('auth-tab-up').addEventListener('click', () => { SFX.uiClick(); authSetMode('up'); });
+  document.getElementById('auth-submit').addEventListener('click', () => { SFX.uiClick(); authSubmit(); });
+  document.getElementById('auth-cancel').addEventListener('click', () => { SFX.uiClick(); closeAuth(); });
 }
 
 // ============================================================

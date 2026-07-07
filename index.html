@@ -386,6 +386,30 @@
   </div>
 </div>
 
+<!-- Account sign in / sign up (standalone site) -->
+<div id="auth-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="auth-title">SIGN IN</div>
+    <div class="auth-tabs">
+      <button class="auth-tab on" id="auth-tab-in" type="button">SIGN IN</button>
+      <button class="auth-tab" id="auth-tab-up" type="button">CREATE ACCOUNT</button>
+    </div>
+    <div class="auth-field">
+      <label for="auth-email">EMAIL</label>
+      <input type="email" id="auth-email" autocomplete="email" placeholder="you@example.com">
+    </div>
+    <div class="auth-field">
+      <label for="auth-password">PASSWORD</label>
+      <input type="password" id="auth-password" autocomplete="current-password" placeholder="••••••••">
+    </div>
+    <div class="auth-msg" id="auth-msg" role="status"></div>
+    <div class="modal-actions">
+      <button class="fs-btn" id="auth-submit">SIGN IN</button>
+      <button class="fs-btn modal-cancel" id="auth-cancel">CANCEL</button>
+    </div>
+  </div>
+</div>
+
 <!-- Reset progress confirmation -->
 <div id="reset-confirm">
   <div class="modal-box">

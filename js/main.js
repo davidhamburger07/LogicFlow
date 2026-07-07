@@ -17,6 +17,8 @@ import { SFX } from './sound.js';
 import * as store from './storage.js';
 import * as cloud from './cloud.js';
 import * as cg from './crazygames.js';
+import * as courses from './courses.js';
+import { backendEnabled } from './config.js';
 import { initOnscreenKeys, toggleOnscreen } from './onscreenkeys.js';
 
 function $(id) { return document.getElementById(id); }
@@ -258,6 +260,17 @@ function boot() {
   // cloud save. Off CrazyGames all of this no-ops and the game runs local-only.
   cg.initSdk().then(() => cg.gameLoadingStop());
   cloud.initCloud();
+
+  // Standalone-site backend (accounts + paid courses). Only when configured in
+  // config.js — dev and the CrazyGames build stay on the local provider.
+  if (backendEnabled()) {
+    import('./supabaseProvider.js').then(async sp => {
+      courses.setEntitlementProvider(sp.provider);
+      screens.setAuthApi(sp);
+      await sp.initSupabase();
+      screens.refreshAfterAuth();
+    }).catch(() => { /* backend unreachable → stay on the local provider */ });
+  }
 }
 
 boot();
