@@ -10,6 +10,7 @@
 //
 // Question schema:
 //   { type:'BITMAP', rows:[[0,0,1,1,0,0], [0,1,1,1,1,0], …],
+//     walk?:true,   // WATCH mode: NEXT ROW paints each line for the student, with narration
 //     badge, board, title, desc, hints, explain }
 // ============================================================
 
@@ -19,6 +20,7 @@ export const bitmap = {
   type: 'BITMAP',
 
   render(host, question, ctx) {
+    if (question.walk) return renderWalk(host, question, ctx);
     host.innerHTML = '';
     const rows = question.rows.map(r => r.slice());
 
@@ -76,3 +78,60 @@ export const bitmap = {
     host.appendChild(wrap);
   },
 };
+
+// WATCH mode — the same layout, but a NEXT ROW button paints each line for the
+// student with narration, so they see exactly how bits become pixels before
+// they do it themselves. Non-failable; completing it submits correct.
+function renderWalk(host, question, ctx) {
+  host.innerHTML = '';
+  const rows = question.rows;
+  let pos = 0, busy = false;
+
+  const wrap = mk('bm bm-walk');
+  const say = mk('bm-say');
+  say.innerHTML = 'Each row of bits paints one line of the image: <b>1 = fill the pixel</b>, <b>0 = skip it</b>. Press <b>NEXT ROW</b> and watch.';
+  wrap.appendChild(say);
+
+  const body = mk('bm-body');
+  const rowEls = rows.map((r, ri) => {
+    const rowEl = mk('bm-row');
+    rowEl.appendChild(mk('bm-bits', 'span')).textContent = r.join('');
+    const px = mk('bm-pixels');
+    const cells = r.map((bit, ci) => {
+      const b = mk('bm-px', 'button'); b.type = 'button'; b.disabled = true;
+      b.setAttribute('aria-label', `pixel row ${ri + 1}, column ${ci + 1}`);
+      px.appendChild(b); return b;
+    });
+    rowEl.appendChild(px);
+    body.appendChild(rowEl);
+    return { rowEl, cells };
+  });
+  wrap.appendChild(body);
+
+  const next = mk('bm-next', 'button');
+  next.type = 'button'; next.textContent = '▶ NEXT ROW';
+  next.addEventListener('click', () => {
+    if (busy || pos >= rows.length) return;
+    busy = true;
+    const r = rows[pos], { rowEl, cells } = rowEls[pos];
+    rowEls.forEach(({ rowEl: el2 }) => el2.classList.remove('bm-cur'));
+    rowEl.classList.add('bm-cur');
+    const ones = r.map((b, i) => b ? i + 1 : 0).filter(Boolean);
+    say.innerHTML = `Row ${pos + 1} — <b>${r.join(' ')}</b>: `
+      + (ones.length ? `fill pixel${ones.length > 1 ? 's' : ''} <b>${ones.join(', ')}</b>, skip the rest.` : 'all zeros — nothing to fill.');
+    // paint the 1-pixels left → right with a little stagger
+    r.forEach((bit, ci) => { if (bit) setTimeout(() => { cells[ci].classList.add('on'); (ctx.sfx.bitClick || ctx.sfx.uiClick)(true); }, 120 + ci * 110); });
+    setTimeout(() => {
+      busy = false; pos++;
+      if (pos >= rows.length) {
+        rowEl.classList.remove('bm-cur');
+        say.innerHTML = '✓ Every 1 became a black pixel, row by row — <b>that\'s all a bitmap is</b>. Your turn next.';
+        next.textContent = '✓ DONE'; next.disabled = true;
+        ctx.sfx.zap();
+        ctx.onSubmit(true, {});
+      }
+    }, 200 + r.length * 110);
+  });
+  wrap.appendChild(next);
+  host.appendChild(wrap);
+}

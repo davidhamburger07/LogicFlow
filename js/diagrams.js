@@ -360,16 +360,21 @@ const asciiTable = (() => {
     if (c === 127) return `<span class="at-ctrl">DEL</span>`;
     return `<b>${esc(String.fromCharCode(c))}</b>`;
   };
+  const ANCHORS = new Set([48, 65, 97]);   // '0', 'A', 'a' — the codes worth memorising
   let rows = '';
   for (let r = 0; r < 32; r++) {
     let cells = '';
-    for (let col = 0; col < 4; col++) { const c = r + col * 32; cells += `<td class="at-dec">${c}</td><td class="at-ch">${glyph(c)}</td>`; }
+    for (let col = 0; col < 4; col++) {
+      const c = r + col * 32;
+      const hi = ANCHORS.has(c) ? ' at-hi' : '';
+      cells += `<td class="at-dec${hi}">${c}</td><td class="at-ch${hi}">${glyph(c)}</td>`;
+    }
     rows += `<tr>${cells}</tr>`;
   }
   const head = '<tr>' + '<th>Dec</th><th>Chr</th>'.repeat(4) + '</tr>';
   return `<div class="at-wrap"><div class="at-cap">THE FULL 7-BIT ASCII TABLE · CODES 0–127</div>`
     + `<div class="at-scroll"><table class="at-table"><thead>${head}</thead><tbody>${rows}</tbody></table></div>`
-    + `<div class="at-note">Codes <b>0–31</b> and <b>127</b> are non-printing <b>control codes</b> (NUL, tab, line-feed…); <b>32</b> is space. The characters exams test — digits, upper- and lower-case letters — sit in <b>48–122</b>.</div></div>`;
+    + `<div class="at-note">The <span class="at-hi-key">highlighted</span> codes are the anchors worth memorising: <b>'0' = 48</b>, <b>'A' = 65</b>, <b>'a' = 97</b> — everything else you count on from there. Codes <b>0–31</b> and <b>127</b> are non-printing <b>control codes</b> (NUL, tab, line-feed…); <b>32</b> is space.</div></div>`;
 })();
 
 // 11b) a 1-bit bitmap — pixels are bits

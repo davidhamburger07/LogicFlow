@@ -2929,6 +2929,20 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 .qb-reroll:hover { border-color: var(--node-color); color: var(--node-color); }
 .qb-gen-samples { display: flex; flex-direction: column; gap: 6px; }
 
+/* BITMAP + BUSSTOP walk (WATCH) modes — step-through demos with narration */
+.bm-say, .bs-say { font-family: var(--mono); font-size: 12.5px; line-height: 1.7; color: var(--ink-2); background: var(--panel); border-left: 3px solid var(--phase-color); padding: 10px 14px; max-width: 480px; min-height: 40px; }
+.bm-say b, .bs-say b { color: var(--phase-color); }
+.bm-next, .bs-next { font-family: var(--mono); font-size: 13px; letter-spacing: 1px; padding: 12px 28px; background: var(--phase-color); color: #fff; border: none; cursor: pointer; transition: filter .12s; align-self: flex-start; }
+.bm-next:hover:not(:disabled), .bs-next:hover:not(:disabled) { filter: brightness(1.06); }
+.bm-next:disabled, .bs-next:disabled { opacity: .6; cursor: default; }
+.bm-next:focus-visible, .bs-next:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+.bm-walk .bm-row.bm-cur .bm-bits { color: var(--phase-color); font-weight: bold; }
+.bm-walk .bm-row.bm-cur { background: var(--phase-color-light); }
+span.bs-wcell { display: inline-flex; align-items: center; justify-content: center; }
+.bs-dig.bs-cur { color: var(--phase-color); text-decoration: underline; }
+@keyframes bsPop { from { transform: scale(1.45); } to { transform: none; } }
+.bs-pop { animation: bsPop .25s ease-out; color: var(--phase-color); }
+
 /* KB/MB unit-conversion table (data-representation lesson) */
 .pi-convert { display: flex; justify-content: center; margin: 10px 0; }
 .cv-table { border-collapse: collapse; font-family: var(--mono); font-size: 12px; }
@@ -2938,19 +2952,22 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 .cv-table td:first-child { color: var(--phase-color); text-align: right; }
 
 /* full 7-bit ASCII table (data-representation lesson) */
-.at-wrap { width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 8px; }
-.at-cap { font-size: 8px; letter-spacing: 2px; color: var(--ink-4); text-align: center; }
+.at-wrap { width: 100%; max-width: 680px; display: flex; flex-direction: column; gap: 10px; }
+.at-cap { font-size: 9px; letter-spacing: 2px; color: var(--ink-4); text-align: center; }
 .at-scroll { overflow-x: auto; border: 1px solid var(--border); }
-.at-table { border-collapse: collapse; font-family: var(--mono); font-size: 11px; width: 100%; }
-.at-table th { font-size: 7.5px; letter-spacing: 1px; color: var(--ink-4); font-weight: normal; padding: 4px 5px; border-bottom: 1px solid var(--border); background: var(--panel); }
-.at-table td { padding: 2px 6px; text-align: center; border-bottom: 1px solid var(--border); }
+.at-table { border-collapse: collapse; font-family: var(--mono); font-size: 14px; width: 100%; }
+.at-table th { font-size: 9px; letter-spacing: 1.5px; color: var(--ink-3); font-weight: normal; padding: 7px 8px; border-bottom: 1.5px solid var(--border); background: var(--panel); }
+.at-table td { padding: 4.5px 9px; text-align: center; border-bottom: 1px solid var(--border); }
+.at-table tbody tr:nth-child(even) td { background: var(--panel); }
 .at-table tr:last-child td { border-bottom: none; }
-.at-dec { color: var(--ink-4); }
-.at-ch { color: var(--ink); border-right: 1px solid var(--border); }
+.at-dec { color: var(--ink-3); font-size: 12.5px; }
+.at-ch { color: var(--ink); border-right: 1.5px solid var(--border); }
 .at-table td.at-ch:last-child { border-right: none; }
-.at-ch b { color: var(--phase-color); }
-.at-ctrl { font-size: 8.5px; letter-spacing: .5px; color: var(--ink-4); }
-.at-note { font-size: 10.5px; line-height: 1.6; color: var(--ink-3); }
+.at-ch b { color: var(--phase-color); font-size: 15px; }
+.at-ctrl { font-size: 10px; letter-spacing: .5px; color: var(--ink-4); }
+.at-table td.at-hi { background: var(--phase-color-light); box-shadow: inset 0 -2px 0 var(--phase-color); }
+.at-hi-key { background: var(--phase-color-light); box-shadow: inset 0 -2px 0 var(--phase-color); padding: 0 4px; }
+.at-note { font-size: 12px; line-height: 1.7; color: var(--ink-3); }
 .at-note b { color: var(--ink); }
 
 /* ── REDUCED MOTION (accessibility floor) ─────────────────────

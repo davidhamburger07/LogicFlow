@@ -2177,13 +2177,18 @@ export const PHASES = [
           html: '<div class="pi-text">An image is a <strong>grid of pixels</strong>, and each pixel\'s colour is a number. How many bits that number needs is the <strong>colour depth</strong>: 1 bit gives 2 colours (pure black/white), 8 bits give 256, and the 24-bit <strong>#RRGGBB</strong> codes you built in Hex Colours give 16.7 million.</div>'
             + '<div class="pi-text">That leads to the formula the exam always asks: <strong>file size (bits) = width × height × colour depth</strong> — a number for every pixel. Divide by <strong>8</strong> to get bytes. More pixels (higher <strong>resolution</strong>) or more bits per pixel (higher <strong>colour depth</strong>) = a sharper, richer image — and a bigger file. It\'s always a trade-off.</div>',
           diagram: 'bitmap-grid' },
-        { part: 'PART 2 · IMAGES', heading: 'HOW TO · PAINT AN IMAGE FROM BITS',
-          html: '<div class="pi-text">In a moment you\'ll turn rows of binary into a picture. It\'s simpler than it looks — work <strong>one row at a time, left to right</strong>:</div>'
-            + '<div class="pi-text"><strong>1.</strong> Take the top row of bits.<br>'
-            + '<strong>2.</strong> Read it left → right: a <strong>1</strong> means "fill this pixel in" (black), a <strong>0</strong> means "leave it" (white).<br>'
-            + '<strong>3.</strong> Click every pixel that\'s a 1.<br>'
-            + '<strong>4.</strong> Drop to the next row and repeat until the picture appears.</div>'
-            + '<div class="pi-text">Example — the row <code>0 1 1 0</code> becomes ⬜⬛⬛⬜: skip, fill, fill, skip. That\'s the whole idea of a black-and-white bitmap: <strong>one bit per pixel</strong>.</div>' },
+        { part: 'PART 2 · IMAGES', heading: 'WATCH · BITS BECOME A PICTURE',
+          html: '<div class="pi-text">In a moment you\'ll turn rows of binary into a picture yourself. First watch it happen — step through this small image <strong>one row at a time</strong> and see each <strong>1</strong> become a black pixel, each <strong>0</strong> stay white.</div>',
+          q: { type: 'BITMAP', walk: true,
+            rows: [
+              [0, 1, 0, 1, 0],
+              [1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1],
+              [0, 1, 1, 1, 0],
+              [0, 0, 1, 0, 0],
+            ],
+            title: 'Watch: each row of bits paints one line of the image.',
+            explain: 'Row by row, left to right: <strong>1 = fill the pixel, 0 = skip it</strong>. Five rows of five bits make this 5 × 5 picture — one bit per pixel is all a black-and-white bitmap is.' } },
         { part: 'PART 2 · IMAGES',
           q: { type: 'BITMAP',
             rows: [
@@ -2202,14 +2207,11 @@ export const PHASES = [
             formula: 'size (bits) = width × height × colour depth',
             steps: [{ expr: '200 × 100', answer: 20000 }, { expr: '{prev} × 3', answer: 60000, unit: 'bits' }],
             explain: '200 × 100 × 3 = <strong>60,000 bits</strong>. Formula first, then substitute — that\'s where the marks are.' } },
-        { part: 'PART 2 · IMAGES', heading: 'HOW TO · THE BUS STOP METHOD',
-          html: '<div class="pi-text">Next you\'ll divide by 8 to turn bits into bytes. If short division — "the bus stop" — is rusty, here it is step by step. The divisor sits <strong>outside</strong> the bus stop, the number goes <strong>inside</strong>, and you work <strong>left → right</strong>, writing each answer digit <em>on top</em> and carrying any remainder onto the front of the next digit.</div>'
-            + '<div class="pi-text">Worked example — <strong>6144 ÷ 8</strong>:</div>'
-            + '<div class="pi-text"><strong>1.</strong> 8 into <strong>6</strong>? Doesn\'t go — write <strong>0</strong> on top, carry the <strong>6</strong>.<br>'
-            + '<strong>2.</strong> 8 into <strong>61</strong> (the carried 6, then the 1)? <strong>7</strong> times (7×8 = 56), remainder <strong>5</strong> — write 7, carry 5.<br>'
-            + '<strong>3.</strong> 8 into <strong>54</strong>? <strong>6</strong> times (6×8 = 48), remainder <strong>6</strong> — write 6, carry 6.<br>'
-            + '<strong>4.</strong> 8 into <strong>64</strong>? <strong>8</strong> exactly (8×8 = 64), remainder <strong>0</strong> — write 8.</div>'
-            + '<div class="pi-text">Read the top row: <strong>0768 = 768</strong>. The little carried numbers are the whole trick — always push the remainder onto the front of the next digit. Now try it on the real number below.</div>' },
+        { part: 'PART 2 · IMAGES', heading: 'WATCH · THE BUS STOP METHOD',
+          html: '<div class="pi-text">Next you\'ll divide by 8 to turn bits into bytes. If short division — "the bus stop" — is rusty, watch one first. The divisor sits <strong>outside</strong> the bus stop, the number goes <strong>inside</strong>, and you work <strong>left → right</strong>: each answer digit goes <em>on top</em>, and any remainder is carried onto the front of the next digit. Step through <strong>6144 ÷ 8</strong>.</div>',
+          q: { type: 'BUSSTOP', walk: true, dividend: 6144, divisor: 8,
+            title: 'Watch: 6144 ÷ 8 with the bus stop method, one digit at a time.',
+            explain: 'Left to right: 8 into 6 doesn\'t go (0, carry 6) · 8 into 61 goes 7 r 5 · 8 into 54 goes 6 r 6 · 8 into 64 goes 8 exactly. Read the top: <strong>768</strong>. The carried remainders are the whole trick.' } },
         { part: 'PART 2 · IMAGES',
           q: { type: 'BUSSTOP', dividend: 60000, divisor: 8, unit: 'bytes',
             title: 'Part 2: bits → bytes. Divide 60,000 by 8 using the bus stop method.',
