@@ -909,6 +909,17 @@ function endOfPlaylist() {
   showPhaseComplete();
 }
 
+// Record an arcade run against its personal best and return a short results
+// suffix: nothing on the first run, a "new best!" flourish when beaten,
+// otherwise a reminder of the score to chase.
+function recordArcadeBest(mode, topicId, value, unit) {
+  const prev = store.getBest(mode, topicId);
+  const isNew = store.recordBest(mode, topicId, value);
+  if (isNew && prev != null) return ' · 🏆 NEW PERSONAL BEST!';
+  if (prev != null) return ` · Best: ${prev} ${unit}`;
+  return '';
+}
+
 // ---- phase complete (campaign + revision) ------------------
 function showPhaseComplete() {
   stopTimer();
@@ -949,6 +960,7 @@ function showPhaseComplete() {
     el['pc-next-btn'].onclick = () => nav.toRevision();
     el['pc-map-btn'].style.display = 'none';
   } else if (launchContext === 'timed') {
+    el['pc-sub'].textContent += recordArcadeBest('timed', phase.id, phasePts, 'pts');
     el['pc-next-btn'].textContent = 'BACK TO ARCADE →';
     el['pc-next-btn'].onclick = () => nav.toArcade();
     el['pc-map-btn'].style.display = 'none';
@@ -994,9 +1006,10 @@ function survivalResults(cleared) {
   el['go-eyebrow'].textContent = cleared ? 'FLAWLESS RUN' : 'STREAK BROKEN';
   el['go-label'].textContent = 'QUESTIONS SURVIVED';
   el['go-score'].textContent = survivedCount;
-  el['go-msg'].textContent = cleared
+  el['go-msg'].textContent = (cleared
     ? `Flawless — you answered all ${survivedCount} questions without a single slip. Final score ${score}.`
-    : `You answered ${survivedCount} in a row before the streak broke. Final score ${score}.`;
+    : `You answered ${survivedCount} in a row before the streak broke. Final score ${score}.`)
+    + recordArcadeBest('survival', 'all', survivedCount, 'survived');
   el['go-restart-btn'].textContent = 'PLAY AGAIN';
   el['go-restart-btn'].onclick = () => startSurvival();
   el['go-modes-btn'].textContent = 'BACK TO ARCADE';
@@ -1045,7 +1058,8 @@ function paperResults() {
   el['go-eyebrow'].textContent = 'PAPER COMPLETE';
   el['go-label'].textContent = `MARKS AWARDED · ${pct}%`;
   el['go-score'].textContent = `${paperMarks}/${paperTotal}`;
-  el['go-msg'].textContent = `You awarded yourself ${paperMarks} out of ${paperTotal} marks (${pct}%). ${band}`;
+  el['go-msg'].textContent = `You awarded yourself ${paperMarks} out of ${paperTotal} marks (${pct}%). ${band}`
+    + recordArcadeBest('pastpaper', PHASES[sessionPhaseIdx].id, paperMarks, 'marks');
   el['go-restart-btn'].textContent = 'RETAKE PAPER';
   el['go-restart-btn'].onclick = () => launchPhase(sessionPhaseIdx, 'pastpaper');
   el['go-modes-btn'].textContent = 'BACK TO ARCADE';

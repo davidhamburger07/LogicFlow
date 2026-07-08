@@ -14,7 +14,7 @@
 import * as engine from './engine.js';
 import * as screens from './screens.js';
 import { SFX } from './sound.js';
-import { MUSIC } from './music.js';
+import { MUSIC, MUSIC_ENABLED } from './music.js';
 import * as store from './storage.js';
 import * as cloud from './cloud.js';
 import * as cg from './crazygames.js';
@@ -46,6 +46,8 @@ function paintMusic(on) {
     b.classList.toggle('active', (b.dataset.music === 'on') === on));
 }
 function wireMusic() {
+  // music is parked until real tracks land — hide the toggle, never auto-start
+  if (!MUSIC_ENABLED) { const row = $('settings-music-row'); if (row) row.hidden = true; return; }
   document.querySelectorAll('#settings-music .settings-seg').forEach(b =>
     b.addEventListener('click', () => {
       SFX.uiClick();

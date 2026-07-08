@@ -537,12 +537,18 @@ export function showArcadeModes() {
   dom.arcadeModeList.innerHTML = '';
   dom.arcadeModeList.append(
     arcadeModeCard('EXAM RUSH', 'TIMED', 'Beat the clock — every question runs on a countdown. Run out of time and it is marked wrong.', () => showArcadeTopics('timed')),
-    arcadeModeCard('SURVIVAL', 'SUDDEN DEATH', 'One wrong answer ends the run — chase your longest streak across every topic.', () => engine.startSurvival()),
+    arcadeModeCard('SURVIVAL', 'SUDDEN DEATH', 'One wrong answer ends the run — chase your longest streak across every topic.' + bestSuffix('survival', 'all', 'survived'), () => engine.startSurvival()),
     arcadeModeCard('PAST PAPER', 'EXAM STYLE', 'Sit a topic as an exam paper — write answers, reveal the mark scheme, self-mark, and get a grade.', () => showArcadeTopics('pastpaper')),
     arcadeModeCard('PRACTICAL CODING', 'WRITE CODE', 'Write real programs across the syllabus — reveal a model answer in your exam board’s notation and self-mark against the mark scheme.', () => engine.startPractical()),
   );
   engine.showScreen('arcade-modes');
 }
+// "· 🏆 Best: N unit" for a picker, or '' if there's no personal best yet.
+function bestSuffix(mode, topicId, unit) {
+  const b = store.getBest(mode, topicId);
+  return b == null ? '' : ` · 🏆 Best: ${b} ${unit}`;
+}
+
 function arcadeModeCard(title, tag, sub, onClick, disabled) {
   const b = h('button', 'arcade-mode' + (disabled ? ' disabled' : ''));
   b.innerHTML = `<span class="arcade-mode-tag">${tag}</span><span class="arcade-mode-title">${title}</span>`
@@ -560,9 +566,10 @@ export function showArcadeTopics(mode = 'timed') {
   PHASES.forEach((phase, i) => {
     if (mode === 'pastpaper' && !(phase.paper && phase.paper.length)) return;   // only topics with a paper
     const st = store.getTopicStats(phase.id);
-    const meta = mode === 'pastpaper'
+    const meta = (mode === 'pastpaper'
       ? `${phase.paper.length} questions · ${phase.paper.reduce((s, q) => s + (q.marks || 0), 0)} marks`
-      : `${phase.questions.length} questions${st.started ? ' · ' + st.mastery + '% mastery' : ''}`;
+      : `${phase.questions.length} questions${st.started ? ' · ' + st.mastery + '% mastery' : ''}`)
+      + bestSuffix(mode, phase.id, mode === 'pastpaper' ? 'marks' : 'pts');
     const card = h('button', 'arcade-topic');
     card.style.setProperty('--node-color', phase.color);
     card.innerHTML = `

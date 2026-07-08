@@ -349,6 +349,29 @@ const asciiMap = (() => {
   return wrap('0 0 440 160', body);
 })();
 
+// 11a-ii) the full 7-bit ASCII table (codes 0–127) — an HTML table, not SVG;
+// the lesson renderer innerHTMLs the diagram string either way.
+const asciiTable = (() => {
+  const CTRL = ['NUL', 'SOH', 'STX', 'ETX', 'EOT', 'ENQ', 'ACK', 'BEL', 'BS', 'HT', 'LF', 'VT', 'FF', 'CR', 'SO', 'SI', 'DLE', 'DC1', 'DC2', 'DC3', 'DC4', 'NAK', 'SYN', 'ETB', 'CAN', 'EM', 'SUB', 'ESC', 'FS', 'GS', 'RS', 'US'];
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const glyph = c => {
+    if (c < 32) return `<span class="at-ctrl">${CTRL[c]}</span>`;
+    if (c === 32) return `<span class="at-ctrl">SP</span>`;
+    if (c === 127) return `<span class="at-ctrl">DEL</span>`;
+    return `<b>${esc(String.fromCharCode(c))}</b>`;
+  };
+  let rows = '';
+  for (let r = 0; r < 32; r++) {
+    let cells = '';
+    for (let col = 0; col < 4; col++) { const c = r + col * 32; cells += `<td class="at-dec">${c}</td><td class="at-ch">${glyph(c)}</td>`; }
+    rows += `<tr>${cells}</tr>`;
+  }
+  const head = '<tr>' + '<th>Dec</th><th>Chr</th>'.repeat(4) + '</tr>';
+  return `<div class="at-wrap"><div class="at-cap">THE FULL 7-BIT ASCII TABLE · CODES 0–127</div>`
+    + `<div class="at-scroll"><table class="at-table"><thead>${head}</thead><tbody>${rows}</tbody></table></div>`
+    + `<div class="at-note">Codes <b>0–31</b> and <b>127</b> are non-printing <b>control codes</b> (NUL, tab, line-feed…); <b>32</b> is space. The characters exams test — digits, upper- and lower-case letters — sit in <b>48–122</b>.</div></div>`;
+})();
+
 // 11b) a 1-bit bitmap — pixels are bits
 const bitmapGrid = (() => {
   const rows = ['00111100', '01000010', '10100101', '10000001', '10100101', '10011001', '01000010', '00111100'];
@@ -930,6 +953,7 @@ export const SVG_DIAGRAMS = {
   'truth-table-anatomy': truthAnatomy,
   'gate-chain': gateChain,
   'ascii-map': asciiMap,
+  'ascii-table': asciiTable,
   'bitmap-grid': bitmapGrid,
   'sound-sampling': soundSampling,
   'compression-paths': compressionPaths,

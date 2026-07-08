@@ -2929,6 +2929,30 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 .qb-reroll:hover { border-color: var(--node-color); color: var(--node-color); }
 .qb-gen-samples { display: flex; flex-direction: column; gap: 6px; }
 
+/* KB/MB unit-conversion table (data-representation lesson) */
+.pi-convert { display: flex; justify-content: center; margin: 10px 0; }
+.cv-table { border-collapse: collapse; font-family: var(--mono); font-size: 12px; }
+.cv-table th { font-size: 9px; letter-spacing: 1px; color: var(--ink-3); font-weight: normal; padding: 7px 16px; border: 1px solid var(--border); background: var(--panel); }
+.cv-table th span { font-size: 7.5px; color: var(--ink-4); letter-spacing: .5px; }
+.cv-table td { padding: 7px 16px; border: 1px solid var(--border); text-align: center; color: var(--ink-2); }
+.cv-table td:first-child { color: var(--phase-color); text-align: right; }
+
+/* full 7-bit ASCII table (data-representation lesson) */
+.at-wrap { width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 8px; }
+.at-cap { font-size: 8px; letter-spacing: 2px; color: var(--ink-4); text-align: center; }
+.at-scroll { overflow-x: auto; border: 1px solid var(--border); }
+.at-table { border-collapse: collapse; font-family: var(--mono); font-size: 11px; width: 100%; }
+.at-table th { font-size: 7.5px; letter-spacing: 1px; color: var(--ink-4); font-weight: normal; padding: 4px 5px; border-bottom: 1px solid var(--border); background: var(--panel); }
+.at-table td { padding: 2px 6px; text-align: center; border-bottom: 1px solid var(--border); }
+.at-table tr:last-child td { border-bottom: none; }
+.at-dec { color: var(--ink-4); }
+.at-ch { color: var(--ink); border-right: 1px solid var(--border); }
+.at-table td.at-ch:last-child { border-right: none; }
+.at-ch b { color: var(--phase-color); }
+.at-ctrl { font-size: 8.5px; letter-spacing: .5px; color: var(--ink-4); }
+.at-note { font-size: 10.5px; line-height: 1.6; color: var(--ink-3); }
+.at-note b { color: var(--ink); }
+
 /* ── REDUCED MOTION (accessibility floor) ─────────────────────
    Near-zero durations rather than `animation: none`, so animations with
    fill modes still land on their end state (content stays visible); the

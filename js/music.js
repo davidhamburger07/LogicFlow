@@ -11,7 +11,15 @@
 // main.js owns persistence/UI: starts it on the first user gesture (autoplay
 // policy) when the setting is on, mirrors the volume slider + mute, and the
 // ad layer mutes it during ads.
+//
+// PARKED: the generative loop didn't sound good enough, so MUSIC_ENABLED is
+// false — no auto-start, and the Settings toggle is hidden. All the plumbing
+// (volume/mute/ad-mute mirroring) stays live so licensed music FILES can be
+// dropped in later: replace the oscillator source with a looped
+// AudioBufferSource/<audio> feeding the same bus, then flip the flag back on.
 // ============================================================
+
+export const MUSIC_ENABLED = false;   // flip when real music tracks land
 
 export const MUSIC = (() => {
   const LEVEL = 0.16;               // music sits far below SFX (master fraction)

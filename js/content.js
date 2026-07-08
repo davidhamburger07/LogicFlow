@@ -2147,9 +2147,12 @@ export const PHASES = [
           diagram: 'ascii-map',
           check: {
             title: 'ASCII uses 7 bits per character. How many different characters can it represent?',
-            options: ['128 (2⁷)', '7', '256', '64'],
-            answer: '128 (2⁷)',
+            options: ['128', '7', '256', '64'],
+            answer: '128',
             explain: '7 bits → 2⁷ = <strong>128</strong> characters (codes 0–127). That limit is exactly why Unicode was needed for other languages and emoji.' } },
+        { part: 'PART 1 · TEXT', heading: 'THE FULL ASCII TABLE',
+          html: '<div class="pi-text">Here it is — every one of the <strong>128</strong> codes ASCII can store. You don\'t memorise it; you learn the <strong>anchors</strong> and count on from there. Spot the patterns the exam relies on: the <strong>digits 0–9</strong> start at 48, the <strong>capitals A–Z</strong> at 65, and the <strong>lowercase a–z</strong> at 97 — exactly 32 above their capitals. The first 32 codes aren\'t letters at all; they\'re <strong>control codes</strong> like tab and line-feed.</div>',
+          diagram: 'ascii-table' },
         { part: 'PART 1 · TEXT', heading: 'WATCH · A BYTE IS JUST A NUMBER',
           html: '<div class="pi-text">The big idea in action: a character is stored as a <strong>number</strong> in a byte. Watch the byte <code>01000001</code> read out to denary — it comes to <strong>65</strong>, and 65 is the ASCII code for <strong>\'A\'</strong>. It is the exact same binary-reading you already know.</div>',
           q: { type: 'BINREAD', bits: [0, 1, 0, 0, 0, 0, 0, 1], walk: true, title: 'Read the byte 01000001 to denary — that number is a letter\'s ASCII code.' } },
@@ -2174,6 +2177,13 @@ export const PHASES = [
           html: '<div class="pi-text">An image is a <strong>grid of pixels</strong>, and each pixel\'s colour is a number. How many bits that number needs is the <strong>colour depth</strong>: 1 bit gives 2 colours (pure black/white), 8 bits give 256, and the 24-bit <strong>#RRGGBB</strong> codes you built in Hex Colours give 16.7 million.</div>'
             + '<div class="pi-text">That leads to the formula the exam always asks: <strong>file size (bits) = width × height × colour depth</strong> — a number for every pixel. Divide by <strong>8</strong> to get bytes. More pixels (higher <strong>resolution</strong>) or more bits per pixel (higher <strong>colour depth</strong>) = a sharper, richer image — and a bigger file. It\'s always a trade-off.</div>',
           diagram: 'bitmap-grid' },
+        { part: 'PART 2 · IMAGES', heading: 'HOW TO · PAINT AN IMAGE FROM BITS',
+          html: '<div class="pi-text">In a moment you\'ll turn rows of binary into a picture. It\'s simpler than it looks — work <strong>one row at a time, left to right</strong>:</div>'
+            + '<div class="pi-text"><strong>1.</strong> Take the top row of bits.<br>'
+            + '<strong>2.</strong> Read it left → right: a <strong>1</strong> means "fill this pixel in" (black), a <strong>0</strong> means "leave it" (white).<br>'
+            + '<strong>3.</strong> Click every pixel that\'s a 1.<br>'
+            + '<strong>4.</strong> Drop to the next row and repeat until the picture appears.</div>'
+            + '<div class="pi-text">Example — the row <code>0 1 1 0</code> becomes ⬜⬛⬛⬜: skip, fill, fill, skip. That\'s the whole idea of a black-and-white bitmap: <strong>one bit per pixel</strong>.</div>' },
         { part: 'PART 2 · IMAGES',
           q: { type: 'BITMAP',
             rows: [
@@ -2192,17 +2202,37 @@ export const PHASES = [
             formula: 'size (bits) = width × height × colour depth',
             steps: [{ expr: '200 × 100', answer: 20000 }, { expr: '{prev} × 3', answer: 60000, unit: 'bits' }],
             explain: '200 × 100 × 3 = <strong>60,000 bits</strong>. Formula first, then substitute — that\'s where the marks are.' } },
+        { part: 'PART 2 · IMAGES', heading: 'HOW TO · THE BUS STOP METHOD',
+          html: '<div class="pi-text">Next you\'ll divide by 8 to turn bits into bytes. If short division — "the bus stop" — is rusty, here it is step by step. The divisor sits <strong>outside</strong> the bus stop, the number goes <strong>inside</strong>, and you work <strong>left → right</strong>, writing each answer digit <em>on top</em> and carrying any remainder onto the front of the next digit.</div>'
+            + '<div class="pi-text">Worked example — <strong>6144 ÷ 8</strong>:</div>'
+            + '<div class="pi-text"><strong>1.</strong> 8 into <strong>6</strong>? Doesn\'t go — write <strong>0</strong> on top, carry the <strong>6</strong>.<br>'
+            + '<strong>2.</strong> 8 into <strong>61</strong> (the carried 6, then the 1)? <strong>7</strong> times (7×8 = 56), remainder <strong>5</strong> — write 7, carry 5.<br>'
+            + '<strong>3.</strong> 8 into <strong>54</strong>? <strong>6</strong> times (6×8 = 48), remainder <strong>6</strong> — write 6, carry 6.<br>'
+            + '<strong>4.</strong> 8 into <strong>64</strong>? <strong>8</strong> exactly (8×8 = 64), remainder <strong>0</strong> — write 8.</div>'
+            + '<div class="pi-text">Read the top row: <strong>0768 = 768</strong>. The little carried numbers are the whole trick — always push the remainder onto the front of the next digit. Now try it on the real number below.</div>' },
         { part: 'PART 2 · IMAGES',
           q: { type: 'BUSSTOP', dividend: 60000, divisor: 8, unit: 'bytes',
             title: 'Part 2: bits → bytes. Divide 60,000 by 8 using the bus stop method.',
             explain: '8 into 6 doesn\'t go (write 0, carry 6) · 8 into 60 goes <strong>7</strong> r 4 · 8 into 40 goes <strong>5</strong> · then two easy 0s → <strong>7,500 bytes</strong>.' } },
         { part: 'PART 2 · IMAGES', heading: 'KILOBYTES & MEGABYTES',
-          html: '<div class="pi-text">Bytes are still tiny, so we scale up: <strong>bytes → KB → MB → GB</strong>. Most GCSE boards use the <strong>decimal</strong> convention — divide by <strong>1,000</strong> at each step (1 KB = 1,000 bytes, 1 MB = 1,000 KB). <strong>WJEC</strong> uses the <strong>binary</strong> convention instead: divide by <strong>1,024</strong> each step (because 1,024 = 2¹⁰, the true power-of-two kilobyte). Same idea, different divisor — always use the one your board expects.</div>' },
-        { part: 'PART 2 · IMAGES', heading: 'WJEC FOCUS · DIVIDE BY 1024', onlyBoards: ['WJEC'],
-          q: { type: 'CALC', title: 'WJEC: a file is 8,388,608 bits. Give its size in MB using the binary convention — ÷8, then ÷1024, then ÷1024.',
-            formula: 'bits → bytes (÷8) → KB (÷1024) → MB (÷1024)',
-            steps: [{ expr: '8388608 ÷ 8', answer: 1048576, unit: 'bytes' }, { expr: '{prev} ÷ 1024', answer: 1024, unit: 'KB' }, { expr: '{prev} ÷ 1024', answer: 1, unit: 'MB' }],
-            explain: 'WJEC uses the <strong>binary</strong> convention: ÷8 for bytes, then ÷<strong>1024</strong> for KB and ÷<strong>1024</strong> again for MB. 8,388,608 bits = 1,048,576 bytes = 1,024 KB = <strong>1 MB</strong>. (Other boards divide by 1,000 instead.)' } },
+          html: '<div class="pi-text">Bytes are tiny, so we scale up the same way we go from metres to kilometres: <strong>bytes → KB → MB → GB → TB</strong>, dividing at each step.</div>'
+            + '<div class="pi-convert"><table class="cv-table"><thead><tr><th></th><th>Decimal<br><span>most boards</span></th><th>Binary<br><span>WJEC</span></th></tr></thead><tbody>'
+            + '<tr><td>1 KB</td><td>1,000 bytes</td><td>1,024 bytes</td></tr>'
+            + '<tr><td>1 MB</td><td>1,000 KB</td><td>1,024 KB</td></tr>'
+            + '<tr><td>1 GB</td><td>1,000 MB</td><td>1,024 MB</td></tr>'
+            + '<tr><td>1 TB</td><td>1,000 GB</td><td>1,024 GB</td></tr>'
+            + '</tbody></table></div>'
+            + '<div class="pi-text">Here\'s the catch that trips students up. A kilobyte is <em>really</em> <strong>1,024</strong> bytes — computers count in powers of two, and 1,024 = 2¹⁰. But 1,024 is awkward to divide by, so <strong>most boards round it down to 1,000</strong> (the decimal convention) to keep the maths simple. <strong>WJEC</strong> keeps the exact <strong>1,024</strong> (the binary convention). Same idea, different accuracy — <strong>use the divisor your board expects</strong>: <strong>1,000</strong> for AQA / OCR / Eduqas / Edexcel, <strong>1,024</strong> for WJEC.</div>' },
+        { part: 'PART 2 · IMAGES', heading: 'WJEC FOCUS · ÷8 WITH THE BUS STOP', onlyBoards: ['WJEC'],
+          html: '<div class="pi-text">WJEC uses the <strong>binary</strong> convention (÷1,024, not ÷1,000). A file is <strong>8,388,608 bits</strong> — a big number, so turning bits into bytes is a job for the bus stop method. Divide it by 8.</div>',
+          q: { type: 'BUSSTOP', dividend: 8388608, divisor: 8, unit: 'bytes',
+            title: 'WJEC, step 1 — divide 8,388,608 bits by 8 to get bytes, using the bus stop method.',
+            explain: '8,388,608 ÷ 8 = <strong>1,048,576 bytes</strong>. Next, divide by 1,024 twice to reach MB.' } },
+        { part: 'PART 2 · IMAGES', onlyBoards: ['WJEC'],
+          q: { type: 'CALC', title: 'WJEC, step 2 — take those 1,048,576 bytes to MB the binary way: ÷1,024, then ÷1,024.',
+            formula: 'bytes → KB (÷1024) → MB (÷1024)',
+            steps: [{ expr: '1048576 ÷ 1024', answer: 1024, unit: 'KB' }, { expr: '{prev} ÷ 1024', answer: 1, unit: 'MB' }],
+            explain: 'WJEC divides by <strong>1,024</strong> (not 1,000): 1,048,576 bytes = 1,024 KB = <strong>1 MB</strong>. (÷1,024 is really a long division, so most people spot the powers of two — 1,048,576 = 1,024 × 1,024 — rather than work it by hand.)' } },
         { part: 'PART 2 · IMAGES',
           q: { type: 'SIGNAL', pixels: 4800, budget: 24000, depths: [1, 2, 4, 8], minDepth: 4,
             title: 'Restore the corrupted image: raise the colour depth until it\'s legible — but stay inside the bandwidth budget.',

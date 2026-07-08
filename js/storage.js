@@ -33,6 +33,7 @@ const KEY = {
   courses: 'logicflow.courses',       // owned course ids (the free base course is implicit)
   activeCourse: 'logicflow.activeCourse',
   music: 'logicflow.music',           // background music on/off (default on)
+  bests: 'logicflow.bests',           // arcade personal bests: { "mode:topicId": value }
 };
 
 const BOARDS = ['AQA', 'OCR', 'Eduqas', 'WJEC', 'Edexcel'];   // WJEC + Edexcel use Python, like Eduqas
@@ -476,6 +477,21 @@ export function resetProgress() {
     localStorage.removeItem(KEY.schedule);
     localStorage.removeItem(KEY.campaign);
   } catch (e) {}
+}
+
+// ============================================================
+// arcade personal bests — highest-is-best, keyed by "mode:topicId" (topicId
+// is a phase id, or 'all' for the cross-topic Survival mode). Rides the backup
+// code + cloud save via snapshotState. Capped implicitly (few modes × topics).
+// ============================================================
+export function getBests() { const v = readJSON(KEY.bests, {}); return (v && typeof v === 'object') ? v : {}; }
+export function getBest(mode, topicId = 'all') { const v = getBests()[`${mode}:${topicId}`]; return typeof v === 'number' ? v : null; }
+// Records value if it beats the stored best (or none yet). Returns true if it was a new best.
+export function recordBest(mode, topicId, value) {
+  if (!Number.isFinite(value)) return false;
+  const bests = getBests(), key = `${mode}:${topicId}`, prev = bests[key];
+  if (typeof prev === 'number' && value <= prev) return false;
+  bests[key] = value; writeJSON(KEY.bests, bests); return true;
 }
 
 // ============================================================
