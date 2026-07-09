@@ -2497,6 +2497,11 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 .pi-specnote strong { color: var(--warn-ink); }
 .pi-code { font-family: var(--mono); font-size: 12.5px; line-height: 1.6; background: var(--panel); border-left: 3px solid var(--phase-color); padding: 10px 13px; margin: 6px 0 10px; color: var(--ink); overflow-x: auto; }
 .pi-code b { color: var(--phase-color); font-weight: 600; }
+/* the exam definition to memorise — a labelled spec callout inside a teach page */
+.pi-defbox { background: var(--phase-color-light); border-left: 4px solid var(--phase-color); padding: 11px 15px; margin: 10px 0; text-align: left; }
+.pi-defbox-label { font-size: 13px; letter-spacing: 2.5px; color: var(--phase-color); margin-bottom: 6px; font-weight: 600; }
+.pi-defbox-text { font-size: 14px; line-height: 1.75; color: var(--ink); }
+.pi-defbox-text strong { color: var(--phase-color); }
 
 /* per-question "optional extension" banner (board slider — e.g. SQL write-commands) */
 #q-enrich { margin-top: 10px; display: flex; flex-direction: column; gap: 9px; align-items: flex-start; }

@@ -46,7 +46,8 @@ export const PHASES = [
         // ── THE BIG IDEA — context: history, why binary, where it's used ──
         { part: 'THE BIG IDEA', heading: 'WHY WE COUNT IN TENS',
           html: '<div class="pi-text">Long before computers, humans needed to count — and almost every culture on Earth settled on the same system: <strong>denary</strong>, also called <strong>base 10</strong>. Why ten? Look at your hands. We have <strong>ten fingers</strong>, so we naturally count 1, 2, 3 … up to 10, run out, and start a new group. That "start a new group" is the whole trick behind writing big numbers.</div>'
-            + '<div class="pi-text">Base 10 uses just <strong>ten digits</strong> — 0, 1, 2, 3, 4, 5, 6, 7, 8, 9. To write anything bigger than 9 we use <strong>place value</strong>: each column to the left is worth <strong>ten times</strong> the one before it — units, tens, hundreds, thousands, and so on. Those same ten digits can now build <em>any</em> number, no matter how large.</div>',
+            + '<div class="pi-text">Base 10 uses just <strong>ten digits</strong> — 0, 1, 2, 3, 4, 5, 6, 7, 8, 9. To write anything bigger than 9 we use <strong>place value</strong>: each column to the left is worth <strong>ten times</strong> the one before it — units, tens, hundreds, thousands, and so on. Those same ten digits can now build <em>any</em> number, no matter how large.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · DENARY</div><div class="pi-defbox-text">The <strong>base-10</strong> number system we use every day. It has ten digits, <strong>0 to 9</strong>.</div></div>',
           diagram: 'decimal-place-value' },
         { part: 'THE BIG IDEA', heading: 'THE SECRET INGREDIENT: ZERO',
           html: '<div class="pi-text">So the number <strong>274</strong> isn\'t really "two seven four" — it means <strong>2 hundreds + 7 tens + 4 units</strong>. The position of each digit tells you what it\'s worth. Slide a digit one column to the left and it becomes ten times bigger.</div>'
@@ -55,7 +56,9 @@ export const PHASES = [
         { part: 'THE BIG IDEA', heading: 'WHY COMPUTERS COUNT IN TWOS',
           html: '<div class="pi-text">A computer has no fingers — it has <strong>electricity</strong>. Deep inside every chip are <strong>billions of microscopic switches</strong> called <strong>transistors</strong>, and each one can only ever be in one of two states: <strong>ON</strong> or <strong>OFF</strong> (a high or a low voltage). That gives a computer two symbols to work with, not ten.</div>'
             + '<div class="pi-text">Why only two? Because two states are <strong>reliable</strong>. Real electrical signals are noisy — voltages wobble up and down — but it\'s still easy to tell a clear ON from a clear OFF. Trying to read ten slightly-different voltage levels (one for each decimal digit) would be slow and full of errors. Two states are fast, cheap and almost impossible to mistake.</div>'
-            + '<div class="pi-text">So computers use <strong>binary</strong> — <strong>base 2</strong>. It has just two digits, <strong>0 and 1</strong>, and a single one is called a <strong>bit</strong> (short for <em>binary digit</em>). The clever part: binary uses the <em>exact same place-value idea</em> as decimal. The only difference is that each column is worth <strong>×2</strong> instead of ×10 — every step left <strong>doubles</strong>.</div>',
+            + '<div class="pi-text">So computers use <strong>binary</strong> — <strong>base 2</strong>. It has just two digits, <strong>0 and 1</strong>, and a single one is called a <strong>bit</strong> (short for <em>binary digit</em>). The clever part: binary uses the <em>exact same place-value idea</em> as decimal. The only difference is that each column is worth <strong>×2</strong> instead of ×10 — every step left <strong>doubles</strong>.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · BINARY</div><div class="pi-defbox-text">The <strong>base-2</strong> number system computers use. It has only two digits, <strong>0 and 1</strong>.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · BIT</div><div class="pi-defbox-text">A single <strong>b</strong>inary dig<strong>it</strong> — one 0 or 1. The <strong>smallest unit of data</strong> in a computer.</div></div>',
           diagram: 'decimal-binary' },
         { part: 'THE BIG IDEA', heading: 'A BIT OF HISTORY',
           html: '<div class="pi-text">Binary feels modern, but the idea is over <strong>300 years old</strong>. In <strong>1703</strong> the mathematician <strong>Gottfried Leibniz</strong> worked out a complete system of arithmetic using nothing but 0 and 1 — he thought it was rather beautiful. Then in the <strong>1850s</strong>, <strong>George Boole</strong> invented a kind of logic where every statement is either <strong>true or false</strong> — which lines up perfectly with 1 and 0.</div>'
@@ -123,6 +126,8 @@ export const PHASES = [
         // ── PART 3 — BITS, BYTES & HOW MANY VALUES ──
         { part: 'PART 3 · BITS & BYTES', heading: 'BITS, NIBBLES & BYTES',
           html: '<div class="pi-text">A single bit isn\'t much use on its own, so bits are <strong>grouped together</strong>. Four bits make a <strong>nibble</strong>, and eight bits make a <strong>byte</strong>. The byte is the basic chunk computers work in — for example, one character of text is usually stored in a single byte.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · NIBBLE</div><div class="pi-defbox-text">A group of <strong>4 bits</strong> (half a byte).</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · BYTE</div><div class="pi-defbox-text">A group of <strong>8 bits</strong>. One byte can store <strong>256 different values</strong> (0 to 255).</div></div>'
             + '<div class="pi-text">Each extra bit you add <strong>doubles</strong> how many different values you can store: 1 bit → 2 values, 2 bits → 4, 3 bits → 8, 4 bits → 16 … In general, <strong>n bits store 2ⁿ values</strong>. A full byte (8 bits) therefore stores 2⁸ = <strong>256</strong> values — which we count as <strong>0 to 255</strong>.</div>',
           diagram: 'bit-nibble-byte' },
         { part: 'PART 3 · BITS & BYTES', heading: 'SCALING UP: KB, MB, GB',
@@ -261,7 +266,8 @@ export const PHASES = [
 
         // ── PART 1 — KNOW THE GATES ──
         { part: 'PART 1 · KNOW THE GATES', heading: 'FOUR GATES, FOUR EVERYDAY RULES',
-          html: '<div class="pi-text">The fastest way to learn the gates is to spot them in everyday rules. <strong>AND</strong> is the strict one: a safe opens only with a valid keycard <em>AND</em> the right PIN — both, or nothing. <strong>OR</strong> is the generous one: a burglar alarm rings if the window <em>OR</em> the door opens — either is enough (both also counts).</div>'
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · LOGIC GATE</div><div class="pi-defbox-text">An electronic component that takes one or more <strong>binary inputs</strong> and produces a single <strong>binary output</strong>, following a fixed rule.</div></div>'
+            + '<div class="pi-text">The fastest way to learn the gates is to spot them in everyday rules. <strong>AND</strong> is the strict one: a safe opens only with a valid keycard <em>AND</em> the right PIN — both, or nothing. <strong>OR</strong> is the generous one: a burglar alarm rings if the window <em>OR</em> the door opens — either is enough (both also counts).</div>'
             + '<div class="pi-text"><strong>NOT</strong> simply inverts: a street light switches ON when it is <em>NOT</em> daytime. And <strong>XOR</strong> — "exclusive OR" — fires only when its inputs <em>differ</em>: think of a landing light wired to two switches, one downstairs and one upstairs. Flipping either switch toggles the light, so it\'s on exactly when the two switches are in <em>different</em> positions. In the questions below, pick the gate that matches each rule.</div>' },
         { part: 'PART 1 · KNOW THE GATES',
           q: { type: 'GATEOUT', tests: [
@@ -294,7 +300,8 @@ export const PHASES = [
 
         // ── PART 2 — TRUTH TABLES ──
         { part: 'PART 2 · TRUTH TABLES', heading: 'WHAT A TRUTH TABLE IS — AND WHY',
-          html: '<div class="pi-text">A gate\'s rule in words ("1 if at least one input is 1…") can hide surprises. So engineers use a <strong>truth table</strong>: a table listing <strong>every possible input combination</strong>, one row each, with the output <strong>Q</strong> written next to it. It\'s the circuit\'s complete behaviour, with nowhere for a surprise to hide — which is why circuits are designed, checked and examined with them.</div>'
+          html: '<div class="pi-text">A gate\'s rule in words ("1 if at least one input is 1…") can hide surprises. So engineers use a <strong>truth table</strong> — the circuit\'s complete behaviour, with nowhere for a surprise to hide. It\'s how circuits are designed, checked and examined.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · TRUTH TABLE</div><div class="pi-defbox-text">A table showing the <strong>output for every possible combination of inputs</strong> to a gate or circuit.</div></div>'
             + '<div class="pi-text">The rows aren\'t in a random order: a 1-input gate (like NOT) has 2¹ = <strong>2 rows</strong>, and a 2-input gate has 2² = <strong>4 rows</strong>, always listed by <strong>counting upwards in binary</strong> — 0,1 for one input; 00, 01, 10, 11 for two — the same counting you learned in Binary Basics. That way you can\'t miss a case or write one twice.</div>',
           diagram: 'truth-table-anatomy' },
         { part: 'PART 2 · TRUTH TABLES', heading: 'THE METHOD — ONE ROW AT A TIME',
@@ -591,11 +598,13 @@ export const PHASES = [
             + '<div class="pi-text">Early programmers hit this problem the moment computers existed: they had to read raw memory off printouts and blinking panel lights, bit by bit. What they needed was a <strong>shorthand</strong> — a way to write binary that\'s dramatically shorter for people, while staying trivially easy to translate back into the exact bits. That shorthand is <strong>hexadecimal</strong>.</div>' },
         { part: 'THE BIG IDEA', heading: 'BASE 16: COUNTING PAST NINE',
           html: '<div class="pi-text"><strong>Hexadecimal</strong> (or just <strong>hex</strong>) is <strong>base 16</strong>. You already know the pattern from base 10 and base 2: a base-16 system needs <strong>sixteen different digits</strong>, and each column is worth <strong>×16</strong> the one to its right.</div>'
-            + '<div class="pi-text">But we only have ten digit symbols (0–9) — so hex <strong>borrows letters</strong> for the rest: <strong>A = 10, B = 11, C = 12, D = 13, E = 14, F = 15</strong>. That feels strange at first — "A is a number?!" — but A–F are ordinary values that just happen to be written as letters. Counting in hex goes 0, 1, 2 … 8, 9, A, B, C, D, E, F — <em>then</em> you run out and start a new column: 10 (which means sixteen).</div>',
+            + '<div class="pi-text">But we only have ten digit symbols (0–9) — so hex <strong>borrows letters</strong> for the rest: <strong>A = 10, B = 11, C = 12, D = 13, E = 14, F = 15</strong>. That feels strange at first — "A is a number?!" — but A–F are ordinary values that just happen to be written as letters. Counting in hex goes 0, 1, 2 … 8, 9, A, B, C, D, E, F — <em>then</em> you run out and start a new column: 10 (which means sixteen).</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · HEXADECIMAL</div><div class="pi-defbox-text">The <strong>base-16</strong> number system. It uses sixteen digits: <strong>0–9 and A–F</strong> (where A = 10 and F = 15).</div></div>',
           diagram: 'hex-digits' },
         { part: 'THE BIG IDEA', heading: 'WHY 16? BECAUSE 16 = 2⁴',
           html: '<div class="pi-text">Base 16 wasn\'t picked at random. Since <strong>16 = 2⁴</strong>, one hex digit holds <em>exactly</em> the same amount of information as <strong>four bits — one nibble</strong>. A byte splits perfectly into two nibbles, so <strong>one byte is always exactly two hex digits</strong>. The ugly 24-bit string from the first page collapses to just <strong>C3 43 F2</strong>.</div>'
-            + '<div class="pi-text">That perfect fit is why hex is everywhere people read raw data by eye: <strong>MAC addresses</strong> printed on routers (<code>2A:5B:C3:…</code>), <strong>colour codes</strong> in web design (<code>#FF8800</code>), <strong>memory addresses</strong> in a debugger (<code>0xFF3A</code> — the <code>0x</code> prefix means "this is hex"), and Windows <strong>error codes</strong> like <code>0x80070005</code>. Remember: the computer never uses hex — underneath it is <em>all still binary</em>. Hex exists purely to save human eyes.</div>',
+            + '<div class="pi-text">That perfect fit is why hex is everywhere people read raw data by eye: <strong>MAC addresses</strong> printed on routers (<code>2A:5B:C3:…</code>), <strong>colour codes</strong> in web design (<code>#FF8800</code>), <strong>memory addresses</strong> in a debugger (<code>0xFF3A</code> — the <code>0x</code> prefix means "this is hex"), and Windows <strong>error codes</strong> like <code>0x80070005</code>. Remember: the computer never uses hex — underneath it is <em>all still binary</em>. Hex exists purely to save human eyes.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM ANSWER · WHY IS HEX USED?</div><div class="pi-defbox-text">Hex is <strong>easier for humans to read, write and remember</strong> than binary, and it\'s <strong>quick to convert</strong> because <strong>one hex digit = exactly 4 bits</strong>. (The computer itself still only uses binary.)</div></div>',
           diagram: 'bit-nibble-byte' },
         { part: 'THE BIG IDEA', use: ['video'],
           check: {
@@ -789,7 +798,8 @@ export const PHASES = [
         // ── THE BIG IDEA ──
         { part: 'THE BIG IDEA', heading: 'EVERY PICTURE IS MADE OF PIXELS',
           html: '<div class="pi-text">Look very closely at any screen — a phone, a TV, this one — and the picture dissolves into a grid of tiny dots called <strong>pixels</strong>. A full-HD screen packs in about <strong>2 million</strong> of them. Every image you\'ve ever seen on a screen is nothing more than those dots, each set to one colour.</div>'
-            + '<div class="pi-text">Zoom in further and each pixel is really <strong>three miniature lights</strong> sitting side by side: one <strong>red</strong>, one <strong>green</strong>, one <strong>blue</strong>. A pixel\'s colour is decided by nothing more than <strong>how brightly each of the three lights shines</strong>. So to store a colour, a computer only needs to store <strong>three numbers</strong> — the brightness of R, G and B.</div>',
+            + '<div class="pi-text">Zoom in further and each pixel is really <strong>three miniature lights</strong> sitting side by side: one <strong>red</strong>, one <strong>green</strong>, one <strong>blue</strong>. A pixel\'s colour is decided by nothing more than <strong>how brightly each of the three lights shines</strong>. So to store a colour, a computer only needs to store <strong>three numbers</strong> — the brightness of R, G and B.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · PIXEL</div><div class="pi-defbox-text">A single <strong>picture element</strong> — the smallest dot of an image. Each pixel stores <strong>one colour</strong>.</div></div>',
           diagram: 'pixel-rgb' },
         { part: 'THE BIG IDEA', heading: 'MIXING LIGHT, NOT PAINT',
           html: '<div class="pi-text">Mixing <strong>light</strong> behaves differently from mixing paint. Paint absorbs light — mix lots of colours and you head towards muddy brown. Light <strong>adds</strong> — the more you switch on, the brighter and whiter it gets. This is called <strong>additive colour</strong>.</div>'
@@ -797,7 +807,8 @@ export const PHASES = [
           diagram: 'rgb-mix' },
         { part: 'THE BIG IDEA', heading: 'THE CODE: #RRGGBB',
           html: '<div class="pi-text">Now the part you already know how to do. Each channel\'s brightness is stored as <strong>one byte</strong> — 0 to 255 — and you\'ve just learned that one byte is written as exactly <strong>two hex digits</strong>. So a whole colour is <strong>six hex digits</strong>: two for red, two for green, two for blue, with a <strong>#</strong> on the front. That\'s the famous <strong>#RRGGBB</strong> code.</div>'
-            + '<div class="pi-text"><strong>00</strong> means that channel is off; <strong>FF</strong> means full brightness (255). So <code>#FF8800</code> reads as: red FF (full), green 88 (about half), blue 00 (off) — which mixes to <strong>orange</strong>. These codes are used everywhere real colours get picked: web design (CSS), game skins, art apps, brand style guides.</div>',
+            + '<div class="pi-text"><strong>00</strong> means that channel is off; <strong>FF</strong> means full brightness (255). So <code>#FF8800</code> reads as: red FF (full), green 88 (about half), blue 00 (off) — which mixes to <strong>orange</strong>. These codes are used everywhere real colours get picked: web design (CSS), game skins, art apps, brand style guides.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · HEX COLOUR CODE (#RRGGBB)</div><div class="pi-defbox-text">Six hex digits storing a colour as <strong>three pairs</strong> — red, green, blue. Each pair is <strong>one byte</strong> (00–FF, i.e. 0–255) giving that channel\'s brightness.</div></div>',
           diagram: 'hex-anatomy' },
         { part: 'THE BIG IDEA', use: ['video'],
           check: {
@@ -996,8 +1007,12 @@ export const PHASES = [
       pages: [
         // ── THE BIG IDEA ──
         { part: 'THE BIG IDEA', heading: 'A NETWORK OF NETWORKS',
-          html: '<div class="pi-text">One computer is useful; computers <strong>connected</strong> are transformative. A <strong>network</strong> is just computers linked to share things — files, printers, an internet connection, messages. Your school\'s machines form a <strong>LAN</strong> (Local Area Network): one site, owned and run by one organisation.</div>'
-            + '<div class="pi-text">Link sites <em>across cities and oceans</em> and you have a <strong>WAN</strong> (Wide Area Network), running over third-party infrastructure like phone lines and undersea fibre. The biggest WAN of all is <strong>the internet</strong> — literally a <em>network of networks</em>: millions of LANs, each reaching the world through its <strong>router</strong>. When you message a friend abroad, you\'re hopping LAN → WAN → LAN in milliseconds.</div>',
+          html: '<div class="pi-text">A <strong>network</strong> is computers connected together so they can share things. They share files, printers, an internet connection and messages. That\'s the whole idea.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · NETWORK</div><div class="pi-defbox-text">Two or more computers <strong>connected together</strong> to share data and resources.</div></div>'
+            + '<div class="pi-text">There are two sizes of network, and you must know both. Your school\'s network is a <strong>LAN</strong> — everything is in one place, and the school owns the equipment. The <strong>internet</strong> is the opposite: it connects computers across the whole world.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · LAN (LOCAL AREA NETWORK)</div><div class="pi-defbox-text">A network that covers a <strong>small geographical area</strong>, usually one site — like a school, office or home. The organisation usually <strong>owns the hardware</strong>.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · WAN (WIDE AREA NETWORK)</div><div class="pi-defbox-text">A network that covers a <strong>large geographical area</strong>, connecting LANs together. The connections are usually <strong>hired from telecom companies</strong> (phone lines, undersea cables). The internet is the biggest WAN.</div></div>'
+            + '<div class="pi-text">So the internet is really a <strong>network of networks</strong> — millions of LANs, all joined by a WAN.</div>',
           diagram: 'lan-wan' },
         { part: 'THE BIG IDEA', use: ['video'],
           check: {
@@ -1008,8 +1023,11 @@ export const PHASES = [
 
         // ── PART 1 — LAN, WAN & HARDWARE ──
         { part: 'PART 1 · LAN, WAN & HARDWARE', heading: 'THE KIT THAT CONNECTS YOU',
-          html: '<div class="pi-text">Two boxes do the connecting, and the exam <em>loves</em> to make you tell them apart. A <strong>switch</strong> connects devices <strong>within</strong> one network, using their <strong>MAC addresses</strong> (the unique hardware address burned into every network interface). A <strong>router</strong> connects <strong>different networks together</strong>, forwarding packets between them using <strong>IP addresses</strong> — your home router is the doorway from your LAN to the internet.</div>'
-            + '<div class="pi-text">Memory hook: <em>switch = inside, router = between</em>. Every networked device also needs a <strong>NIC</strong> (Network Interface Card), and wireless devices join through a <strong>WAP</strong> (Wireless Access Point).</div>' },
+          html: '<div class="pi-text">Two boxes do the connecting. The exam <em>loves</em> to ask the difference between them, so learn these two definitions well.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · SWITCH</div><div class="pi-defbox-text">Connects devices together <strong>within one network</strong> (a LAN). It uses <strong>MAC addresses</strong> to send data only to the device it is meant for.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · ROUTER</div><div class="pi-defbox-text">Connects <strong>different networks together</strong>. It forwards packets between networks using <strong>IP addresses</strong>. Your home router connects your LAN to the internet.</div></div>'
+            + '<div class="pi-text">Memory hook: <strong>switch = inside</strong> one network. <strong>Router = between</strong> networks.</div>'
+            + '<div class="pi-text">Two more parts to know. A <strong>MAC address</strong> is a unique hardware address built into every network device at the factory — it never changes. A <strong>NIC</strong> (Network Interface Card) is the part inside a device that lets it connect to a network at all. Wireless devices connect through a <strong>WAP</strong> (Wireless Access Point).</div>' },
         { part: 'PART 1 · LAN, WAN & HARDWARE',
           q: { type: 'MC', title: 'What is the difference between a LAN and a WAN?',
             options: ['LAN covers a small area; WAN spans large geographic areas', 'LAN is wireless; WAN is wired', 'LAN uses TCP; WAN uses IP', 'LAN is faster than WAN always'],
@@ -1033,8 +1051,11 @@ export const PHASES = [
 
         // ── PART 2 — PACKETS ──
         { part: 'PART 2 · PACKETS', heading: 'CHOP IT UP, SHIP IT, REBUILD IT',
-          html: '<div class="pi-text">Here\'s the internet\'s cleverest trick. Data is never sent as one big lump — it\'s <strong>split into packets</strong>, each a few kilobytes, and each stamped with a <strong>header</strong>: the destination <strong>IP address</strong>, the sender\'s, and a <strong>sequence number</strong>. Routers forward each packet hop by hop — and different packets may take <strong>completely different routes</strong>, dodging busy or broken links. At the far end they\'re <strong>reassembled in order</strong>.</div>'
-            + '<div class="pi-text">This is <strong>packet switching</strong>: efficient (everyone shares the wires) and resilient (a dead link just gets routed around). Each packet also carries a <strong>TTL</strong> — a hop budget so a lost packet can\'t wander forever. In the mini-game, you are the router: hop the packet to its destination before the TTL runs out.</div>',
+          html: '<div class="pi-text">Data is never sent across the internet in one big lump. It is <strong>chopped into small chunks called packets</strong>. Each packet travels on its own. At the other end, they are put back together.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · PACKET</div><div class="pi-defbox-text">A <strong>small unit of data</strong>. Each packet has a <strong>header</strong> containing the destination IP address, the source IP address and a <strong>sequence number</strong> — so the packets can be reassembled in the right order.</div></div>'
+            + '<div class="pi-text">Here\'s the clever part: different packets can take <strong>different routes</strong>. If one path is busy or broken, the routers just send packets another way. This whole system is called <strong>packet switching</strong>.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · PACKET SWITCHING</div><div class="pi-defbox-text">Data is <strong>split into packets</strong> which are sent across the network <strong>independently</strong> — each may take a different route — and are <strong>reassembled in order</strong> at the destination.</div></div>'
+            + '<div class="pi-text">One more term: every packet has a <strong>TTL</strong> (time to live) — a hop budget. It stops a lost packet wandering the network forever. In the mini-game below, you are the router: get the packet to its destination before the TTL runs out.</div>',
           diagram: 'packet-journey' },
         { part: 'PART 2 · PACKETS',
           q: { type: 'MC', title: 'You send a 20 MB photo to a friend. How does it actually travel across the internet?',
@@ -1104,8 +1125,12 @@ export const PHASES = [
 
         // ── PART 3 — PROTOCOLS & DNS ──
         { part: 'PART 3 · PROTOCOLS & DNS', heading: 'THE RULES OF THE CONVERSATION',
-          html: '<div class="pi-text">For billions of machines to understand each other they need <strong>protocols</strong> — agreed sets of rules for communication. The core pair is <strong>TCP/IP</strong>: IP addresses and routes the packets, TCP checks they all arrived and reassembles them. On top sit the specialists: <strong>HTTP</strong> transfers web pages (<strong>HTTPS</strong> adds encryption — the padlock), <strong>FTP</strong> transfers files, <strong>SMTP</strong> sends email and <strong>IMAP</strong> fetches it.</div>'
-            + '<div class="pi-text">And before any of that: <strong>DNS (Domain Name System)</strong>, the internet\'s phonebook. You type <code>bbc.co.uk</code>; DNS looks up its <strong>IP address</strong> (151.101.0.81); your browser connects there. Without DNS you\'d be memorising numbers for every site you visit.</div>' },
+          html: '<div class="pi-text">Billions of machines can only talk to each other because they all follow the same rules. A set of rules for communication is called a <strong>protocol</strong>.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · PROTOCOL</div><div class="pi-defbox-text">An <strong>agreed set of rules</strong> for how data is transmitted between devices.</div></div>'
+            + '<div class="pi-text">The two most important protocols work as a team, called <strong>TCP/IP</strong>. <strong>IP</strong> gives every device an address and routes the packets to the right place. <strong>TCP</strong> checks every packet arrived and rebuilds them in the right order.</div>'
+            + '<div class="pi-text">Then each job on the internet has its own specialist protocol. <strong>HTTP</strong> transfers web pages. <strong>HTTPS</strong> is the same but <strong>encrypted</strong> — that\'s the padlock in your browser. <strong>FTP</strong> transfers files. <strong>SMTP</strong> sends email; <strong>IMAP</strong> fetches it.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · DNS (DOMAIN NAME SYSTEM)</div><div class="pi-defbox-text">Translates a <strong>domain name</strong> (like bbc.co.uk) into its <strong>IP address</strong> so your browser can connect to the right server.</div></div>'
+            + '<div class="pi-text">Without DNS, you would have to remember a number address for every website you visit.</div>' },
         { part: 'PART 3 · PROTOCOLS & DNS',
           q: { type: 'MC', title: 'What does DNS stand for — and do?',
             options: ['Domain Name System — it turns website names into IP addresses', 'Data Network Server — it stores websites', 'Digital Node Switch — it connects LANs', 'Direct Name Service — it registers usernames'],
@@ -1284,7 +1309,8 @@ export const PHASES = [
 
         // ── PART 1 — BUBBLE SORT ──
         { part: 'PART 1 · BUBBLE SORT', heading: 'COMPARE NEIGHBOURS, SWAP, REPEAT',
-          html: '<div class="pi-text">One <strong>pass</strong> of a bubble sort sweeps left to right, comparing each <strong>adjacent pair</strong>: if the left value is bigger, <strong>SWAP</strong>; otherwise <strong>KEEP</strong> and move on. By the end of a pass the <strong>largest value has "bubbled" to the end</strong> — it wins every comparison it\'s part of.</div>'
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · BUBBLE SORT</div><div class="pi-defbox-text">Repeatedly <strong>compares neighbouring pairs</strong> and <strong>swaps them if they are in the wrong order</strong>, passing through the list until a full pass needs no swaps.</div></div>'
+            + '<div class="pi-text">One <strong>pass</strong> of a bubble sort sweeps left to right, comparing each <strong>adjacent pair</strong>: if the left value is bigger, <strong>SWAP</strong>; otherwise <strong>KEEP</strong> and move on. By the end of a pass the <strong>largest value has "bubbled" to the end</strong> — it wins every comparison it\'s part of.</div>'
             + '<div class="pi-text">Then you pass again (the settled end can be skipped), and again, until a whole pass needs <strong>no swaps</strong> — that\'s the sorted signal. Exams make you trace a pass showing every comparison and swap, and each one earns a mark. Trace two below: SWAP when the left is bigger, KEEP when it isn\'t.</div>' },
         { part: 'PART 1 · BUBBLE SORT',
           q: { type: 'TRACE', algo: 'bubble', array: [5, 3, 8, 1],
@@ -1297,7 +1323,8 @@ export const PHASES = [
 
         // ── PART 2 — INSERTION SORT (OCR / Edexcel / WJEC / Eduqas — NOT AQA) ──
         { part: 'PART 2 · INSERTION SORT', heading: 'CARDS IN YOUR HAND', onlyBoards: ['OCR', 'Edexcel', 'WJEC', 'Eduqas'],
-          html: '<div class="pi-text"><strong>Insertion sort</strong> works the way you sort playing cards: keep a <strong>sorted hand</strong> on the left, take the next card, and <strong>slide it left</strong> past any bigger card until it drops into place. Simple, and fast on nearly-sorted lists — but O(n²) in general.</div>'
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · INSERTION SORT</div><div class="pi-defbox-text">Takes each item in turn and <strong>inserts it into its correct position</strong> among the items already sorted.</div></div>'
+            + '<div class="pi-text"><strong>Insertion sort</strong> works the way you sort playing cards: keep a <strong>sorted hand</strong> on the left, take the next card, and <strong>slide it left</strong> past any bigger card until it drops into place. Simple, and fast on nearly-sorted lists — but O(n²) in general.</div>'
             + '<div class="pi-text">In the trace below you drive it: <strong>SHIFT</strong> the current card left while the card to its left is bigger, then <strong>DROP</strong> it once it fits — one decision per comparison.</div>' },
         { part: 'PART 2 · INSERTION SORT', heading: 'YOUR TURN · INSERT EACH CARD', onlyBoards: ['OCR', 'Edexcel', 'WJEC', 'Eduqas'],
           html: '<div class="pi-text">Sort the whole list by insertion: <strong>SHIFT</strong> while the left card is bigger, <strong>DROP</strong> when it sits in place.</div>',
@@ -1307,7 +1334,8 @@ export const PHASES = [
 
         // ── PART 2 — MERGE SORT (AQA / OCR / Edexcel / Eduqas — NOT WJEC) ──
         { part: 'PART 2 · MERGE SORT', heading: 'DIVIDE, THEN CONQUER', onlyBoards: ['AQA', 'OCR', 'Edexcel', 'Eduqas'],
-          html: '<div class="pi-text"><strong>Merge sort</strong> is divide-and-conquer: <strong>split</strong> the list in half, and in half again, until every piece is a single item — then <strong>merge</strong> the pieces back together in order. Harder to trace by hand and it uses more memory, but it scales beautifully: <strong>O(n log n)</strong>.</div>'
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · MERGE SORT</div><div class="pi-defbox-text">Repeatedly <strong>splits the list in half</strong> until each part is a single item, then <strong>merges the parts back together in order</strong>.</div></div>'
+            + '<div class="pi-text"><strong>Merge sort</strong> is divide-and-conquer: <strong>split</strong> the list in half, and in half again, until every piece is a single item — then <strong>merge</strong> the pieces back together in order. Harder to trace by hand and it uses more memory, but it scales beautifully: <strong>O(n log n)</strong>.</div>'
             + '<div class="pi-text">Below you run both halves of the method: press <strong>SPLIT</strong> until every group is a single item, then <strong>merge</strong> by clicking the <strong>smaller head</strong> of the two groups each step.</div>' },
         { part: 'PART 2 · MERGE SORT', heading: 'YOUR TURN · SPLIT, THEN MERGE', onlyBoards: ['AQA', 'OCR', 'Edexcel', 'Eduqas'],
           html: '<div class="pi-text">Divide it down to single items, then build the sorted list by always taking the <strong>smaller</strong> of the two heads.</div>',
@@ -1442,6 +1470,7 @@ export const PHASES = [
         // ── THE BIG IDEA ──
         { part: 'THE BIG IDEA', heading: 'SECRETS IN PLAIN SIGHT',
           html: '<div class="pi-text">You now know how packets travel — and here\'s the uncomfortable part: they cross <strong>shared wires and airwaves</strong>. On café Wi-Fi, anyone nearby can <em>capture</em> every packet you send. The internet\'s answer isn\'t to hide the data — it\'s to make captured data <strong>useless</strong>. That\'s <strong>encryption</strong>: scrambling a message (<em>plaintext</em>) into gibberish (<em>ciphertext</em>) using a <strong>key</strong>, so only someone with the right key can unscramble it.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · ENCRYPTION</div><div class="pi-defbox-text">Scrambling data into a form that <strong>cannot be understood without the key</strong> — so intercepted data is useless to an attacker.</div></div>'
             + '<div class="pi-text">The idea is over <strong>2,000 years old</strong>. Julius Caesar protected military orders by <strong>shifting every letter</strong> of the alphabet a fixed number of places. His cipher is easy to crack today, but it teaches the two ingredients every cipher still has: an <strong>algorithm</strong> (shift the letters) and a <strong>key</strong> (how far).</div>',
           diagram: 'caesar-strip' },
         { part: 'THE BIG IDEA', use: ['video'],
@@ -1473,7 +1502,9 @@ export const PHASES = [
         // ── PART 2 — MODERN KEYS ──
         { part: 'PART 2 · MODERN KEYS', heading: 'ONE SHARED KEY — OR A PAIR',
           html: '<div class="pi-text">Modern <strong>symmetric</strong> encryption is Caesar\'s great-grandchild: <strong>one shared key</strong> both locks and unlocks, and it\'s <em>fast</em>. But it inherits Caesar\'s real weakness — the <strong>key exchange problem</strong>. How do you get the key to the other person when someone may be listening to everything you send?</div>'
-            + '<div class="pi-text"><strong>Asymmetric</strong> encryption solves it with a mathematically linked <strong>key pair</strong>: a <strong>public key</strong> you share with the world (it can only <em>lock</em>) and a <strong>private key</strong> you never share (the only thing that <em>unlocks</em>). Now strangers can send you secrets with no prior arrangement. <strong>HTTPS</strong> — the padlock — uses both: asymmetric to safely agree a fresh symmetric <em>session key</em>, then fast symmetric encryption for everything after. Best of both worlds.</div>',
+            + '<div class="pi-text"><strong>Asymmetric</strong> encryption solves it with a mathematically linked <strong>key pair</strong>: a <strong>public key</strong> you share with the world (it can only <em>lock</em>) and a <strong>private key</strong> you never share (the only thing that <em>unlocks</em>). Now strangers can send you secrets with no prior arrangement. <strong>HTTPS</strong> — the padlock — uses both: asymmetric to safely agree a fresh symmetric <em>session key</em>, then fast symmetric encryption for everything after. Best of both worlds.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · SYMMETRIC ENCRYPTION</div><div class="pi-defbox-text"><strong>One shared key</strong> is used to both encrypt and decrypt the data.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · ASYMMETRIC ENCRYPTION</div><div class="pi-defbox-text">Uses a <strong>key pair</strong>: the <strong>public key encrypts</strong>; only the matching <strong>private key can decrypt</strong>.</div></div>',
           diagram: 'enc-keys' },
         { part: 'PART 2 · MODERN KEYS',
           q: { type: 'MC', title: 'What is the difference between symmetric and asymmetric encryption?',
@@ -1594,7 +1625,9 @@ export const PHASES = [
         // ── THE BIG IDEA ──
         { part: 'THE BIG IDEA', heading: 'THE BRAIN OF THE MACHINE',
           html: '<div class="pi-text">Everything you\'ve learned so far meets here. Binary numbers get stored; logic gates make decisions — and the <strong>CPU (Central Processing Unit)</strong> is where billions of those gates are wired into a machine that <strong>runs programs</strong>. Every app, game and web page is ultimately a long list of tiny instructions, and the CPU\'s whole life is executing them, one after another, mind-bogglingly fast.</div>'
-            + '<div class="pi-text">The blueprint is older than you\'d think. In <strong>1945 John von Neumann</strong> described the design we still use: keep the <strong>program AND its data together in the same memory</strong>, both stored as binary. That one idea — the <em>stored program</em> — is why software exists: to make the machine do something new you just load different instructions, no rewiring required.</div>' },
+            + '<div class="pi-text">The blueprint is older than you\'d think. In <strong>1945 John von Neumann</strong> described the design we still use: keep the <strong>program AND its data together in the same memory</strong>, both stored as binary. That one idea — the <em>stored program</em> — is why software exists: to make the machine do something new you just load different instructions, no rewiring required.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · CPU</div><div class="pi-defbox-text">The <strong>Central Processing Unit</strong> — the part of the computer that <strong>fetches, decodes and executes instructions</strong>.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · VON NEUMANN ARCHITECTURE</div><div class="pi-defbox-text">A computer design where <strong>program instructions and data are stored together in the same memory</strong>.</div></div>' },
         { part: 'THE BIG IDEA', heading: 'MEET THE CAST',
           html: '<div class="pi-text">Inside the CPU is a small cast, each part with one fixed job — and the exam wants you to <strong>name each one and say what it does</strong>. Meet them now; you\'ll watch them work in a moment.</div>'
             + '<div class="pi-text"><strong>Control Unit (CU)</strong> — the director. It <strong>decodes</strong> each instruction and sends out <strong>control signals</strong> that tell every other part what to do and when, managing the flow of data through the processor and driving the whole fetch–decode–execute cycle.</div>'
@@ -1605,7 +1638,9 @@ export const PHASES = [
           html: '<div class="pi-text">Three more parts keep the processor fed and in step — and every one is fair game in the exam.</div>'
             + '<div class="pi-text"><strong>Cache</strong> — a small pool of <strong>very fast memory</strong> sitting between the CPU and RAM. It keeps <strong>copies of the instructions and data used most often</strong>, so the CPU rarely has to make the slow trip out to RAM. It comes in levels — <strong>L1</strong> (smallest and fastest, right on the core), then L2 and L3 (larger but slower). More cache means fewer slow RAM trips, so more instructions finished per second.</div>'
             + '<div class="pi-text"><strong>Clock</strong> — sends out a steady electrical <strong>pulse</strong> that keeps every step in time; one tick drives the cycle forward. Its <strong>clock speed</strong> is measured in <strong>hertz</strong>: a 3 GHz clock ticks <strong>3 billion times a second</strong>, so the CPU can run that many fetch–decode–execute cycles per second.</div>'
-            + '<div class="pi-text"><strong>Buses</strong> — the bundles of wires that carry everything between the CPU and memory. The <strong>address bus</strong> carries memory addresses <em>one way</em>, CPU → memory ("which location?"); the <strong>data bus</strong> carries the actual data and instructions <em>both ways</em> ("what is stored there?"); and the <strong>control bus</strong> carries the CU\'s control and timing signals. Beyond the chip sit <strong>RAM</strong> and <strong>ROM</strong> — you\'ll contrast those in Part 3.</div>' },
+            + '<div class="pi-text"><strong>Buses</strong> — the bundles of wires that carry everything between the CPU and memory. The <strong>address bus</strong> carries memory addresses <em>one way</em>, CPU → memory ("which location?"); the <strong>data bus</strong> carries the actual data and instructions <em>both ways</em> ("what is stored there?"); and the <strong>control bus</strong> carries the CU\'s control and timing signals. Beyond the chip sit <strong>RAM</strong> and <strong>ROM</strong> — you\'ll contrast those in Part 3.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · CACHE</div><div class="pi-defbox-text">A small amount of <strong>very fast memory on or near the CPU</strong> that stores <strong>frequently used instructions and data</strong>, so the CPU waits less for RAM.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · CLOCK SPEED</div><div class="pi-defbox-text">The number of <strong>fetch–decode–execute cycles per second</strong>, measured in <strong>hertz</strong> (3 GHz = 3 billion cycles per second).</div></div>' },
         { part: 'THE BIG IDEA', use: ['video'],
           check: {
             title: 'From the video: what are the three stages the CPU repeats for every instruction?',
@@ -1631,6 +1666,12 @@ export const PHASES = [
             ],
             title: 'Match each component to its job.',
             explain: '<strong>PC</strong> = next instruction\'s address · <strong>MAR</strong> = the address in use · <strong>MDR</strong> = the data that arrived · <strong>CU</strong> = the director.' } },
+        { part: 'PART 1 · THE COMPONENTS',
+          q: { type: 'MC', title: 'An instruction has just been read out of RAM. Which register is it sitting in?',
+            desc: 'MAR = where (the address) · MDR = what (the data).',
+            options: ['The Memory Data Register (MDR)', 'The Memory Address Register (MAR)', 'The Program Counter (PC)', 'The Accumulator (ACC)'],
+            answer: 'The Memory Data Register (MDR)',
+            explain: 'Anything that <em>comes out of</em> (or is about to go into) memory lands in the <strong>MDR</strong> — it holds the <strong>data</strong>. The MAR only ever holds the <strong>address</strong> being accessed. Swapping these two is the single most common mistake on this topic.' } },
         { part: 'PART 1 · THE COMPONENTS', heading: 'YOUR TURN',
           html: '<div class="pi-text">Solo check — remember the trap: <strong>MAR = where</strong> (address), <strong>MDR = what</strong> (data). Which register bookmarks the <em>next</em> instruction?</div>',
           q: { type: 'MC', exam: true, title: 'On your own: which register holds the address of the NEXT instruction to be fetched?',
@@ -1700,10 +1741,16 @@ export const PHASES = [
             done: 'The instruction LOAD 3 has loaded the value 42 into the Accumulator — one full fetch–decode–execute cycle.',
             hints: ['The MAR always holds an ADDRESS (where); the MDR holds DATA (what). The ACC holds the result of the execute stage.', 'Fetch: PC→MAR, RAM→MDR, MDR→CIR, PC+1. Decode: CIR→CU. Execute a LOAD: CU→MAR, RAM→MDR, MDR→ACC.'],
             explain: '<strong>Fetch</strong> brings the instruction in (PC→MAR, RAM→MDR, MDR→CIR, then PC+1); <strong>decode</strong> hands it to the Control Unit; <strong>execute</strong> of a LOAD sends the operand address to the MAR, reads the data into the MDR, and copies it into the <strong>Accumulator</strong>. The MAR/MDR split (address vs data) and the Accumulator holding the working value are exactly what the exam tests.' } },
+        { part: 'PART 2 · THE CYCLE', heading: 'WRITE IT LIKE THE EXAM',
+          html: '<div class="pi-text">You can now <em>drive</em> the cycle — here\'s how to <strong>write it for marks</strong>. The classic question is <em>"Describe what happens during the fetch stage" (4 marks)</em>, and examiners award one mark per step <strong>with the register named</strong>:</div>'
+            + '<div class="pi-text">✓ The address of the next instruction is <strong>copied from the PC to the MAR</strong> · ✓ the instruction at that address is <strong>fetched from memory (RAM)</strong> · ✓ it is <strong>placed in the MDR</strong> (and copied to the CIR) · ✓ the <strong>PC is incremented</strong>.</div>'
+            + '<div class="pi-text">Three traps that cost real marks: writing "the CPU gets the instruction from memory" with <strong>no register names</strong> (scores almost nothing); <strong>swapping MAR and MDR</strong>; and <strong>forgetting the PC increments</strong> — that final step is nearly always a mark on its own.</div>' },
 
         // ── PART 3 — MEMORY ──
         { part: 'PART 3 · MEMORY', heading: 'RAM, ROM & THE SPEED LADDER',
           html: '<div class="pi-text">Two memories live on the motherboard, and the exam contrasts them every year. <strong>RAM</strong> is the workbench: it holds the programs and data <em>currently running</em>, it can be read <em>and</em> written, and it\'s <strong>volatile</strong> — cut the power and it\'s wiped (that\'s why unsaved work dies with a crash). <strong>ROM</strong> is the instruction card glued to the machine: tiny, <strong>read-only</strong> and <strong>non-volatile</strong>, holding the firmware/BIOS that boots the computer.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · RAM</div><div class="pi-defbox-text"><strong>Volatile</strong>, read-write main memory holding the <strong>programs and data currently in use</strong>. Contents are <strong>lost when the power is turned off</strong>.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · ROM</div><div class="pi-defbox-text"><strong>Non-volatile, read-only</strong> memory storing the <strong>bootstrap/BIOS</strong> — the startup instructions that load the operating system.</div></div>'
             + '<div class="pi-text">All the storage in a computer forms a <strong>hierarchy</strong>: registers → cache → RAM → secondary storage. Each step down is <em>bigger but slower</em>. That\'s also the recipe for performance: a faster <strong>clock speed</strong>, more <strong>cores</strong> (several instructions at once) and more <strong>cache</strong> (fewer slow trips to RAM) all buy you more completed cycles per second.</div>',
           diagram: 'memory-hierarchy',
           check: {
@@ -1728,16 +1775,32 @@ export const PHASES = [
             topLabel: 'FASTEST', bottomLabel: 'SLOWEST',
             title: 'Put the memory types in order from fastest to slowest.',
             explain: '<strong>Registers → cache → RAM → secondary storage.</strong> Closer to the CPU = faster but smaller.' } },
+        { part: 'PART 3 · MEMORY', heading: 'WHAT MAKES A CPU FAST?',
+          html: '<div class="pi-text">Every "explain CPU performance" answer is a <strong>cause → effect</strong> pair: name the mechanism, then link it to <em>more instructions completed</em> or <em>less time waiting</em>. There are exactly three factors the exam asks about — match each one to its mechanism.</div>',
+          q: { type: 'MATCH', pairs: [
+              { left: 'Clock speed', right: 'More fetch–decode–execute cycles run each second' },
+              { left: 'Number of cores', right: 'Several instructions processed at the same time (in parallel)' },
+              { left: 'Cache size', right: 'Frequently used data kept close by — fewer slow trips to RAM' },
+            ],
+            title: 'Match each performance factor to HOW it speeds the CPU up.',
+            explain: '<strong>Clock speed</strong> = cycles per second · <strong>cores</strong> = instructions in parallel (if the software supports it — never say "always twice as fast") · <strong>cache</strong> = less waiting for RAM. State the mechanism AND the effect for full marks.' } },
         { part: 'PART 3 · MEMORY', heading: 'YOUR TURN',
           html: '<div class="pi-text">On your own — think about what the GHz figure actually counts.</div>',
           q: { type: 'MC', exam: true, title: 'On your own: all else equal, why is a 3.2 GHz CPU faster than a 2.4 GHz one?',
             options: ['It carries out more fetch–decode–execute cycles each second', 'It stores more files', 'It has a bigger screen', 'It uses less electricity'],
             answer: 'It carries out more fetch–decode–execute cycles each second',
             explain: '<strong>GHz = billions of cycles per second.</strong> 3.2 GHz runs 3.2 billion fetch–decode–execute cycles a second — more instructions completed.' } },
+        { part: 'PART 3 · MEMORY', heading: 'YOUR TURN · AND THE MATHS',
+          html: '<div class="pi-text">One more, solo — clock speed is just <strong>cycles per second</strong>, so multiply by the time.</div>',
+          q: { type: 'MC', exam: true, title: 'On your own: a 2 GHz CPU runs for 3 seconds. Roughly how many fetch–decode–execute cycles does it complete?',
+            options: ['About 6 billion', 'About 2 billion', 'About 5 billion', 'About 600 million'],
+            answer: 'About 6 billion',
+            explain: '<strong>2 GHz = 2 billion cycles every second.</strong> Over 3 seconds: 2 billion × 3 = <strong>6 billion cycles</strong>. Clock speed × time = total cycles — a one-line calculation the exam loves.' } },
 
         // ── PART 4 — EMBEDDED SYSTEMS ──
         { part: 'PART 4 · EMBEDDED SYSTEMS', heading: 'THE COMPUTERS YOU NEVER SEE',
           html: '<div class="pi-text">Most CPUs aren\'t in PCs or phones at all. An <strong>embedded system</strong> is a computer <strong>built into a larger device to do one dedicated job</strong>: the controller in a washing machine, a microwave, a traffic light, a digital camera, a car\'s engine management. You use dozens every day without ever thinking "computer".</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · EMBEDDED SYSTEM</div><div class="pi-defbox-text">A computer system <strong>built into a larger device</strong> to perform a <strong>single dedicated function</strong> (e.g. a washing machine controller).</div></div>'
             + '<div class="pi-text">Because the job is fixed, the hardware can be <strong>simple, low-power and cheap</strong> — a modest CPU, a little ROM holding one unchanging program, barely any RAM. Fewer parts and no user installing random software also makes them <strong>more reliable</strong>. Contrast that with a <em>general-purpose</em> computer (laptop, desktop, server), built to run anything you throw at it.</div>'
             + '<div class="pi-examples"><div class="pi-example">🧺 washing machine · ⏲ microwave · 🚦 traffic lights · 📷 camera · 🚗 engine management — one job each</div></div>' },
         { part: 'PART 4 · EMBEDDED SYSTEMS',
@@ -1869,6 +1932,55 @@ export const PHASES = [
           'It decodes instructions and sends control signals to manage the flow of data.',
         ],
         explain: 'Two points: the CU controls/coordinates the CPU, and it decodes instructions / sends control signals. (The ALU does the actual arithmetic and logic.)' },
+      { type: 'MC', badge: 'CPU', board: 'AQA · OCR · Eduqas',
+        title: 'An instruction has just been read out of RAM. Which register is it sitting in?',
+        desc: 'One register holds addresses; another holds the data itself.',
+        options: ['The Memory Data Register (MDR)', 'The Memory Address Register (MAR)', 'The Program Counter (PC)', 'The Accumulator (ACC)'],
+        answer: 'The Memory Data Register (MDR)',
+        hints: ['MAR = where (the address); MDR = what (the data).', 'Anything coming out of memory lands in the DATA register.'],
+        explain: '<strong>The MDR (Memory Data Register)</strong> holds the data or instruction just fetched from memory (or about to be written to it). The MAR only ever holds the <strong>address</strong> being accessed. Swapping MAR and MDR is the most common mistake on this topic.' },
+      { type: 'MC', badge: 'MEMORY', board: 'AQA · OCR · Eduqas',
+        title: 'What does it mean that RAM is VOLATILE?',
+        desc: 'A keyword with exactly one exam meaning.',
+        options: ['Its contents are lost when the power is turned off', 'It can be read and written', 'It is very fast', 'It is stored on the hard drive'],
+        answer: 'Its contents are lost when the power is turned off',
+        hints: ['Think about what happens to unsaved work when the power cuts out.', '"Read and written" is true of RAM, but that is not what volatile means.'],
+        explain: '<strong>Volatile = contents are lost when the power is turned off.</strong> That is the whole definition — always word it that way. (RAM being read/write is a separate property; don\'t mix the two up in a "define volatile" question.)' },
+      { type: 'MC', badge: 'CPU', board: 'AQA · OCR · Eduqas',
+        title: 'How does cache memory improve CPU performance?',
+        desc: 'Think about where cache sits and what it stores.',
+        options: ['It stores frequently used data close to the CPU, so fewer slow trips to RAM are needed', 'It permanently stores the operating system', 'It increases the clock speed of the CPU', 'It adds more cores to the processor'],
+        answer: 'It stores frequently used data close to the CPU, so fewer slow trips to RAM are needed',
+        hints: ['Cache is small, fast memory sitting between the CPU and RAM.', 'It holds COPIES of the instructions/data used most often.'],
+        explain: '<strong>Cache is small, very fast memory on or near the CPU</strong> holding copies of frequently used instructions and data — so the CPU spends less time waiting on the (much slower) trip to RAM. The exam wants both halves: what it stores AND why that saves time.' },
+      { type: 'NUMBER', badge: 'CPU', board: 'AQA · OCR · Eduqas', unit: 'billion cycles',
+        title: 'A CPU has a clock speed of 2 GHz. How many BILLION fetch–decode–execute cycles does it complete in 3 seconds?',
+        desc: 'Clock speed = cycles per second. Multiply by the time.',
+        answer: 6,
+        hints: ['2 GHz means 2 billion cycles every second.', '2 billion per second × 3 seconds.'],
+        explain: '<strong>6 billion.</strong> 2 GHz = 2 billion cycles per second, so over 3 seconds: 2 × 3 = 6 billion cycles. Clock speed × time = total cycles.' },
+      { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 2,
+        title: 'State the purpose of ROM in a computer and give one reason why it must be non-volatile.',
+        markScheme: [
+          'ROM stores the bootstrap / BIOS / firmware — the startup instructions that load the operating system.',
+          'It must keep those instructions when the power is off, otherwise the computer could not start up.',
+        ],
+        explain: 'Careful: ROM does NOT store the operating system — it stores the small <strong>bootstrap</strong> program that <em>loads</em> the OS from storage into RAM. Because that must survive power-off, ROM has to be non-volatile.' },
+      { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 3,
+        title: 'A student says: "A quad-core 2 GHz CPU is always twice as fast as a dual-core 2 GHz CPU." Evaluate this statement.',
+        markScheme: [
+          'More cores allow more instructions to be processed at the same time (in parallel).',
+          'But the software must be written to use multiple cores.',
+          'So it CAN be faster, but it is not automatically/always twice as fast.',
+        ],
+        explain: 'The safe exam wording is "<strong>can</strong> process more instructions in parallel". Doubling cores only helps when the software splits its work across them — so "always twice as fast" is wrong.' },
+      { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 2,
+        title: 'Explain the roles of the MAR and the MDR in the fetch–decode–execute cycle.',
+        markScheme: [
+          'The MAR holds the ADDRESS of the memory location being read from or written to.',
+          'The MDR holds the DATA or instruction fetched from (or being written to) that location.',
+        ],
+        explain: 'One word each: MAR = <strong>address</strong> (where), MDR = <strong>data</strong> (what). Get those two words in and both marks are yours.' },
     ],
     paper: [
       { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 4,
@@ -1898,6 +2010,14 @@ export const PHASES = [
           'A correct brief explanation of any one named factor (the explanation mark).',
         ],
         explain: 'Three named factors = 3 marks; the 4th is the explanation. Don\'t spend all your effort naming — leave a sentence to explain one.' },
+      { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 3,
+        title: 'Explain why increasing a CPU\'s clock speed improves its performance, and state the unit clock speed is measured in.',
+        markScheme: [
+          'Clock speed is the number of (fetch–decode–execute) cycles the CPU performs per second.',
+          'A higher clock speed means more instructions are executed each second.',
+          'Clock speed is measured in hertz (Hz) / gigahertz (GHz).',
+        ],
+        explain: 'The cause → effect chain: clock speed = cycles per second → more cycles = more instructions completed per second. Don\'t forget the unit — hertz (usually GHz) — it\'s a whole mark.' },
     ]
   },
 
@@ -1935,7 +2055,8 @@ export const PHASES = [
             + '<div class="pi-text">So how do you store <strong>−5</strong> using only 0s and 1s? You can\'t just bolt a minus sign on the front. Instead, computers agree on a clever coding system called <strong>two\'s complement</strong>, where the <em>bit pattern itself</em> tells you whether the number is positive or negative.</div>' },
         { part: 'THE BIG IDEA', heading: 'THE CLEVER TRICK: A NEGATIVE COLUMN',
           html: '<div class="pi-text">Here\'s the whole idea in one sentence: make the <strong>leftmost place value negative</strong>. In ordinary 8-bit binary the columns are 128 64 32 16 8 4 2 1. In <strong>two\'s complement</strong> that leftmost column becomes <strong>−128</strong> instead of +128.</div>'
-            + '<div class="pi-text">Everything else stays the same — you still add up the lit place values — but now that one big negative column lets the same 8 bits reach all the way down to −128. If the leftmost bit is a <strong>1</strong>, the −128 is switched on and the number is <strong>negative</strong>; if it\'s a <strong>0</strong>, the number is positive. The genius part: <em>ordinary binary addition still works</em>, so a single adder circuit can handle both + and −.</div>',
+            + '<div class="pi-text">Everything else stays the same — you still add up the lit place values — but now that one big negative column lets the same 8 bits reach all the way down to −128. If the leftmost bit is a <strong>1</strong>, the −128 is switched on and the number is <strong>negative</strong>; if it\'s a <strong>0</strong>, the number is positive. The genius part: <em>ordinary binary addition still works</em>, so a single adder circuit can handle both + and −.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · TWO\'S COMPLEMENT</div><div class="pi-defbox-text">A way of representing <strong>negative numbers in binary</strong> where the most significant bit has a <strong>negative place value</strong> (−128 in 8 bits). An 8-bit number ranges from <strong>−128 to +127</strong>.</div></div>',
           diagram: 'twos-read' },
         { part: 'THE BIG IDEA', use: ['video'],
           check: {
@@ -2143,7 +2264,8 @@ export const PHASES = [
         // ── PART 1 — TEXT ──
         { part: 'PART 1 · TEXT', heading: 'ASCII: EVERY CHARACTER GETS A NUMBER',
           html: '<div class="pi-text"><strong>ASCII</strong> gives every character its own number: <strong>\'A\' = 65</strong>, and the alphabet runs in order from there — B = 66, C = 67 … so you can work out any letter\'s code by counting on from A. Lowercase letters live exactly <strong>32 higher</strong>: \'a\' = 97. Digits and punctuation have codes too (\'0\' = 48).</div>'
-            + '<div class="pi-text">ASCII is a <strong>7-bit</strong> code, so it can only hold 2⁷ = <strong>128</strong> characters — fine for English, useless for the world\'s alphabets and emoji. That\'s why <strong>Unicode</strong> exists: the same idea with far more bits, covering over a <strong>million</strong> characters, and its common UTF-8 form keeps the old ASCII codes unchanged.</div>',
+            + '<div class="pi-text">ASCII is a <strong>7-bit</strong> code, so it can only hold 2⁷ = <strong>128</strong> characters — fine for English, useless for the world\'s alphabets and emoji. That\'s why <strong>Unicode</strong> exists: the same idea with far more bits, covering over a <strong>million</strong> characters, and its common UTF-8 form keeps the old ASCII codes unchanged.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · CHARACTER SET</div><div class="pi-defbox-text">The set of characters a computer can represent, with each character given a <strong>unique binary code</strong>. <strong>ASCII</strong> = 7-bit, 128 characters. <strong>Unicode</strong> = many more bits, over a million characters (all languages + emoji).</div></div>',
           diagram: 'ascii-map',
           check: {
             title: 'ASCII uses 7 bits per character. How many different characters can it represent?',
@@ -2175,7 +2297,9 @@ export const PHASES = [
         // ── PART 2 — IMAGES ──
         { part: 'PART 2 · IMAGES', heading: 'PIXELS, DEPTH & THE FILE-SIZE FORMULA',
           html: '<div class="pi-text">An image is a <strong>grid of pixels</strong>, and each pixel\'s colour is a number. How many bits that number needs is the <strong>colour depth</strong>: 1 bit gives 2 colours (pure black/white), 8 bits give 256, and the 24-bit <strong>#RRGGBB</strong> codes you built in Hex Colours give 16.7 million.</div>'
-            + '<div class="pi-text">That leads to the formula the exam always asks: <strong>file size (bits) = width × height × colour depth</strong> — a number for every pixel. Divide by <strong>8</strong> to get bytes. More pixels (higher <strong>resolution</strong>) or more bits per pixel (higher <strong>colour depth</strong>) = a sharper, richer image — and a bigger file. It\'s always a trade-off.</div>',
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · RESOLUTION</div><div class="pi-defbox-text">The <strong>number of pixels</strong> in an image (width × height). More pixels = sharper image, bigger file.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · COLOUR DEPTH</div><div class="pi-defbox-text">The <strong>number of bits used per pixel</strong>. n bits per pixel allows <strong>2ⁿ colours</strong>.</div></div>'
+            + '<div class="pi-text">That leads to the formula the exam always asks: <strong>file size (bits) = width × height × colour depth</strong> — a number for every pixel. Divide by <strong>8</strong> to get bytes. More pixels or more bits per pixel = a sharper, richer image — and a bigger file. It\'s always a trade-off.</div>',
           diagram: 'bitmap-grid' },
         { part: 'PART 2 · IMAGES', heading: 'WATCH · BITS BECOME A PICTURE',
           html: '<div class="pi-text">In a moment you\'ll turn rows of binary into a picture yourself. First watch it happen — step through this small image <strong>one row at a time</strong> and see each <strong>1</strong> become a black pixel, each <strong>0</strong> stay white.</div>',
@@ -2252,7 +2376,9 @@ export const PHASES = [
         // ── PART 3 — SOUND ──
         { part: 'PART 3 · SOUND', heading: 'SAMPLING: TURNING A WAVE INTO NUMBERS',
           html: '<div class="pi-text">Sound is a smooth, continuous (<strong>analogue</strong>) wave — but a computer can only store numbers. So it <strong>samples</strong>: it measures the wave\'s height (<strong>amplitude</strong>) at regular intervals and stores each measurement as a binary number. Play the numbers back fast enough and you hear the wave again.</div>'
-            + '<div class="pi-text">Two settings decide the quality: the <strong>sample rate</strong> — how many samples per second (Hz) — and the <strong>bit depth</strong> — how many bits per sample. CD audio takes 44,100 samples a second at 16 bits; a phone call manages with ~8,000. So: <strong>file size (bits) = sample rate × bit depth × seconds</strong>. Better quality, bigger file — same trade-off as images.</div>',
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · SAMPLE RATE</div><div class="pi-defbox-text">The number of <strong>samples taken per second</strong>, measured in hertz (Hz).</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · BIT DEPTH</div><div class="pi-defbox-text">The number of <strong>bits used to store each sample</strong>. More bits = more accurate measurement of the wave.</div></div>'
+            + '<div class="pi-text">CD audio takes 44,100 samples a second at 16 bits; a phone call manages with ~8,000. So: <strong>file size (bits) = sample rate × bit depth × seconds</strong>. Better quality, bigger file — same trade-off as images.</div>',
           diagram: 'sound-sampling',
           check: {
             title: 'What is sampling, when recording sound digitally?',
@@ -2273,7 +2399,9 @@ export const PHASES = [
 
         // ── PART 4 — COMPRESSION ──
         { part: 'PART 4 · COMPRESSION', heading: 'LOSSY VS LOSSLESS',
-          html: '<div class="pi-text">Those file sizes add up fast, so files get <strong>compressed</strong> before they\'re stored or sent. There are only two routes. <strong>Lossless</strong> compression re-packs the data cleverly so the <strong>exact original</strong> can be rebuilt — ZIP archives, PNG images, FLAC audio. <strong>Lossy</strong> compression <strong>permanently throws data away</strong> (detail your eyes and ears barely notice) — JPEG photos, MP3 music, MPEG video. Smaller files, but the original is gone for good.</div>'
+          html: '<div class="pi-text">Those file sizes add up fast, so files get <strong>compressed</strong> before they\'re stored or sent. There are only two routes.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · LOSSLESS COMPRESSION</div><div class="pi-defbox-text">Reduces file size with <strong>no data permanently lost</strong> — the <strong>exact original</strong> can be rebuilt (e.g. ZIP, PNG, FLAC).</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · LOSSY COMPRESSION</div><div class="pi-defbox-text"><strong>Permanently removes data</strong> (detail we barely notice) for a much smaller file — the original <strong>cannot be restored</strong> (e.g. JPEG, MP3).</div></div>'
             + '<div class="pi-text">One lossless method worth knowing by name: <strong>Run-Length Encoding (RLE)</strong> replaces a run of repeated values with one <strong>count + value</strong> pair — so <code>AAAAAA</code> (6 characters) becomes <code>6A</code> (2). It shines on data with long runs, like simple graphics.</div>',
           diagram: 'compression-paths',
           check: {
@@ -2471,7 +2599,10 @@ export const PHASES = [
 
         // ── PART 1 — THE LAW ──
         { part: 'PART 1 · THE LAW', heading: 'THREE LAWS TO KNOW',
-          html: '<div class="pi-text">Match the scenario to the law. <strong>Data Protection Act 2018</strong>: how organisations collect, store and use your <strong>personal data</strong> — it must be accurate, secure and used fairly. <strong>Computer Misuse Act 1990</strong>: <strong>unauthorised access</strong> — hacking, guessing passwords, making or spreading malware. <strong>Copyright, Designs and Patents Act 1988</strong>: protects <strong>creative work</strong> — copying software, music or films without permission.</div>',
+          html: '<div class="pi-text">Three UK laws come up again and again. Learn what each one covers and matching the scenario to the law becomes easy marks.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · DATA PROTECTION ACT 2018</div><div class="pi-defbox-text">Controls how organisations <strong>collect, store and use personal data</strong> — it must be accurate, secure, and used fairly.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · COMPUTER MISUSE ACT 1990</div><div class="pi-defbox-text">Makes <strong>unauthorised access</strong> to computer systems illegal — hacking, guessing passwords, making or spreading malware.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · COPYRIGHT, DESIGNS & PATENTS ACT 1988</div><div class="pi-defbox-text">Protects <strong>creative work</strong> (software, music, films) from being <strong>copied or shared without permission</strong>.</div></div>',
           q: { type: 'MC', badge: 'REAL WORLD',
             title: 'A company leaves its customer database unsecured and people’s personal details leak online. Which UK law has it most likely broken?',
             desc: 'This law governs how personal data is stored and used.',
@@ -2522,7 +2653,8 @@ export const PHASES = [
 
         // ── PART 2 — ETHICS, SOCIETY & THE PLANET ──
         { part: 'PART 2 · BEYOND THE LAW', heading: 'ETHICS, SOCIETY & THE PLANET',
-          html: '<div class="pi-text">Plenty of harms aren\'t about breaking a law. <strong>Privacy</strong>: personal data collected or tracked without clear consent. The <strong>digital divide</strong>: the gap between those with good access to technology and those without. <strong>Employment</strong>: automation removes some jobs and creates others. And the <strong>environment</strong>: making and powering devices costs energy and materials, and discarded tech becomes <strong>e-waste</strong>.</div>',
+          html: '<div class="pi-text">Plenty of harms aren\'t about breaking a law. <strong>Privacy</strong>: personal data collected or tracked without clear consent. <strong>Employment</strong>: automation removes some jobs and creates others. And the <strong>environment</strong>: making and powering devices costs energy and materials, and discarded tech becomes <strong>e-waste</strong>.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · DIGITAL DIVIDE</div><div class="pi-defbox-text">The <strong>gap</strong> between people who <strong>have good access to technology</strong> (devices, internet, skills) and those who <strong>do not</strong>.</div></div>',
           q: { type: 'MC', badge: 'PRIVACY',
             title: "Why does secretly tracking users' browsing habits raise a privacy concern?",
             desc: 'Think about consent and how the data could be used',
@@ -2846,7 +2978,8 @@ export const PHASES = [
         // ── THE BIG IDEA ──
         { part: 'THE BIG IDEA', heading: 'THE MANAGER YOU NEVER MEET',
           html: '<div class="pi-text">You now know the hardware: a CPU cycling billions of times a second, RAM, storage. But who\'s in charge? When you have a game, a browser and music open at once, <em>something</em> has to decide who gets the CPU next, where in RAM each one lives, and which one owns the speakers. That something is the <strong>operating system (OS)</strong> — Windows, macOS, Android, iOS.</div>'
-            + '<div class="pi-text">The rule that makes computers manageable: <strong>applications never touch the hardware directly</strong>. Every save, every keypress, every printed page is a <em>request to the OS</em>, which does the hardware work on the app\'s behalf. Without it, every program would need to know how to drive every printer ever made. The OS (plus its maintenance <strong>utilities</strong>) is called <strong>systems software</strong> — software that runs the computer rather than doing a task for you.</div>',
+            + '<div class="pi-text">The rule that makes computers manageable: <strong>applications never touch the hardware directly</strong>. Every save, every keypress, every printed page is a <em>request to the OS</em>, which does the hardware work on the app\'s behalf. Without it, every program would need to know how to drive every printer ever made. The OS (plus its maintenance <strong>utilities</strong>) is called <strong>systems software</strong> — software that runs the computer rather than doing a task for you.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · OPERATING SYSTEM</div><div class="pi-defbox-text">Software that <strong>manages the computer\'s hardware and other programs</strong> — controlling the processor, memory, files, peripherals and users, and providing the user interface.</div></div>',
           diagram: 'os-layers' },
         { part: 'THE BIG IDEA', use: ['video'],
           check: {
@@ -2903,7 +3036,8 @@ export const PHASES = [
 
         // ── PART 2 — UTILITY SOFTWARE ──
         { part: 'PART 2 · UTILITY SOFTWARE', heading: 'THE MAINTENANCE TOOLKIT',
-          html: '<div class="pi-text">Alongside the OS runs <strong>utility software</strong> — small tools that keep the system healthy. <strong>Compression</strong> shrinks files; <strong>backup</strong> copies them for safe-keeping (a <strong>full</strong> backup copies everything; an <strong>incremental</strong> one copies only what changed since the last backup — faster, but restoring needs the full backup plus every increment). <strong>Antivirus</strong> scans for malware, and <strong>encryption</strong> scrambles data.</div>'
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · UTILITY SOFTWARE</div><div class="pi-defbox-text">Small programs that <strong>maintain and look after the computer system</strong> — e.g. antivirus, backup, compression, defragmentation, encryption tools.</div></div>'
+            + '<div class="pi-text">The toolkit: <strong>Compression</strong> shrinks files; <strong>backup</strong> copies them for safe-keeping (a <strong>full</strong> backup copies everything; an <strong>incremental</strong> one copies only what changed since the last backup — faster, but restoring needs the full backup plus every increment). <strong>Antivirus</strong> scans for malware, and <strong>encryption</strong> scrambles data.</div>'
             + '<div class="pi-text">The classic one is <strong>defragmentation</strong>: on a magnetic hard drive, files slowly get split into fragments scattered across the platters; defrag reassembles each file\'s pieces so the read/write head travels less. The exam trap you already have the knowledge for: <strong>defrag is pointless on an SSD</strong> — no moving parts means the layout doesn\'t matter, and the extra writes wear the flash.</div>' },
         { part: 'PART 2 · UTILITY SOFTWARE',
           q: { type: 'MC', title: 'What does defragmentation software do?',
@@ -3067,8 +3201,10 @@ export const PHASES = [
 
         // ── PART 1 — HIGH & LOW LEVEL ──
         { part: 'PART 1 · HIGH & LOW LEVEL', heading: 'TWO ENDS OF THE LADDER',
-          html: '<div class="pi-text"><strong>High-level languages</strong> (Python, Java, C#) are written for <em>humans</em>: readable, quick to write, easy to maintain, and <strong>portable</strong> — the same Python runs on any machine that has a translator for it. One high-level statement can become dozens of machine-code instructions.</div>'
-            + '<div class="pi-text"><strong>Low-level languages</strong> sit next to the hardware. <strong>Machine code</strong> is the raw binary the CPU executes directly. <strong>Assembly</strong> wraps each instruction in a mnemonic (<code>LDA</code>, <code>STO</code>) — roughly <strong>one-to-one</strong> with machine code, translated by an <strong>assembler</strong>, and specific to one processor family. Low-level gives speed and precise control (device drivers, embedded systems); high-level gives productivity. </div>' },
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · HIGH-LEVEL LANGUAGE</div><div class="pi-defbox-text">A language <strong>close to human language</strong> (e.g. Python) — easy to read and write, but it must be <strong>translated</strong> before the CPU can run it.</div></div>'
+            + '<div class="pi-text">High-level languages (Python, Java, C#) are written for <em>humans</em>: readable, quick to write, easy to maintain, and <strong>portable</strong> — the same Python runs on any machine that has a translator for it. One high-level statement can become dozens of machine-code instructions.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · MACHINE CODE (LOW-LEVEL)</div><div class="pi-defbox-text">The <strong>binary instructions the CPU executes directly</strong>. Assembly language is one step above it — mnemonics like <code>LDA</code>, translated one-to-one by an <strong>assembler</strong>.</div></div>'
+            + '<div class="pi-text">Low-level gives speed and precise control (device drivers, embedded systems); high-level gives productivity.</div>' },
         { part: 'PART 1 · HIGH & LOW LEVEL',
           q: { type: 'MC', title: 'What is a key feature of a high-level programming language?',
             options: ['It is close to human language and easier to read and write', 'It is written directly in binary', 'It runs without needing any translation', 'It only works on one specific type of processor'],
@@ -3088,8 +3224,9 @@ export const PHASES = [
 
         // ── PART 2 — COMPILER VS INTERPRETER ──
         { part: 'PART 2 · COMPILER VS INTERPRETER', heading: 'TRANSLATE IT ALL, OR LINE BY LINE?',
-          html: '<div class="pi-text">High-level code reaches the CPU by one of two routes. A <strong>compiler</strong> translates the <em>entire program</em> in one go, producing a standalone <strong>executable</strong>. Compiling takes time and reports every error at the end — but the result runs <strong>fast</strong>, and you can ship it without your source code. That\'s why finished games arrive compiled.</div>'
-            + '<div class="pi-text">An <strong>interpreter</strong> translates and executes <strong>one line at a time</strong>. It starts instantly and <strong>stops at the first error</strong> — perfect while you\'re writing and debugging — but it\'s slower, and the interpreter must be installed everywhere the program runs. The real-world workflow: <em>develop with an interpreter\'s quick feedback, ship the compiled version</em>.</div>',
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · COMPILER</div><div class="pi-defbox-text">Translates the <strong>whole program into machine code in one go</strong>, producing an <strong>executable file</strong>. Errors are reported at the end; the result runs fast.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · INTERPRETER</div><div class="pi-defbox-text">Translates and runs the program <strong>one line at a time</strong>, stopping at the <strong>first error</strong>. Slower, and must be present every time the program runs.</div></div>'
+            + '<div class="pi-text">Compiling takes time and you can ship the result without your source code — that\'s why finished games arrive compiled. An interpreter starts instantly and stops at the first mistake — perfect while writing and debugging. The real-world workflow: <em>develop with an interpreter\'s quick feedback, ship the compiled version</em>.</div>',
           diagram: 'compiler-interpreter' },
         { part: 'PART 2 · COMPILER VS INTERPRETER', heading: 'SEE THE DIFFERENCE',
           html: '<div class="pi-text">Same buggy program, two translators — run it each way and watch what happens. Where does each one find the error, and what has already run by the time it does?</div>',
@@ -3130,7 +3267,8 @@ export const PHASES = [
 
         // ── PART 3 — THE IDE ──
         { part: 'PART 3 · THE IDE', heading: 'THE PROGRAMMER\'S WORKBENCH',
-          html: '<div class="pi-text">Real programmers don\'t juggle separate tools — they work in an <strong>IDE (Integrated Development Environment)</strong>: one program containing everything. A <strong>code editor</strong> with syntax highlighting and auto-complete; a <strong>run-time environment</strong> to test code instantly; a built-in <strong>translator</strong>; and <strong>error diagnostics / debugging tools</strong>.</div>'
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · IDE</div><div class="pi-defbox-text">An <strong>Integrated Development Environment</strong> — one program with the tools to write and test code: a <strong>code editor, run-time environment, translator and debugger</strong>.</div></div>'
+            + '<div class="pi-text">Real programmers don\'t juggle separate tools — they work in an IDE. A <strong>code editor</strong> with syntax highlighting and auto-complete; a <strong>run-time environment</strong> to test code instantly; a built-in <strong>translator</strong>; and <strong>error diagnostics / debugging tools</strong>.</div>'
             + '<div class="pi-text">The debugger is the star: set a <strong>breakpoint</strong> to pause the program at a chosen line, <strong>single-step</strong> through it one line at a time, and <strong>watch variables</strong> change as it runs — the fastest way to see exactly where a program goes wrong. Examples you might meet: IDLE, Visual Studio, PyCharm.</div>' },
         { part: 'PART 3 · THE IDE',
           q: { type: 'MC', title: 'What does an IDE (Integrated Development Environment) provide?',
@@ -3265,7 +3403,8 @@ export const PHASES = [
         // ── THE BIG IDEA ──
         { part: 'THE BIG IDEA', heading: 'WHERE FILES LIVE WHEN THE POWER DIES',
           html: '<div class="pi-text">Last topic left you with a problem: <strong>RAM is volatile</strong> — cut the power and everything in it evaporates. Yet your photos, saves and homework are still there tomorrow. That\'s the job of <strong>secondary storage</strong>: big, <strong>non-volatile</strong> memory that keeps data with the power off.</div>'
-            + '<div class="pi-text">Every time you hit <strong>Save</strong>, the computer copies your work out of fragile RAM onto secondary storage — a hard drive, an SSD, a memory card. The exam calls RAM <em>primary</em> storage (small, fast, temporary) and everything below it <em>secondary</em> (huge, slower, permanent). This topic is about what that permanent layer is actually made of — and how to pick the right kind.</div>' },
+            + '<div class="pi-text">Every time you hit <strong>Save</strong>, the computer copies your work out of fragile RAM onto secondary storage — a hard drive, an SSD, a memory card. The exam calls RAM <em>primary</em> storage (small, fast, temporary) and everything below it <em>secondary</em> (huge, slower, permanent). This topic is about what that permanent layer is actually made of — and how to pick the right kind.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · SECONDARY STORAGE</div><div class="pi-defbox-text"><strong>Non-volatile</strong> storage for programs and data that must be kept <strong>when the power is off</strong> (e.g. HDD, SSD, optical disc).</div></div>' },
         { part: 'THE BIG IDEA', heading: 'THREE WAYS TO TRAP A BIT',
           html: '<div class="pi-text">Engineers have found three good ways to make a bit <em>stay put</em> without power. <strong>Magnetic</strong> storage magnetises microscopic spots on a spinning metal platter — a moving head flies over it to read and write. <strong>Optical</strong> storage presses microscopic <strong>pits</strong> into a plastic disc and reads them back with a <strong>laser</strong>. <strong>Solid-state</strong> storage traps electrical charge inside <strong>flash</strong> transistors — a chip with <em>no moving parts at all</em>.</div>'
             + '<div class="pi-text">All three survive power-off; where they differ is <strong>speed, toughness, capacity and price</strong> — and that difference is exactly what the exam asks you to reason about.</div>',
@@ -3358,7 +3497,9 @@ export const PHASES = [
 
         // ── PART 3 — VIRTUAL MEMORY & CAPACITY ──
         { part: 'PART 3 · VIRTUAL MEMORY & CAPACITY', heading: 'WHEN RAM RUNS OUT — AND DOING THE MATHS',
-          html: '<div class="pi-text">Storage and RAM also work <em>together</em>. When RAM fills up (too many tabs!), the OS quietly borrows a slice of secondary storage and treats it as extra RAM — that\'s <strong>virtual memory</strong>. It lets more programs run at once, but the disk is <em>far</em> slower than real RAM, which is why an overloaded computer suddenly crawls. If it gets really bad, the machine spends almost all its time shuffling data between RAM and disk instead of doing useful work — a state called <strong>thrashing</strong>. The fix is usually to add more RAM.</div>'
+          html: '<div class="pi-text">Storage and RAM also work <em>together</em>. When RAM fills up (too many tabs!), the OS quietly borrows a slice of secondary storage and treats it as extra RAM — that\'s <strong>virtual memory</strong>.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · VIRTUAL MEMORY</div><div class="pi-defbox-text">Part of <strong>secondary storage used as if it were extra RAM</strong> when RAM is full. It lets more programs run, but is <strong>much slower</strong> than real RAM.</div></div>'
+            + '<div class="pi-text">If it gets really bad, the machine spends almost all its time shuffling data between RAM and disk instead of doing useful work — a state called <strong>thrashing</strong>. The fix is usually to add more RAM.</div>'
             + '<div class="pi-text">Finally, the maths: capacity questions are just division. <strong>How many files fit = capacity ÷ file size</strong> — after converting units (remember: ×1000 per step, so 1 GB = 1,000 MB). A 32 GB card is 32,000 MB; at 5 MB a photo, that\'s 6,400 photos.</div>',
           diagram: 'virtual-memory',
           check: {
@@ -3535,8 +3676,10 @@ export const PHASES = [
 
         // ── PART 1 — TABLES & KEYS ──
         { part: 'PART 1 · TABLES & KEYS', heading: 'RECORDS, FIELDS AND THE TWO KEYS',
-          html: '<div class="pi-text">Pin the vocabulary down first — the exam asks it every year. A <strong>table</strong> holds the data; each <strong>row is a record</strong> (all the data about one thing) and each <strong>column is a field</strong> (one property, like Surname). The <strong>primary key</strong> is the field that <strong>uniquely identifies</strong> each record — a StudentID, never a name, because two students can share a name.</div>'
-            + '<div class="pi-text">To link tables, a <strong>foreign key</strong> in one table holds the <strong>primary key of another</strong> — an Orders table carries a CustomerID pointing at the Customers table. That\'s what makes it <em>relational</em>: each fact is stored <strong>once</strong> and referenced everywhere else, instead of repeated (the weakness of a single-table <strong>flat file</strong>).</div>' },
+          html: '<div class="pi-text">Pin the vocabulary down first — the exam asks it every year. A <strong>table</strong> holds the data; each <strong>row is a record</strong> (all the data about one thing) and each <strong>column is a field</strong> (one property, like Surname).</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · PRIMARY KEY</div><div class="pi-defbox-text">A field that <strong>uniquely identifies each record</strong> in a table (e.g. StudentID — never a name, because names can repeat).</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · FOREIGN KEY</div><div class="pi-defbox-text">A field in one table that <strong>holds the primary key of another table</strong>, linking the two together.</div></div>'
+            + '<div class="pi-text">That link is what makes a database <em>relational</em>: each fact is stored <strong>once</strong> and referenced everywhere else, instead of repeated (the weakness of a single-table <strong>flat file</strong>).</div>' },
         { part: 'PART 1 · TABLES & KEYS',
           q: { type: 'MC', title: 'What is a primary key in a database table?',
             options: ['A field that uniquely identifies each record in the table', 'A field that links to another table', 'The first field listed in the table', 'A password that protects the database'],
@@ -3810,7 +3953,8 @@ export const PHASES = [
 
         // ── PART 1 — MALWARE ──
         { part: 'PART 1 · MALWARE', heading: 'KNOW YOUR PARASITES',
-          html: '<div class="pi-text"><strong>Malware</strong> = malicious software, and the exam expects you to tell the family apart. A <strong>virus</strong> attaches itself to a file and spreads when that file is opened or shared. A <strong>worm</strong> is nastier: it <strong>self-replicates across the network</strong> with no user action at all. A <strong>trojan</strong> plays the Trojan-horse trick — it <em>looks</em> like a useful program, so you install it yourself.</div>'
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · MALWARE</div><div class="pi-defbox-text"><strong>Malicious software</strong> — software designed to damage, disrupt or gain unauthorised access to a computer system.</div></div>'
+            + '<div class="pi-text">The exam expects you to tell the family apart. A <strong>virus</strong> attaches itself to a file and spreads when that file is opened or shared. A <strong>worm</strong> is nastier: it <strong>self-replicates across the network</strong> with no user action at all. A <strong>trojan</strong> plays the Trojan-horse trick — it <em>looks</em> like a useful program, so you install it yourself.</div>'
             + '<div class="pi-text">Then the money-makers: <strong>ransomware</strong> encrypts your files and demands payment for the key (best defence: <strong>backups</strong> — restore and never pay), and <strong>spyware</strong> quietly records what you do, including every key you press.</div>' },
         { part: 'PART 1 · MALWARE',
           q: { type: 'MC', title: 'Which type of malware can spread across a network by itself, without the user doing anything?',
@@ -3831,7 +3975,9 @@ export const PHASES = [
 
         // ── PART 2 — TRICKS & DIRECT ATTACKS ──
         { part: 'PART 2 · TRICKS & DIRECT ATTACKS', heading: 'CON THE PERSON, OR BATTER THE SYSTEM',
-          html: '<div class="pi-text"><strong>Social engineering</strong> comes in flavours: <strong>phishing</strong> (a fake email or site imitating your bank — the "urgent, click here" trap), <strong>shouldering</strong> (simply watching you type your PIN), and <strong>blagging</strong> (a made-up story: "Hi, it\'s IT, I just need your password"). The defence is human: training, suspicion, never logging in through an emailed link.</div>'
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · SOCIAL ENGINEERING</div><div class="pi-defbox-text"><strong>Tricking a person</strong> into giving away information or access — attacking the human, not the machine.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · PHISHING</div><div class="pi-defbox-text">Fake emails or websites that <strong>imitate a trusted organisation</strong> to trick you into revealing passwords or bank details.</div></div>'
+            + '<div class="pi-text">The other flavours: <strong>shouldering</strong> (simply watching you type your PIN) and <strong>blagging</strong> (a made-up story: "Hi, it\'s IT, I just need your password"). The defence is human: training, suspicion, never logging in through an emailed link.</div>'
             + '<div class="pi-text">The direct attacks target the system instead. <strong>Brute force</strong>: software tries thousands of passwords a second — beaten by long passwords, account lockouts and 2FA. <strong>DDoS</strong>: a botnet of hijacked machines floods a server until real users can\'t get through. <strong>SQL injection</strong>: typing database commands into a web form so an unsanitised system executes them — beaten by input validation.</div>' },
         { part: 'PART 2 · TRICKS & DIRECT ATTACKS',
           q: { type: 'MC', title: 'An email claims to be from your bank, says your account is locked, and links to a page asking for your password. What is this?',
@@ -3883,7 +4029,9 @@ export const PHASES = [
         // ── PART 3 — DEFENCE IN DEPTH ──
         { part: 'PART 3 · DEFENCE IN DEPTH', heading: 'LAYER THE SHIELDS',
           html: '<div class="pi-text">No single defence stops every attack, so real security is <strong>layered</strong>. At the network edge, a <strong>firewall</strong> filters the traffic coming in and out, blocking anything that breaks its rules. On the machines, <strong>anti-malware</strong> scans for and removes infections. Around the data, <strong>user access levels</strong> mean each person can only reach what their role needs — so one stolen login can\'t open everything.</div>'
-            + '<div class="pi-text">Then the habits: strong passwords and <strong>2FA</strong>, regular <strong>backups</strong> (the ransomware killer), software updates, staff <strong>training</strong> — and <strong>penetration testing</strong>: paying ethical hackers to attack your own system first, so you find the holes before criminals do.</div>' },
+            + '<div class="pi-text">Then the habits: strong passwords and <strong>2FA</strong>, regular <strong>backups</strong> (the ransomware killer), software updates, staff <strong>training</strong> — and <strong>penetration testing</strong>.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · FIREWALL</div><div class="pi-defbox-text">Monitors and <strong>filters traffic entering and leaving</strong> a network, blocking connections that break its rules.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · PENETRATION TESTING</div><div class="pi-defbox-text">Employing people to <strong>deliberately attack your own system</strong> to find security weaknesses <strong>before criminals do</strong>.</div></div>' },
         { part: 'PART 3 · DEFENCE IN DEPTH',
           q: { type: 'MC', title: 'What is the role of a firewall?',
             options: ['It monitors and filters traffic entering and leaving a network, blocking unwanted connections', 'It encrypts all files on the hard drive', 'It backs up data automatically', 'It removes viruses that are already on the computer'],
@@ -4062,7 +4210,9 @@ export const PHASES = [
 
         // ── PART 1 — TOPOLOGIES & ORGANISATION ──
         { part: 'PART 1 · TOPOLOGIES & ORGANISATION', heading: 'STAR VS MESH · CLIENT-SERVER VS P2P',
-          html: '<div class="pi-text"><strong>Star:</strong> every device wires to a central switch. Fast, easy to manage, and one broken cable only cuts off one device — but if the <em>centre</em> dies, everything stops, and all that cable costs money. <strong>Mesh:</strong> devices interconnect by multiple paths; a failed link just means rerouting. Resilient (hospitals, the internet) but needs many more connections.</div>'
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · STAR TOPOLOGY</div><div class="pi-defbox-text">Every device connects to a <strong>central switch</strong>. A broken cable only cuts off one device — but if the <strong>centre fails, the whole network stops</strong>.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · MESH TOPOLOGY</div><div class="pi-defbox-text">Devices connect to <strong>many other devices</strong>, so there are <strong>multiple routes</strong> — a failed link is simply routed around. Resilient, but needs many more connections.</div></div>'
+            + '<div class="pi-text">Star is fast and easy to manage; mesh is what hospitals and the internet use, because there\'s no single point of failure.</div>'
             + '<div class="pi-text"><strong>Client-server:</strong> a central server holds the files, runs the email, does the backups — easy to secure and manage centrally, but the server is a single point of failure and costs. <strong>Peer-to-peer:</strong> all machines equal, sharing directly — cheap and simple for a home, but no central control, backup or security.</div>' },
         { part: 'PART 1 · TOPOLOGIES & ORGANISATION',
           q: { type: 'MC', title: 'In a star network topology, how are the devices connected?',
@@ -4084,7 +4234,9 @@ export const PHASES = [
         // ── PART 2 — HARDWARE & ADDRESSES ──
         { part: 'PART 2 · HARDWARE & ADDRESSES', heading: 'SWITCHES, WI-FI AND TWO KINDS OF ADDRESS',
           html: '<div class="pi-text">Inside a network, the <strong>switch</strong> does the delivering — and unlike an old-fashioned hub (which shouted every message to everyone), a switch sends data <strong>only to the intended device</strong>, identified by its <strong>MAC address</strong>: the permanent, unique ID burned into every network card at the factory. A <strong>WAP (Wireless Access Point)</strong> lets devices join the wired network over Wi-Fi — convenient, but slower and less secure than a cable, so it must be encrypted.</div>'
-            + '<div class="pi-text">Keep the two addresses straight: a <strong>MAC address never changes</strong> (hardware), while an <strong>IP address locates the device on a network and can change</strong> (join a different network, get a different IP). And a connection\'s <strong>bandwidth</strong> is how much data it can move per second (Mbps) — more devices sharing it means less each.</div>' },
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · MAC ADDRESS</div><div class="pi-defbox-text">A <strong>unique, permanent hardware identifier</strong> given to every network device at the factory. Used by <strong>switches</strong> inside a network.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · IP ADDRESS</div><div class="pi-defbox-text">An address that <strong>locates a device on a network</strong>. It <strong>can change</strong> (join a different network, get a different IP). Used by <strong>routers</strong> between networks.</div></div>'
+            + '<div class="pi-text">And a connection\'s <strong>bandwidth</strong> is how much data it can move per second (Mbps) — more devices sharing it means less each.</div>' },
         { part: 'PART 2 · HARDWARE & ADDRESSES',
           q: { type: 'MC', title: 'What does a network switch do?',
             options: ['Connects devices within a network and sends data only to the intended device using MAC addresses', 'Connects two different networks together using IP addresses', 'Converts domain names into IP addresses', 'Provides a wireless signal for devices to join'],
@@ -4269,7 +4421,9 @@ export const PHASES = [
 
         // ── PART 1 — VARIABLES & OPERATORS ──
         { part: 'PART 1 · VARIABLES & OPERATORS', heading: 'STORE, THEN COMBINE',
-          html: '<div class="pi-text"><strong>Assignment</strong> puts a value into a variable: <code>age ← 15</code>. The arrow (or <code>=</code> in Python) always means "the right-hand side goes into the left." Re-assigning replaces the old value.</div>'
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · VARIABLE</div><div class="pi-defbox-text">A <strong>named store for a value</strong> that <strong>can change</strong> while the program runs.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · CONSTANT</div><div class="pi-defbox-text">A named value that is <strong>set once and cannot change</strong> while the program runs (e.g. pi, VAT rate).</div></div>'
+            + '<div class="pi-text"><strong>Assignment</strong> puts a value into a variable: <code>age ← 15</code>. The arrow (or <code>=</code> in Python) always means "the right-hand side goes into the left." Re-assigning replaces the old value.</div>'
             + '<div class="pi-text"><strong>Operators</strong> combine values: <code>+ − × ÷</code>, plus two exam favourites — <code>MOD</code> (the <em>remainder</em>: <code>17 MOD 5 = 2</code>) and <code>DIV</code> (the <em>whole-number part</em>: <code>17 DIV 5 = 3</code>). On text, <code>+</code> <strong>joins</strong> strings (concatenation) instead of adding.</div>',
           q: { type: 'NUMBER', badge: 'REAL WORLD',
             title: 'Trace this code: score ← 10, then score ← score + 5, then score ← score × 2. What is the final value of score?',
@@ -4502,7 +4656,8 @@ export const PHASES = [
 
         // ── PART 1 — SELECTION ──
         { part: 'PART 1 · SELECTION', heading: 'MAKING DECISIONS',
-          html: '<div class="pi-text"><code>IF … ELSEIF … ELSE</code> lets a program choose. The golden rule: conditions are checked <strong>from the top</strong>, and <strong>only the first true branch runs</strong> — the rest are skipped. So order matters: put the tightest condition first.</div>'
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · SELECTION</div><div class="pi-defbox-text">Choosing which code to run <strong>based on a condition</strong> — <code>IF … ELSE</code>.</div></div>'
+            + '<div class="pi-text"><code>IF … ELSEIF … ELSE</code> lets a program choose. The golden rule: conditions are checked <strong>from the top</strong>, and <strong>only the first true branch runs</strong> — the rest are skipped. So order matters: put the tightest condition first.</div>'
             + '<div class="pi-text">To combine conditions, use <strong>AND</strong> (both must be true) and <strong>OR</strong> (either is enough). "Between 1 and 10" means <code>x ≥ 1 AND x ≤ 10</code> — using OR there would wrongly accept everything.</div>',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
             title: 'What does this program output?',
@@ -4531,7 +4686,8 @@ export const PHASES = [
 
         // ── PART 2 — ITERATION ──
         { part: 'PART 2 · ITERATION', heading: 'REPEATING WORK',
-          html: '<div class="pi-text">Two flavours of loop. A <strong>count-controlled</strong> loop (<code>FOR</code>) repeats a <em>known</em> number of times — deal 5 cards. A <strong>condition-controlled</strong> loop (<code>WHILE</code> / <code>REPEAT UNTIL</code>) repeats an <em>unknown</em> number of times, until a condition changes — keep asking for a password until it\'s right.</div>'
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · ITERATION</div><div class="pi-defbox-text"><strong>Repeating</strong> a block of code — a loop. <strong>Count-controlled</strong> (FOR) = a fixed number of times; <strong>condition-controlled</strong> (WHILE) = until a condition changes.</div></div>'
+            + '<div class="pi-text">A <strong>count-controlled</strong> loop repeats a <em>known</em> number of times — deal 5 cards. A <strong>condition-controlled</strong> loop repeats an <em>unknown</em> number of times — keep asking for a password until it\'s right.</div>'
             + '<div class="pi-text">Two classic traps: a WHILE loop may run <strong>zero times</strong> if its condition starts false; and watch the <strong>bounds</strong> — AQA/OCR <code>TO 5</code> includes 5, but Python <code>range(1, 6)</code> stops before 6.</div>',
           q: { type: 'MC', badge: 'REAL WORLD',
             title: 'A game must keep asking for a password until the correct one is typed — however many tries that takes. Which construct fits best?',
@@ -4751,7 +4907,9 @@ export const PHASES = [
 
         // ── PART 1 — DEFINING & CALLING ──
         { part: 'PART 1 · DEFINING & CALLING', heading: 'DEFINE IT, THEN CALL IT',
-          html: '<div class="pi-text">Using a subroutine is two steps. First <strong>define</strong> it — give it a name and list its <strong>parameters</strong> (the data it needs). Then <strong>call</strong> it by name, passing <strong>arguments</strong> — the actual values. The arguments fill the parameters <em>in order</em>: <code>add(3, 7)</code> sets <code>a = 3, b = 7</code>.</div>'
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · SUBROUTINE</div><div class="pi-defbox-text">A <strong>named block of code</strong> you can call by name to avoid repeating yourself. A <strong>function returns a value</strong>; a <strong>procedure</strong> just performs a task.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · PARAMETER</div><div class="pi-defbox-text">Data <strong>passed into a subroutine</strong> when it is called — <code>add(3, 7)</code> passes 3 and 7.</div></div>'
+            + '<div class="pi-text">Using a subroutine is two steps. First <strong>define</strong> it — give it a name and list its parameters. Then <strong>call</strong> it by name, passing the actual values, which fill the parameters <em>in order</em>: <code>add(3, 7)</code> sets <code>a = 3, b = 7</code>.</div>'
             + '<div class="pi-text">One rule to remember: a subroutine must be <strong>defined before it is called</strong>.</div>',
           q: { type: 'MC', badge: 'REAL WORLD',
             title: 'You need to calculate the area of a rectangle in 20 different places in your program. What is the best way to avoid repeating the code?',
@@ -4818,7 +4976,8 @@ export const PHASES = [
 
         // ── PART 3 — SCOPE & WRITING ──
         { part: 'PART 3 · SCOPE & WRITING', heading: 'WHAT STAYS LOCAL',
-          html: '<div class="pi-text">A variable made inside a subroutine — including a <strong>parameter</strong> — is <strong>local</strong>: it only exists inside that subroutine and vanishes when it ends. Changing a parameter inside does <em>not</em> change the original variable outside. This is <strong>scope</strong>, and it\'s what stops subroutines accidentally interfering with each other.</div>',
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · LOCAL VARIABLE (SCOPE)</div><div class="pi-defbox-text">A variable made <strong>inside a subroutine</strong> (including a parameter). It <strong>only exists inside</strong> that subroutine and cannot be seen or changed outside it.</div></div>'
+            + '<div class="pi-text">Changing a parameter inside a subroutine does <em>not</em> change the original variable outside. This is <strong>scope</strong>, and it\'s what stops subroutines accidentally interfering with each other.</div>',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
             title: 'What does this program output?',
             desc: 'Does changing a parameter change the original variable?',
@@ -5010,7 +5169,8 @@ export const PHASES = [
 
         // ── PART 1 — ARRAYS & INDEXING ──
         { part: 'PART 1 · ARRAYS & INDEXING', heading: 'COUNTING FROM ZERO',
-          html: '<div class="pi-text">Read an element by its index in square brackets: for <code>nums = [4, 8, 15]</code>, <code>nums[0]</code> is 4 and <code>nums[2]</code> is 15. Because counting starts at 0, the <strong>last index is one less than the length</strong> — a 3-item array has indexes 0, 1, 2.</div>'
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · ARRAY</div><div class="pi-defbox-text">A data structure storing <strong>many values under one name</strong>, each at a numbered position called an <strong>index</strong> — starting at <strong>0</strong>.</div></div>'
+            + '<div class="pi-text">Read an element by its index in square brackets: for <code>nums = [4, 8, 15]</code>, <code>nums[0]</code> is 4 and <code>nums[2]</code> is 15. Because counting starts at 0, the <strong>last index is one less than the length</strong> — a 3-item array has indexes 0, 1, 2.</div>'
             + '<div class="pi-text">This is the single most common source of bugs in real code: the <strong>off-by-one error</strong>. Reaching for <code>arr[length]</code> runs off the end of the array. Always ask: "what\'s the <em>last</em> index?"</div>',
           q: { type: 'MC', badge: 'REAL WORLD',
             title: 'An array scores holds [50, 80, 20, 95, 60]. What does scores[1] give you?',
@@ -5252,7 +5412,10 @@ export const PHASES = [
 
         // ── PART 1 — ERRORS & BUGS ──
         { part: 'PART 1 · ERRORS & BUGS', heading: 'SYNTAX, LOGIC, RUNTIME',
-          html: '<div class="pi-text">Start by sorting the three error types. <strong>Syntax</strong> breaks the language rules, so the program won\'t run at all. <strong>Logic</strong> runs fine but produces the wrong answer. <strong>Runtime</strong> crashes mid-execution. Each has its own tell — and its own fix.</div>',
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · SYNTAX ERROR</div><div class="pi-defbox-text"><strong>Breaks the rules of the language</strong> (e.g. a missing bracket) — the program <strong>will not run at all</strong>.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · LOGIC ERROR</div><div class="pi-defbox-text">The program <strong>runs, but gives the wrong result</strong> (e.g. + where you meant ×).</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · RUNTIME ERROR</div><div class="pi-defbox-text">The program <strong>crashes while running</strong> (e.g. dividing by zero, reading past the end of an array).</div></div>'
+            + '<div class="pi-text">Each has its own tell — and its own fix. Sort the three types below.</div>',
           q: { type: 'CATEGORISE', badge: 'ERRORS',
             bins: ['Syntax', 'Logic', 'Runtime'],
             items: [
@@ -5305,7 +5468,9 @@ export const PHASES = [
 
         // ── PART 2 — VALIDATION ──
         { part: 'PART 2 · VALIDATION', heading: 'NEVER TRUST THE INPUT',
-          html: '<div class="pi-text">The golden rule: a robust program <strong>never trusts what the user types</strong>. <strong>Validation</strong> rejects unreasonable input before it can do harm. Five checks come up: <strong>range</strong> (within limits), <strong>type</strong> (right data type), <strong>presence</strong> (something was entered), <strong>length</strong> (enough characters), and <strong>format</strong> (matches a pattern).</div>',
+          html: '<div class="pi-text">The golden rule: a robust program <strong>never trusts what the user types</strong>.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · VALIDATION</div><div class="pi-defbox-text">Checking that input is <strong>sensible and acceptable</strong> before the program uses it — and <strong>rejecting it if not</strong>.</div></div>'
+            + '<div class="pi-text">Five checks come up: <strong>range</strong> (within limits), <strong>type</strong> (right data type), <strong>presence</strong> (something was entered), <strong>length</strong> (enough characters), and <strong>format</strong> (matches a pattern).</div>',
           q: { type: 'MC', badge: 'REAL WORLD',
             title: 'A sign-up form should reject an age of 200 or −5 before saving it. What is this an example of?',
             desc: 'Stopping bad input before it is used.',
@@ -5362,7 +5527,8 @@ export const PHASES = [
 
         // ── PART 3 — TESTING & MAINTAINABILITY ──
         { part: 'PART 3 · TESTING & MAINTAINABILITY', heading: 'TEST LIKE YOU MEAN IT',
-          html: '<div class="pi-text">You can\'t just run a program once and hope. Good testing uses three kinds of <strong>test data</strong>: <strong>normal</strong> (typical valid values), <strong>boundary</strong> (right on the edges of what\'s allowed — where bugs hide), and <strong>erroneous / invalid</strong> (rubbish that should be rejected).</div>',
+          html: '<div class="pi-text">You can\'t just run a program once and hope. Good testing uses three kinds of <strong>test data</strong>:</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · TEST DATA TYPES</div><div class="pi-defbox-text"><strong>Normal</strong> = typical valid values · <strong>Boundary</strong> = right on the edges of what\'s allowed (where bugs hide) · <strong>Erroneous / invalid</strong> = data that should be rejected.</div></div>',
           q: { type: 'CATEGORISE', badge: 'TESTING',
             bins: ['Normal', 'Boundary', { AQA: 'Erroneous', OCR: 'Invalid', Eduqas: 'Erroneous' }],
             items: [
@@ -5614,8 +5780,12 @@ export const PHASES = [
 
         // ── PART 1 — THE FOUR TOOLS ──
         { part: 'PART 1 · THE FOUR TOOLS', heading: 'FOUR MOVES, WITH EXAMPLES',
-          html: '<div class="pi-text"><strong>Decomposition:</strong> "make a racing game" becomes graphics, car physics, lap timing, menus — each solvable (and testable) on its own. <strong>Abstraction:</strong> the London Tube map is the classic — it keeps station order and connections, and throws away real distances and streets, because travellers don\'t need them. Less detail = less complexity.</div>'
-            + '<div class="pi-text"><strong>Pattern recognition:</strong> noticing that sorting a leaderboard and sorting a contact list are <em>the same problem</em> — so one solution serves both. <strong>Algorithmic thinking:</strong> pinning down the exact, ordered steps — a recipe precise enough that a machine (which can\'t improvise) could follow it. The exam gives you scenarios; your job is to name the move.</div>' },
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · DECOMPOSITION</div><div class="pi-defbox-text"><strong>Breaking a big problem into smaller sub-problems</strong> that can be solved separately.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · ABSTRACTION</div><div class="pi-defbox-text"><strong>Removing unnecessary detail</strong> to focus on the important parts of a problem.</div></div>'
+            + '<div class="pi-text"><strong>Decomposition:</strong> "make a racing game" becomes graphics, car physics, lap timing, menus — each solvable (and testable) on its own. <strong>Abstraction:</strong> the London Tube map keeps station order and connections, and throws away real distances and streets, because travellers don\'t need them.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · PATTERN RECOGNITION</div><div class="pi-defbox-text"><strong>Spotting similarities</strong> between problems so an existing solution can be <strong>reused</strong>.</div></div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · ALGORITHMIC THINKING</div><div class="pi-defbox-text">Writing the <strong>exact step-by-step instructions</strong>, in order, that solve the problem.</div></div>'
+            + '<div class="pi-text">Sorting a leaderboard and sorting a contact list are <em>the same problem</em> — one solution serves both. And an algorithm is a recipe precise enough that a machine (which can\'t improvise) could follow it. The exam gives you scenarios; your job is to name the move.</div>' },
         { part: 'PART 1 · THE FOUR TOOLS',
           q: { type: 'MC', title: 'What is abstraction?',
             options: ['Removing unnecessary detail to focus on the important parts of a problem', 'Breaking a problem into smaller sub-problems', 'Writing the step-by-step instructions to solve a problem', 'Testing a program with different inputs'],
@@ -5786,7 +5956,8 @@ export const PHASES = [
 
         // ── PART 1 — LINEAR SEARCH ──
         { part: 'PART 1 · LINEAR SEARCH', heading: 'THE HONEST PLOD',
-          html: '<div class="pi-text"><strong>Linear search</strong>: start at the first item, check it, move to the next, and keep going until you find the target or run out of list. That\'s the whole algorithm — and its superpower is that it makes <em>no demands</em>: the list can be in any order.</div>'
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · LINEAR SEARCH</div><div class="pi-defbox-text"><strong>Checks each item in turn</strong> from the start until the target is found or the list ends. Works on <strong>any list</strong> — sorted or not.</div></div>'
+            + '<div class="pi-text">Start at the first item, check it, move to the next, and keep going. That\'s the whole algorithm — and its superpower is that it makes <em>no demands</em>: the list can be in any order.</div>'
             + '<div class="pi-text">The cost is the worst case: if the target is last — or missing — you check <strong>all n items</strong>, which is why it\'s <strong>O(n)</strong>. Fine for 20 items; painful for a million. In the trace below, click each element exactly as the algorithm would check it.</div>' },
         { part: 'PART 1 · LINEAR SEARCH',
           q: { type: 'MC', title: 'How does a linear search work?',
@@ -5811,7 +5982,8 @@ export const PHASES = [
 
         // ── PART 2 — BINARY SEARCH ──
         { part: 'PART 2 · BINARY SEARCH', heading: 'THE CLEVER HALVING',
-          html: '<div class="pi-text"><strong>Binary search</strong>: check the <strong>middle</strong> of the sorted list. Too small? The target must be in the right half — bin the left. Too big? Bin the right. Repeat on what\'s left, halving every step. Each single comparison eliminates <em>half the remaining list</em>, which is why the checks grow so slowly: <strong>O(log n)</strong>.</div>'
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · BINARY SEARCH</div><div class="pi-defbox-text">Checks the <strong>middle item</strong> of a <strong>sorted</strong> list, <strong>discards the half</strong> that can\'t contain the target, and repeats. The list <strong>must be sorted first</strong>.</div></div>'
+            + '<div class="pi-text">Too small? The target must be in the right half — bin the left. Too big? Bin the right. Each single comparison eliminates <em>half the remaining list</em>, which is why the checks grow so slowly: <strong>O(log n)</strong>.</div>'
             + '<div class="pi-text">The one iron rule: the list <strong>must already be sorted</strong>. On an unsorted list "too small, go right" means nothing — you can\'t rule out either half, so you\'re back to the linear plod (or you sort first). State that precondition in the exam; it\'s a guaranteed mark.</div>' },
         { part: 'PART 2 · BINARY SEARCH',
           q: { type: 'MC', title: 'How does a binary search work?',
@@ -6001,7 +6173,8 @@ export const PHASES = [
         // ── PART 2 — OVERFLOW ──
         { part: 'PART 2 · OVERFLOW', heading: 'WHEN THE ANSWER WON’T FIT',
           html: '<div class="pi-text">Everything works fine until an addition needs <strong>more bits than you have</strong>. In an 8-bit register the biggest number is <strong>11111111</strong> (255). Add 1 and the carry ripples all the way along until it tries to spill into a <strong>9th bit</strong> — but there is no 9th bit. The carry is lost, and every other column is now 0.</div>'
-            + '<div class="pi-text">The result <strong>wraps around</strong>: 255 + 1 becomes <strong>0</strong>, 256 becomes 0, 257 becomes 1, and so on. To find the wrapped answer, subtract <strong>256</strong> until you\'re back in the 0–255 range. This lost-carry effect is what we call <strong>overflow</strong>.</div>',
+            + '<div class="pi-text">The result <strong>wraps around</strong>: 255 + 1 becomes <strong>0</strong>, 256 becomes 0, 257 becomes 1, and so on. To find the wrapped answer, subtract <strong>256</strong> until you\'re back in the 0–255 range.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · OVERFLOW</div><div class="pi-defbox-text">When the result of a calculation <strong>needs more bits than are available</strong> to store it — the extra carry bit is <strong>lost</strong>.</div></div>',
           diagram: 'overflow' },
         { part: 'PART 2 · OVERFLOW', heading: 'WATCH IT OVERFLOW',
           html: '<div class="pi-text">Watch the worst case: <strong>11111111 + 1</strong> (255 + 1). Every single column carries, and the very last carry has nowhere to go — it falls off the top. Step through it and see the byte wrap all the way back to <strong>0</strong>.</div>',
@@ -6019,7 +6192,8 @@ export const PHASES = [
         // ── PART 3 — BINARY SHIFTS ──
         { part: 'PART 3 · BINARY SHIFTS', heading: 'SLIDE TO MULTIPLY & DIVIDE',
           html: '<div class="pi-text">Here\'s a neat trick. Each column in binary is worth <strong>twice</strong> the one to its right — so if you slide <strong>every bit one place to the left</strong>, each bit lands in a column worth double, and the whole number is <strong>multiplied by 2</strong>. The empty space on the right is filled with a <strong>0</strong>.</div>'
-            + '<div class="pi-text">Slide every bit one place to the <strong>right</strong> and each bit halves, so the number is <strong>divided by 2</strong> (any bit that drops off the end is the lost remainder). Shifting <strong>n places</strong> multiplies or divides by <strong>2ⁿ</strong>: left by 3 is ×8, right by 2 is ÷4. For a processor this is far faster than real multiplication.</div>'
+            + '<div class="pi-text">Slide every bit one place to the <strong>right</strong> and each bit halves, so the number is <strong>divided by 2</strong> (any bit that drops off the end is the lost remainder). For a processor this is far faster than real multiplication.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · BINARY SHIFT</div><div class="pi-defbox-text">Moving every bit left or right. A shift <strong>left by n multiplies by 2ⁿ</strong>; a shift <strong>right by n divides by 2ⁿ</strong> (left by 3 = ×8, right by 2 = ÷4).</div></div>'
             + '<div class="pi-text">In the questions below you <strong>press the SHIFT button and watch it happen</strong> — each bit slides across and the value updates live, so you can see the ×2 or ÷2 for yourself before you answer.</div>',
           diagram: 'binary-shift' },
         { part: 'PART 3 · BINARY SHIFTS', heading: 'YOUR TURN',
@@ -6154,8 +6328,9 @@ export const PHASES = [
 
         // ── PART 1 — WHAT AI IS ──
         { part: 'PART 1 · WHAT AI IS', heading: 'INTELLIGENCE, AND LEARNING FROM DATA',
-          html: '<div class="pi-text"><strong>AI</strong> is computer systems doing tasks that normally need human intelligence — learning, recognising patterns, deciding. Not every program counts: a calculator just follows fixed rules and always does the same thing.</div>'
-            + '<div class="pi-text"><strong>Machine learning</strong> is the most common kind. Rather than a programmer writing a rule for every case, the system is <strong>trained on data</strong>, finds the patterns, and improves its decisions — handling situations no one explicitly coded for.</div>',
+          html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · ARTIFICIAL INTELLIGENCE (AI)</div><div class="pi-defbox-text">Computer systems performing tasks that <strong>normally need human intelligence</strong> — learning, recognising patterns, making decisions.</div></div>'
+            + '<div class="pi-text">Not every program counts: a calculator just follows fixed rules and always does the same thing.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · MACHINE LEARNING</div><div class="pi-defbox-text">A type of AI where the system <strong>learns patterns from training data</strong> and improves, <strong>without being programmed for every case</strong>.</div></div>',
           q: { type: 'MC', title: 'What is artificial intelligence (AI)?',
             desc: 'A core idea in the newer specifications.',
             options: ['Computer systems that perform tasks normally needing human intelligence, such as learning or making decisions', 'Any computer program at all', 'A faster type of processor', 'A way of storing data in the cloud'],
