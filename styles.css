@@ -2201,17 +2201,6 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
   50% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--node-color) 6%, transparent); } }
 
 /* the green LEARN circle — revisit the learn pages, separate from the questions */
-.cmp-learn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 4;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  width: 46px; height: 46px; border-radius: 50%; padding: 0; cursor: pointer;
-  background: var(--surface); border: 2px solid #16a34a; color: #16a34a;
-  transition: transform .12s, background .12s, color .12s; }
-.cmp-learn-ic { font-size: 15px; line-height: 1; }
-.cmp-learn-tag { font-size: 6px; letter-spacing: 1px; margin-top: 1px; }
-.cmp-learn:hover { transform: translateY(-50%) scale(1.1); background: #16a34a; color: #fff; }
-.cmp-learn:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
-.side-left .cmp-learn { right: calc(50% + 100px); }
-.side-right .cmp-learn { left: calc(50% + 100px); }
 
 /* the side label */
 .cmp-label { position: absolute; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 5px;
@@ -2281,9 +2270,6 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
   .side-left .cmp-dot { right: calc(50% + 30px); }
   .side-right .cmp-dot { left: calc(50% + 30px); }
   .cmp-branch { width: 26px; }
-  .cmp-learn { width: 38px; height: 38px; }
-  .side-left .cmp-learn { right: calc(50% + 82px); }
-  .side-right .cmp-learn { left: calc(50% + 82px); }
   .cmp-lesson.side-left .cmp-label { right: calc(50% + 126px); }
   .cmp-lesson.side-right .cmp-label { left: calc(50% + 126px); }
   .cmp-lesson .cmp-label { max-width: calc(50% - 142px); }

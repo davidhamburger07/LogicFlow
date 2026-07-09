@@ -218,8 +218,8 @@ const TUT_SLIDES = [
     visual: '<div class="tut-boards"><span class="tut-board on">AQA</span><span class="tut-board">OCR</span><span class="tut-board">Eduqas</span><span class="tut-board">WJEC</span><span class="tut-board">Edexcel</span></div>',
     body: 'Pick your board on the menu — <strong>AQA</strong>, <strong>OCR</strong>, <strong>Eduqas</strong>, <strong>WJEC</strong> or <strong>Edexcel</strong>. The lessons then switch to your board’s <strong>programming notation</strong> and cover the exact topics and logic gates it examines. Set it once and everything follows.' },
   { eyebrow: 'THE CAMPAIGN', heading: 'FOLLOW THE <em>SIGNAL</em>',
-    visual: '<div class="tut-map"><span class="tut-node learn">◉<small>LEARN</small></span><span class="tut-wire"></span><span class="tut-node test">▶<small>TEST</small></span><span class="tut-wire"></span><span class="tut-node lock">🔒<small>NEXT</small></span></div>',
-    body: 'Work along the circuit, unit by unit. Each topic has a <strong style="color:#16a34a">green lesson</strong> to learn from and a <strong>blue test</strong> to clear. Finish a unit’s topics to open its <strong>unit test</strong>, with <strong>mock checkpoints</strong> to tie it together — or jump straight to any topic you need.' },
+    visual: '<div class="tut-map"><span class="tut-node test">▶<small>TOPIC</small></span><span class="tut-wire"></span><span class="tut-node test">◆<small>UNIT TEST</small></span><span class="tut-wire"></span><span class="tut-node lock">🔒<small>NEXT</small></span></div>',
+    body: 'Work along the circuit, unit by unit. Each <strong>topic</strong> is one continuous flow — it teaches the idea, walks an example, then hands you the questions. Clear a unit\'s topics to open its <strong>unit test</strong>, with <strong>mock checkpoints</strong> to tie it together — or jump straight to any topic you need.' },
   { eyebrow: 'INSIDE A LESSON', heading: 'TEACH, THEN <em>YOUR TURN</em>',
     visual: '<div class="tut-card-demo"><div class="tut-demo-pv"><b class="lit">8</b><b>4</b><b class="lit">2</b><b>1</b></div><div class="tut-demo-sum">8 + 2 = <span class="tut-demo-in">?</span></div></div>',
     body: 'A lesson explains the idea, walks through a worked example, then hands you a real question to try. The scaffolding <strong>fades</strong> as you go — guided at first, then all you.' },
@@ -344,7 +344,6 @@ function starBar(crown) {
 function lessonNode(u, ln, i) {
   const phase = PHASES[idxOfId(ln.phaseId)];
   const side = i % 2 === 0 ? 'side-left' : 'side-right';
-  // a div (not a button) so it can hold the separate LEARN button without nesting
   const node = h('div', `cmp-node cmp-lesson ${side} ${ln.state}${ln.current ? ' current' : ''}${ln.state !== 'locked' ? ' reached' : ''}`);
   node.style.setProperty('--node-color', u.color);
   node.setAttribute('role', 'button');
@@ -358,16 +357,11 @@ function lessonNode(u, ln, i) {
     : ln.current ? '<span class="cmp-meta">▶ START</span>'
       : ln.state === 'unlocked' ? '<span class="cmp-meta">READY</span>'
         : '<span class="cmp-meta">LOCKED</span>';
-  // a separate green LEARN circle — revisit the learn pages without the questions
-  const learnBtn = ln.state !== 'locked'
-    ? `<button type="button" class="cmp-learn" title="Read the learn pages again" aria-label="Learn ${phase ? phase.name : 'this topic'} again"><span class="cmp-learn-ic">📖</span><span class="cmp-learn-tag">LEARN</span></button>`
-    : '';
   node.innerHTML = `
     <span class="cmp-bus"></span>
     <span class="cmp-branch"></span>
     <span class="cmp-joint"></span>
     <span class="cmp-dot">${dot}</span>
-    ${learnBtn}
     <span class="cmp-label">
       <span class="cmp-name">${phase ? phase.name : 'LESSON'}</span>
       ${meta}
@@ -378,10 +372,8 @@ function lessonNode(u, ln, i) {
     // first play teaches (show intro); replaying a cleared lesson skips it
     engine.launchPhase(idxOfId(ln.phaseId), 'campaign', ln.state === 'cleared');
   };
-  node.addEventListener('click', e => { if (e.target.closest('.cmp-learn')) return; launch(); });
-  node.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('.cmp-learn')) { e.preventDefault(); launch(); } });
-  const lb = node.querySelector('.cmp-learn');
-  if (lb) lb.addEventListener('click', e => { e.stopPropagation(); SFX.uiClick(); engine.viewLesson(idxOfId(ln.phaseId)); });
+  node.addEventListener('click', launch);
+  node.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); launch(); } });
   return node;
 }
 

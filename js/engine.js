@@ -232,7 +232,6 @@ export function initEngine() {
 // ============================================================
 export function launchPhase(phaseIdx, context, skipIntro = false) {
   launchContext = context;
-  lessonReview = false;
   sessionPhaseIdx = phaseIdx;
   currentPhaseIdx = phaseIdx;
   const src = (context === 'pastpaper') ? (PHASES[phaseIdx].paper || []) : PHASES[phaseIdx].questions;
@@ -406,18 +405,8 @@ function applyContextUI() {
 // quick formative check (e.g. the watch-check) between pages. A topic can
 // override with an authored `intro.pages` sequence for bespoke depth.
 let lessonPages = [], lessonPos = 0, lessonCheckPending = false, lessonDone = new Set();
-let lessonReview = false;   // true when the lesson is opened for review (learn-only)
 let lessonContinuous = false;   // true for the "one continuous flow" topics (teach + practise +
                                 // solo exam, no separate scored test) — finishing clears the topic
-
-// show ONLY the learn pages for a topic (no questions), returning to the
-// campaign map at the end. The campaign map's green LEARN node calls this so
-// the learn section is separate from the questions and easy to revisit.
-export function viewLesson(phaseIdx) {
-  currentPhaseIdx = phaseIdx;
-  lessonReview = true;
-  showPhaseIntro();
-}
 
 function showPhaseIntro() {
   const phase = PHASES[currentPhaseIdx];
@@ -431,7 +420,7 @@ function showPhaseIntro() {
   el['pi-meta'].textContent = phase.intro.meta;
   el['pi-board-tags'].innerHTML = phase.boards.map(b => `<span class="pi-board-tag">${b}</span>`).join('');
 
-  lessonContinuous = !lessonReview && !!phase.intro.continuous;
+  lessonContinuous = !!phase.intro.continuous;
   lessonPages = buildLessonPages(phase);
   lessonPos = 0; lessonDone = new Set();
   renderLessonPage();
@@ -591,7 +580,7 @@ function renderLessonPage() {
   const start = document.getElementById('pi-start-btn');
   if (start) {
     const last = lessonPos >= lessonPages.length - 1;
-    start.textContent = last ? (lessonReview ? '← BACK TO MAP' : (lessonContinuous ? 'FINISH →' : 'START PHASE →')) : 'NEXT →';
+    start.textContent = last ? (lessonContinuous ? 'FINISH →' : 'START PHASE →') : 'NEXT →';
     start.disabled = lessonCheckPending;
   }
   const pi = document.getElementById('phase-intro'); if (pi) pi.scrollTop = 0;
@@ -602,9 +591,6 @@ function renderLessonPage() {
 export function lessonAdvance() {
   if (lessonCheckPending) return false;
   if (lessonPos >= lessonPages.length - 1) {
-    // review mode (opened from the green LEARN node) -> back to the map,
-    // not into the questions. Return false so main.js skips the read-confirm.
-    if (lessonReview) { lessonReview = false; nav.toCampaign(); return false; }
     // continuous-flow topic: the flow IS the whole topic (teach + practise +
     // solo exam), so finishing it clears the topic — there's no separate test.
     if (lessonContinuous) { finishContinuousFlow(); return false; }
