@@ -405,6 +405,7 @@ function applyContextUI() {
 // quick formative check (e.g. the watch-check) between pages. A topic can
 // override with an authored `intro.pages` sequence for bespoke depth.
 let lessonPages = [], lessonPos = 0, lessonCheckPending = false, lessonDone = new Set();
+let lessonGen = new Map();       // per-launch cache of resolved generated lesson slots (keyed by page pos)
 let lessonContinuous = false;   // true for the "one continuous flow" topics (teach + practise +
                                 // solo exam, no separate scored test) — finishing clears the topic
 
@@ -422,7 +423,7 @@ function showPhaseIntro() {
 
   lessonContinuous = !!phase.intro.continuous;
   lessonPages = buildLessonPages(phase);
-  lessonPos = 0; lessonDone = new Set();
+  lessonPos = 0; lessonDone = new Set(); lessonGen = new Map();
   renderLessonPage();
 
   el['hint-refill-note'].style.display = hintRefilledFlag ? 'block' : 'none';
@@ -528,6 +529,18 @@ function renderLessonCheck(host, check, alreadyDone) {
 // calculator) appear in the flow as guided practice. Formative — no lives;
 // it gates NEXT until answered, then shows the explanation.
 function renderLessonQuestion(host, q) {
+  // a generated slot ({ gen: '…' }) builds a concrete instance of a normal type.
+  // Cache it per-launch so navigating BACK shows the same question, not a reroll;
+  // keep any lesson-only flags (exam / walk) from the slot wrapper.
+  if (q && q.gen) {
+    if (!lessonGen.has(lessonPos)) {
+      const inst = generateQuestion(q.gen, q.opts, launchContext);
+      if (q.exam) inst.exam = true;
+      if (q.walk) inst.walk = true;
+      lessonGen.set(lessonPos, inst);
+    }
+    q = lessonGen.get(lessonPos);
+  }
   const already = lessonDone.has(lessonPos);
   lessonCheckPending = !already;
   const reg = REGISTRY[q.type];
