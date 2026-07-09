@@ -547,23 +547,30 @@ function binarySub(opts, context) {
   return { ...base, type: 'BINSUB', desc: 'Negate B (flip + 1), then add A + (−B).', a: aArr, b: bArr };
 }
 function unitsConvert() {
+  // WJEC uses the binary convention (×1024 per step); the other boards use decimal (×1000).
+  const bin = getBoard() === 'WJEC';
+  const step = bin ? 1024 : 1000;
   const kinds = [
-    () => ({ q: 'How many bits are there in one byte?', a: 8, ds: [4, 16, 1000] }),
-    () => ({ q: 'How many bits are there in one nibble?', a: 4, ds: [8, 2, 16] }),
-    () => { const n = randInt(2, 8); return { q: `How many bits are there in ${n} bytes?`, a: n * 8, ds: [n * 4, n * 2, n * 16] }; },
-    () => { const n = randInt(2, 9); return { q: `How many bytes are there in ${n} kB?`, a: n * 1000, ds: [n * 1024, n * 100, n * 8] }; },
-    () => { const n = randInt(2, 9); return { q: `How many kB are there in ${n} MB?`, a: n * 1000, ds: [n * 1024, n * 100, n * 10] }; },
-    () => { const n = randInt(2, 6); return { q: `How many MB are there in ${n} GB?`, a: n * 1000, ds: [n * 1024, n * 100, n * 1000000] }; },
+    () => ({ q: 'How many bits are there in one byte?', a: 8 }),
+    () => ({ q: 'How many bits are there in one nibble?', a: 4 }),
+    () => { const n = randInt(2, 8); return { q: `How many bits are there in ${n} bytes?`, a: n * 8 }; },
+    () => { const n = randInt(2, 9); return { q: `How many bytes are there in ${n} kB?`, a: n * step }; },
+    () => { const n = randInt(2, 9); return { q: `How many kB are there in ${n} MB?`, a: n * step }; },
+    () => { const n = randInt(2, 6); return { q: `How many MB are there in ${n} GB?`, a: n * step }; },
   ];
   const k = kinds[randInt(0, kinds.length - 1)]();
   return {
     // a single unit conversion — the number pad is the natural input.
-    type: 'NUMBER', badge: 'DATA UNITS', board: 'AQA · OCR · Eduqas',
+    type: 'NUMBER', badge: 'DATA UNITS', board: bin ? 'WJEC' : 'AQA · OCR · Eduqas',
     title: k.q,
-    desc: 'GCSE convention: 1 byte = 8 bits, and 1 kB = 1000 B, 1 MB = 1000 kB, 1 GB = 1000 MB.',
+    desc: bin
+      ? 'WJEC convention: 1 byte = 8 bits, and 1 kB = 1024 B, 1 MB = 1024 kB, 1 GB = 1024 MB.'
+      : 'GCSE convention: 1 byte = 8 bits, and 1 kB = 1000 B, 1 MB = 1000 kB, 1 GB = 1000 MB.',
     answer: k.a,
-    hints: ['1 nibble = 4 bits, 1 byte = 8 bits; each step up (kB → MB → GB) is ×1000.', `The answer is ${k.a}.`],
-    explain: `<strong>${k.a}.</strong> 1 byte = 8 bits, 1 nibble = 4 bits, and each unit step up (kB, MB, GB, TB) multiplies by 1000 in the current GCSE specs (not 1024).`,
+    hints: [`1 nibble = 4 bits, 1 byte = 8 bits; each step up (kB → MB → GB) is ×${step}.`, `The answer is ${k.a}.`],
+    explain: bin
+      ? `<strong>${k.a}.</strong> 1 byte = 8 bits, 1 nibble = 4 bits, and on WJEC each unit step up (kB, MB, GB, TB) multiplies by <strong>1024</strong> (the binary convention: 1024 = 2¹⁰).`
+      : `<strong>${k.a}.</strong> 1 byte = 8 bits, 1 nibble = 4 bits, and each unit step up (kB, MB, GB, TB) multiplies by 1000 on your board (WJEC is the exception, which uses 1024).`,
   };
 }
 function soundFileSize(opts, context) {

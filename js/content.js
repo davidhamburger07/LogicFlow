@@ -2769,7 +2769,7 @@ export const PHASES = [
             scenario: 'A supermarket replaces its human checkout staff with AI self-service kiosks that use facial recognition to verify a shopper’s age when buying alcohol. Discuss the impacts of this decision.',
             blocks: [
               { id: 1, kind: 'point', side: 'for', cat: 'Cultural', who: 'Customers', text: 'Checkout is faster, so customers spend less time queuing and can shop more conveniently.' },
-              { id: 2, kind: 'point', side: 'for', cat: 'Legal', who: 'Company', text: 'The supermarket lowers its wage costs and can stay open for longer hours.' },
+              { id: 2, kind: 'point', side: 'for', cat: 'Cultural', who: 'Company', text: 'The supermarket cuts its costs and can stay open around the clock, changing how and when people shop.' },
               { id: 3, kind: 'point', side: 'against', cat: 'Ethical', who: 'Employees', text: 'Checkout staff may lose their jobs, causing unemployment and financial hardship.' },
               { id: 4, kind: 'point', side: 'against', cat: 'Environmental', who: 'Community', text: 'The old tills become e-waste, and the always-on kiosks use more electricity.' },
               { id: 5, kind: 'point', side: 'for', cat: 'Cultural', who: 'Customers', weak: true, text: 'The new kiosks look more modern than the old tills.' },
@@ -2940,7 +2940,7 @@ export const PHASES = [
         scenario: 'A supermarket replaces its human checkout staff with AI self-service kiosks that use facial recognition to verify a shopper’s age when buying alcohol. Discuss the impacts of this decision.',
         blocks: [
           { id: 1, kind: 'point', side: 'for', cat: 'Cultural', who: 'Customers', text: 'Checkout is faster, so customers spend less time queuing and can shop more conveniently.' },
-          { id: 2, kind: 'point', side: 'for', cat: 'Legal', who: 'Company', text: 'The supermarket lowers its wage costs and can stay open for longer hours.' },
+          { id: 2, kind: 'point', side: 'for', cat: 'Cultural', who: 'Company', text: 'The supermarket cuts its costs and can stay open around the clock, changing how and when people shop.' },
           { id: 3, kind: 'point', side: 'against', cat: 'Ethical', who: 'Employees', text: 'Checkout staff may lose their jobs, causing unemployment and financial hardship.' },
           { id: 4, kind: 'point', side: 'against', cat: 'Environmental', who: 'Community', text: 'The old tills become e-waste, and the always-on kiosks use more electricity.' },
           { id: 5, kind: 'point', side: 'for', cat: 'Cultural', who: 'Customers', weak: true, text: 'The new kiosks look more modern than the old tills.' },
