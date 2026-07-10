@@ -41,19 +41,21 @@ console.log('copied index.html, styles.css, js/');
 //     to system monospace anyway).
 let fontMsg = 'font: kept Google Fonts link (offline or fetch failed) — falls back to monospace';
 try {
+  // a full Chrome UA is needed for Google to serve woff2; older/plain UAs get ttf.
   const cssRes = await fetch('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap',
-    { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' } });
+    { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' } });
   const css = await cssRes.text();
-  const m = css.match(/url\((https:\/\/[^)]+\.woff2)\)/);
-  if (!m) throw new Error('no woff2 url in font CSS');
-  const woff2 = Buffer.from(await (await fetch(m[1])).arrayBuffer());
+  const m = css.match(/url\((https:\/\/[^)]+\.(woff2|ttf))\)/);
+  if (!m) throw new Error('no font url in font CSS');
+  const ext = m[2], fmt = ext === 'woff2' ? 'woff2' : 'truetype';
+  const font = Buffer.from(await (await fetch(m[1])).arrayBuffer());
   await mkdir(join(DIST, 'fonts'), { recursive: true });
-  await writeFile(join(DIST, 'fonts', 'share-tech-mono.woff2'), woff2);
+  await writeFile(join(DIST, 'fonts', `share-tech-mono.${ext}`), font);
   let html = await readFile(join(DIST, 'index.html'), 'utf8');
   html = html.replace(/<link href="https:\/\/fonts\.googleapis\.com[^>]*>/,
-    `<style>@font-face{font-family:'Share Tech Mono';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/share-tech-mono.woff2') format('woff2');}</style>`);
+    `<style>@font-face{font-family:'Share Tech Mono';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/share-tech-mono.${ext}') format('${fmt}');}</style>`);
   await writeFile(join(DIST, 'index.html'), html);
-  fontMsg = `font: bundled locally (fonts/share-tech-mono.woff2, ${(woff2.length / 1024).toFixed(0)} KB)`;
+  fontMsg = `font: bundled locally (fonts/share-tech-mono.${ext}, ${(font.length / 1024).toFixed(0)} KB)`;
 } catch (e) { /* keep external link */ }
 console.log(fontMsg);
 

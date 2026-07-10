@@ -75,6 +75,17 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
   white-space: nowrap; transition: border-color .12s, color .12s;
 }
 #exit-btn:hover { border-color: var(--error); color: var(--error); }
+/* phone-width HUD: must never force the layout viewport wider than the screen
+   (its min-content was inflating mobile layouts to ~474px and stranding the
+   lesson NEXT button below the fold) */
+@media (max-width: 560px) {
+  #hud { padding: 6px 10px; gap: 8px; flex-wrap: wrap; }
+  .logo { font-size: 13px; letter-spacing: 2px; }
+  .hud-left { gap: 8px; }
+  .hud-right { gap: 6px; }
+  #vol-wrap { display: none; }   /* volume control stays available in Settings */
+  .hud-center { order: 3; width: 100%; justify-content: center; gap: 14px; }
+}
 
 /* confirmation modal */
 #exit-confirm, #read-confirm, #reset-confirm, #auth-modal {
@@ -2596,6 +2607,24 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 .tut-mech-ico { font-size: 21px; line-height: 1; }
 .tut-mech small { font-size: 7.5px; letter-spacing: 1px; color: var(--ink-4); text-align: center; line-height: 1.35; }
 @media (max-width: 560px) { .pi-check-opts { grid-template-columns: 1fr; } }
+/* phone-width lesson screen: the nav row must never force the viewport wider
+   (26 page dots + BACK + NEXT in one row was doing exactly that) */
+@media (max-width: 560px) {
+  .pi-header { padding: 20px 16px 16px; }
+  .pi-title { font-size: 19px; letter-spacing: 1.5px; }
+  .pi-body { padding: 22px 16px; }
+  .pi-part { letter-spacing: 2px; }
+  .pi-footer { padding: 14px 12px 26px; }
+  .pi-nav { flex-wrap: wrap; gap: 10px; }
+  .pi-dots { order: -1; width: 100%; flex-wrap: wrap; justify-content: center; row-gap: 5px; gap: 5px; }
+  .pi-dot { width: 7px; height: 7px; }
+  .pi-nav-btn { padding: 11px 12px; }
+  #pi-start-btn { padding: 13px 22px; }
+  /* the WORKING OUT palette covered the content at phone widths — collapse it
+     to the DRAW toggle in the corner; the full toolset appears while drawing */
+  .wp-bar { top: auto; bottom: 178px; right: 8px; transform: none; padding: 6px; }
+  #workpad:not(.drawing) .wp-bar > :not(.wp-draw):not(.wp-title) { display: none; }
+}
 
 /* ── LEARN SCREEN: reveal + rich blocks ──────────────── */
 @keyframes piReveal { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
