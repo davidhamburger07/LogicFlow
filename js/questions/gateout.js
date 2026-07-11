@@ -44,7 +44,7 @@ function gateSvg(g, a, b) {
       + `<path d="M 92,30 q 12,20 0,40" fill="none" stroke="${ink}" stroke-width="2"/>`;
     body += wire(139, 50, 172, 0) + lab(188, 55, 'Q=?', null);
   }
-  body += `<text x="110" y="92" fill="var(--ink-4)" font-family="var(--mono)" font-size="10" letter-spacing="2" text-anchor="middle">${g}</text>`;
+  body += `<text x="110" y="92" fill="var(--ink-4)" font-family="var(--mono)" font-size="12" letter-spacing="2" text-anchor="middle">${g}</text>`;
   return `<svg viewBox="0 0 210 100" class="go-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${g} gate with A=${a}${b == null ? '' : ' and B=' + b}">${body}</svg>`;
 }
 

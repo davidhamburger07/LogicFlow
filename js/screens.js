@@ -18,6 +18,7 @@ import * as store from './storage.js';
 import * as engine from './engine.js';
 import { SFX } from './sound.js';
 import * as courses from './courses.js';
+import { notationTableHtml } from './notation.js';
 
 const PHASE_IDS = PHASES.map(p => p.id);
 const PHASE_IDX_BY_ID = {};
@@ -97,7 +98,144 @@ export function showMainMenu() {
     menuBtn('HOW TO PLAY', 'New here? A 60-second guide to the game', () => showTutorial(showMainMenu)),
     menuBtn('SETTINGS', 'Theme, sound, exam board and progress', showSettings),
   );
+  if (authApi && authApi.sendFeedback) {
+    const fb = h('button', 'menu-feedback', '💬 FEEDBACK — spotted a problem or got an idea?');
+    fb.addEventListener('click', () => { SFX.uiClick(); openFeedback('menu'); });
+    dom.menuActions.append(fb);
+  }
   engine.showScreen('main-menu');
+}
+
+// ============================================================
+// feedback — a straight line from the player to the developer. Standalone
+// site only (inserts into the Supabase feedback table; RLS is insert-only).
+// ============================================================
+let feedbackFrom = 'menu';
+export function openFeedback(from) {
+  if (!authApi || !authApi.sendFeedback) return;
+  feedbackFrom = from || 'menu';
+  fbMsg('');
+  document.getElementById('fb-message').value = '';
+  document.getElementById('fb-send').disabled = false;
+  document.getElementById('feedback-modal').classList.add('show');
+  setTimeout(() => { try { document.getElementById('fb-message').focus(); } catch (e) {} }, 50);
+}
+function closeFeedback() { document.getElementById('feedback-modal').classList.remove('show'); }
+function fbMsg(text, kind) { const m = document.getElementById('fb-msg'); m.textContent = text || ''; m.className = 'auth-msg' + (kind ? ' auth-msg-' + kind : ''); }
+async function fbSubmit() {
+  const message = document.getElementById('fb-message').value.trim();
+  const email = document.getElementById('fb-email').value.trim();
+  if (message.length < 4) { fbMsg('Tell us a little more first.', 'err'); return; }
+  const btn = document.getElementById('fb-send'); btn.disabled = true; fbMsg('Sending…');
+  const res = await authApi.sendFeedback(message, email, { from: feedbackFrom, board: store.getBoard() });
+  btn.disabled = false;
+  if (!res || !res.ok) { fbMsg((res && res.error) || 'Could not send right now — please try again.', 'err'); return; }
+  fbMsg('Sent — thank you!', 'ok');
+  SFX.correct();
+  setTimeout(closeFeedback, 1200);
+}
+export function initFeedback() {
+  document.getElementById('fb-send').addEventListener('click', fbSubmit);
+  document.getElementById('fb-cancel').addEventListener('click', () => { SFX.uiClick(); closeFeedback(); });
+}
+
+// ============================================================
+// board differences — what actually changes between exam boards.
+// Generated at runtime from the SAME flags the game plays by
+// (onlyBoards / reqBoards / specGate / notation / unit convention),
+// so this screen can never drift out of sync with the content.
+// ============================================================
+const BOARD_LIST = ['AQA', 'OCR', 'Eduqas', 'WJEC', 'Edexcel'];
+const CODE_NOTATION = {
+  AQA: 'AQA pseudo-code (← / OUTPUT)', OCR: 'OCR Exam Reference Language',
+  Eduqas: 'Python', WJEC: 'Python', Edexcel: 'Python',
+};
+const ALL_GATES = ['AND', 'OR', 'NOT', 'XOR'];
+const cleanPart = p => (p || '').replace(/^PART \d+ · /, '');
+
+// walk the content once and group every board-gated item
+function collectBoardDiff() {
+  const onlyMap = new Map();   // phase+boards -> { phases, label, boards }
+  const reqMap = new Map();    // enrichLabel  -> { label, phase, boards }
+  PHASES.forEach(p => {
+    ((p.intro && p.intro.pages) || []).forEach(pg => {
+      if (pg.onlyBoards) {
+        const key = p.id + '|' + pg.onlyBoards.join(',') + '|' + cleanPart(pg.part);
+        if (!onlyMap.has(key)) onlyMap.set(key, { label: `${p.name} · ${cleanPart(pg.part)}`, boards: pg.onlyBoards });
+      }
+      const q = pg.q;
+      if (q && q.reqBoards) {
+        const key = q.enrichLabel || q.title;
+        if (!reqMap.has(key)) reqMap.set(key, { label: q.enrichLabel || q.title, phase: p.name, boards: q.reqBoards });
+      }
+    });
+    (p.questions || []).forEach(q => {
+      if (q.reqBoards) {
+        const key = q.enrichLabel || q.title;
+        if (!reqMap.has(key)) reqMap.set(key, { label: q.enrichLabel || q.title, phase: p.name, boards: q.reqBoards });
+      }
+    });
+  });
+  return { only: [...onlyMap.values()], req: [...reqMap.values()] };
+}
+
+function bdSection(title, inner) { return `<div class="bd-section"><div class="bd-title">${title}</div>${inner}</div>`; }
+function bdList(items) { return `<ul class="bd-list">${items.map(i => `<li>${i}</li>`).join('')}</ul>`; }
+
+function renderBoardDiff() {
+  const b = store.getBoard();
+  const { only, req } = collectBoardDiff();
+  const gates = ALL_GATES.filter(g => store.boardRequiresGate(g, b));
+  const extra = req.filter(r => r.boards.includes(b));
+  const skippable = req.filter(r => !r.boards.includes(b));
+  const shown = only.filter(o => o.boards.includes(b));
+  const hidden = only.filter(o => !o.boards.includes(b));
+
+  let out = `<div class="bd-note">One thing never changes: <strong>the definitions are identical on every board</strong>. `
+    + `What changes is <strong>coverage</strong> (what you must know) and <strong>notation</strong> (how code and logic are written).</div>`;
+
+  out += bdSection(`YOUR SPEC AT A GLANCE · ${b}`, bdList([
+    `<strong>Code notation</strong> — ${CODE_NOTATION[b]}. Every programming question renders in it.`,
+    `<strong>Logic gates</strong> — ${gates.join(', ')}${gates.includes('XOR') ? '' : ' (XOR is not on your spec — XOR content shows as optional)'}.`,
+    `<strong>Data units</strong> — ${b === 'WJEC' ? '1 kB = 1,024 bytes (the binary convention)' : '1 kB = 1,000 bytes (the decimal convention)'}.`,
+  ]) + notationTableHtml(b));
+
+  if (extra.length) out += bdSection('EXTRA ON YOUR SPEC — YOU MUST KNOW THESE', bdList(extra.map(r => `<strong>${r.label}</strong> <span class="bd-dim">(${r.phase})</span>`)));
+  if (skippable.length) out += bdSection('NOT ON YOUR SPEC — SHOWN AS OPTIONAL, WITH A SKIP', bdList(skippable.map(r => `<strong>${r.label}</strong> <span class="bd-dim">(${r.phase} · required for ${r.boards.join(', ')})</span>`)));
+  if (shown.length) out += bdSection('LESSON CONTENT INCLUDED FOR YOUR BOARD', bdList(shown.map(o => `<strong>${o.label}</strong>`)));
+  if (hidden.length) out += bdSection('LESSON CONTENT HIDDEN FOR YOUR BOARD', bdList(hidden.map(o => `<strong>${o.label}</strong> <span class="bd-dim">(${o.boards.join(', ')} only)</span>`)));
+
+  // the full five-board comparison, generated from the same data
+  const rows = [
+    ['Code notation', ...BOARD_LIST.map(x => CODE_NOTATION[x])],
+    ['Boolean shorthand', ...BOARD_LIST.map(x => store.getGateNotation(x).label)],
+    ['Logic gates', ...BOARD_LIST.map(x => ALL_GATES.filter(g => store.boardRequiresGate(g, x)).join(' '))],
+    ['1 kB equals', ...BOARD_LIST.map(x => x === 'WJEC' ? '1,024 B' : '1,000 B')],
+    ...only.map(o => [o.label, ...BOARD_LIST.map(x => o.boards.includes(x) ? '✓' : '—')]),
+    ...req.map(r => [r.label, ...BOARD_LIST.map(x => r.boards.includes(x) ? 'required' : 'optional')]),
+  ];
+  out += bdSection('EVERY BOARD, SIDE BY SIDE',
+    `<div class="bd-table-wrap"><table class="bd-table"><thead><tr><th></th>${BOARD_LIST.map(x => `<th${x === b ? ' class="bd-you"' : ''}>${x}</th>`).join('')}</tr></thead><tbody>`
+    + rows.map(r => `<tr><th>${r[0]}</th>${r.slice(1).map((c, i) => `<td${BOARD_LIST[i] === b ? ' class="bd-you"' : ''}>${c}</td>`).join('')}</tr>`).join('')
+    + `</tbody></table></div>`);
+
+  document.getElementById('board-diff-content').innerHTML = out;
+  document.querySelectorAll('#board-diff-boards .board-opt').forEach(btn => btn.classList.toggle('active', btn.dataset.board === b));
+}
+
+let boardDiffReturn = null;
+export function showBoardDiff(returnFn) {
+  resetAccent();
+  boardDiffReturn = returnFn || showMainMenu;
+  renderBoardDiff();
+  document.getElementById('board-diff-back').onclick = () => { SFX.uiClick(); boardDiffReturn(); };
+  engine.showScreen('board-diff');
+}
+// re-render when the board is switched from this screen (main.js sets the board first)
+export function initBoardDiff() {
+  document.getElementById('board-diff-boards').addEventListener('click', e => {
+    if (e.target.closest('.board-opt')) setTimeout(renderBoardDiff, 0);
+  });
 }
 
 // ============================================================

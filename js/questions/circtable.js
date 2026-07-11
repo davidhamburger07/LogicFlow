@@ -72,7 +72,7 @@ function circuitSvg(inputs, gates, output) {
   body += wire(srcOutX(output), outY[output], qx, outY[output], true);
   body += `<text x="${qx + 6}" y="${outY[output] + 5}" fill="var(--phase-color)" font-family="${FONT}" font-size="14">Q</text>`;
   // gates on top + a small type label
-  gates.forEach(g => { const p = pos[g.id]; body += gateBody(g.op, p.x, p.yTop) + `<text x="${p.x + 16}" y="${p.yTop + GW + 12}" fill="var(--ink-4)" font-family="${FONT}" font-size="8" text-anchor="middle" letter-spacing="1">${g.op}</text>`; });
+  gates.forEach(g => { const p = pos[g.id]; body += gateBody(g.op, p.x, p.yTop) + `<text x="${p.x + 16}" y="${p.yTop + GW + 12}" fill="var(--ink-4)" font-family="${FONT}" font-size="12" text-anchor="middle" letter-spacing="1">${g.op}</text>`; });
   return `<svg viewBox="0 0 ${W} ${H}" class="ctb-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="logic circuit to trace">${body}</svg>`;
 }
 

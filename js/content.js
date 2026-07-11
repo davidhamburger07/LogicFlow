@@ -267,8 +267,14 @@ export const PHASES = [
         // ── PART 1 — KNOW THE GATES ──
         { part: 'PART 1 · KNOW THE GATES', heading: 'FOUR GATES, FOUR EVERYDAY RULES',
           html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · LOGIC GATE</div><div class="pi-defbox-text">An electronic component that takes one or more <strong>binary inputs</strong> and produces a single <strong>binary output</strong>, following a fixed rule.</div></div>'
-            + '<div class="pi-text">The fastest way to learn the gates is to spot them in everyday rules. <strong>AND</strong> is the strict one: a safe opens only with a valid keycard <em>AND</em> the right PIN — both, or nothing. <strong>OR</strong> is the generous one: a burglar alarm rings if the window <em>OR</em> the door opens — either is enough (both also counts).</div>'
-            + '<div class="pi-text"><strong>NOT</strong> simply inverts: a street light switches ON when it is <em>NOT</em> daytime. And <strong>XOR</strong> — "exclusive OR" — fires only when its inputs <em>differ</em>: think of a landing light wired to two switches, one downstairs and one upstairs. Flipping either switch toggles the light, so it\'s on exactly when the two switches are in <em>different</em> positions. In the questions below, pick the gate that matches each rule.</div>' },
+            + '<div class="pi-text">The fastest way to learn the gates is to spot them in everyday rules:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>AND</strong> — the strict one: a safe opens only with a valid keycard <em>AND</em> the right PIN. Both, or nothing.</li>'
+            + '<li><strong>OR</strong> — the generous one: a burglar alarm rings if the window <em>OR</em> the door opens. Either is enough (both also counts).</li>'
+            + '<li><strong>NOT</strong> — simply inverts: a street light switches ON when it is <em>NOT</em> daytime.</li>'
+            + '<li><strong>XOR</strong> — "exclusive OR": fires only when its inputs <em>differ</em>. A landing light wired to two switches (one downstairs, one upstairs) is on exactly when the switches are in <em>different</em> positions.</li>'
+            + '</ul>'
+            + '<div class="pi-text">In the questions below, pick the gate that matches each rule.</div>' },
         { part: 'PART 1 · KNOW THE GATES',
           q: { type: 'GATEOUT', tests: [
               { gate: 'AND', a: 1, b: 1 },
@@ -305,7 +311,13 @@ export const PHASES = [
             + '<div class="pi-text">The rows aren\'t in a random order: a 1-input gate (like NOT) has 2¹ = <strong>2 rows</strong>, and a 2-input gate has 2² = <strong>4 rows</strong>, always listed by <strong>counting upwards in binary</strong> — 0,1 for one input; 00, 01, 10, 11 for two — the same counting you learned in Binary Basics. That way you can\'t miss a case or write one twice.</div>',
           diagram: 'truth-table-anatomy' },
         { part: 'PART 2 · TRUTH TABLES', heading: 'THE METHOD — ONE ROW AT A TIME',
-          html: '<div class="pi-text">The method never changes: <strong>①</strong> list the input rows in binary order. <strong>②</strong> Take <strong>one row at a time</strong> — cover the others up if it helps. <strong>③</strong> Apply the gate\'s rule to <em>that row\'s inputs only</em> ("A is 0 and B is 1 — does OR give a 1? Yes"). <strong>④</strong> Write the answer in Q, then move to the next row.</div>'
+          html: '<div class="pi-text">The method never changes:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>① List the input rows</strong> — in binary counting order.</li>'
+            + '<li><strong>② Take one row at a time</strong> — cover the others up if it helps.</li>'
+            + '<li><strong>③ Apply the gate\'s rule</strong> — to <em>that row\'s inputs only</em> ("A is 0 and B is 1 — does OR give a 1? Yes").</li>'
+            + '<li><strong>④ Write the answer in Q</strong> — then move to the next row.</li>'
+            + '</ul>'
             + '<div class="pi-text">That\'s all there is to it — a big table is just a stack of tiny yes/no questions. Over the next few pages you\'ll <strong>watch</strong> the four gates being filled in, one at a time, then <strong>do each one yourself</strong>. Take it slowly: getting this rock-solid now is what stops a truth table looking scary in the exam.</div>' },
         // 2A — WATCH each of the four gates built step by step
         { part: 'PART 2 · TRUTH TABLES', heading: 'WATCH · THE AND GATE',
@@ -616,7 +628,13 @@ export const PHASES = [
         // ── PART 1 — READING HEX (hex → denary) ──
         { part: 'PART 1 · READING HEX', heading: 'SIXTEENS AND UNITS',
           html: '<div class="pi-text">Reading a 2-digit hex number is place value again — just like tens-and-units, but the columns are <strong>sixteens and units</strong>: the left digit is worth <strong>× 16</strong>, the right digit <strong>× 1</strong>.</div>'
-            + '<div class="pi-text">The method: <strong>(1)</strong> if a digit is a letter, turn it back into its number first (A=10 … F=15); <strong>(2)</strong> multiply the left digit by 16; <strong>(3)</strong> add the right digit. So <strong>2A</strong> is (2 × 16) + (10 × 1) = 32 + 10 = <strong>42</strong>. Use the working-out pad if you want to scribble.</div>',
+            + '<div class="pi-text">The method:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>① Letters become numbers</strong> — if a digit is a letter, turn it back first (A=10 … F=15).</li>'
+            + '<li><strong>② Multiply the left digit by 16.</strong></li>'
+            + '<li><strong>③ Add the right digit.</strong></li>'
+            + '</ul>'
+            + '<div class="pi-text">So <strong>2A</strong> is (2 × 16) + (10 × 1) = 32 + 10 = <strong>42</strong>. Use the working-out pad if you want to scribble.</div>',
           diagram: 'hex-place-value' },
         { part: 'PART 1 · READING HEX', heading: 'WATCH · READ A HEX NUMBER',
           html: '<div class="pi-text">Watch one read out, digit by digit. Turn any letter into its value (here <strong>B = 11</strong>), multiply each digit by its column (the 16s, then the units), and add them up. Step through and watch the running total build.</div>',
@@ -803,7 +821,14 @@ export const PHASES = [
           diagram: 'pixel-rgb' },
         { part: 'THE BIG IDEA', heading: 'MIXING LIGHT, NOT PAINT',
           html: '<div class="pi-text">Mixing <strong>light</strong> behaves differently from mixing paint. Paint absorbs light — mix lots of colours and you head towards muddy brown. Light <strong>adds</strong> — the more you switch on, the brighter and whiter it gets. This is called <strong>additive colour</strong>.</div>'
-            + '<div class="pi-text">The combinations are worth memorising: <strong>red + green = yellow</strong> (genuinely — try it below!), <strong>red + blue = magenta</strong>, <strong>green + blue = cyan</strong>. All three at full power make <strong>white</strong>; all three off make <strong>black</strong>. Every other colour — orange, pink, turquoise, brown — is just some in-between mix of the three brightnesses.</div>',
+            + '<div class="pi-text">The combinations are worth memorising:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Red + green = yellow</strong> — genuinely; try it below!</li>'
+            + '<li><strong>Red + blue = magenta</strong></li>'
+            + '<li><strong>Green + blue = cyan</strong></li>'
+            + '<li><strong>All three at full power = white</strong> · all three off = <strong>black</strong>.</li>'
+            + '</ul>'
+            + '<div class="pi-text">Every other colour — orange, pink, turquoise, brown — is just some in-between mix of the three brightnesses.</div>',
           diagram: 'rgb-mix' },
         { part: 'THE BIG IDEA', heading: 'THE CODE: #RRGGBB',
           html: '<div class="pi-text">Now the part you already know how to do. Each channel\'s brightness is stored as <strong>one byte</strong> — 0 to 255 — and you\'ve just learned that one byte is written as exactly <strong>two hex digits</strong>. So a whole colour is <strong>six hex digits</strong>: two for red, two for green, two for blue, with a <strong>#</strong> on the front. That\'s the famous <strong>#RRGGBB</strong> code.</div>'
@@ -1128,7 +1153,13 @@ export const PHASES = [
           html: '<div class="pi-text">Billions of machines can only talk to each other because they all follow the same rules. A set of rules for communication is called a <strong>protocol</strong>.</div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · PROTOCOL</div><div class="pi-defbox-text">An <strong>agreed set of rules</strong> for how data is transmitted between devices.</div></div>'
             + '<div class="pi-text">The two most important protocols work as a team, called <strong>TCP/IP</strong>. <strong>IP</strong> gives every device an address and routes the packets to the right place. <strong>TCP</strong> checks every packet arrived and rebuilds them in the right order.</div>'
-            + '<div class="pi-text">Then each job on the internet has its own specialist protocol. <strong>HTTP</strong> transfers web pages. <strong>HTTPS</strong> is the same but <strong>encrypted</strong> — that\'s the padlock in your browser. <strong>FTP</strong> transfers files. <strong>SMTP</strong> sends email; <strong>IMAP</strong> fetches it.</div>'
+            + '<div class="pi-text">Then each job on the internet has its own specialist protocol:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>HTTP</strong> — transfers web pages.</li>'
+            + '<li><strong>HTTPS</strong> — the same but <strong>encrypted</strong>. That\'s the padlock in your browser.</li>'
+            + '<li><strong>FTP</strong> — transfers files.</li>'
+            + '<li><strong>SMTP</strong> — sends email; <strong>IMAP</strong> fetches it.</li>'
+            + '</ul>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · DNS (DOMAIN NAME SYSTEM)</div><div class="pi-defbox-text">Translates a <strong>domain name</strong> (like bbc.co.uk) into its <strong>IP address</strong> so your browser can connect to the right server.</div></div>'
             + '<div class="pi-text">Without DNS, you would have to remember a number address for every website you visit.</div>' },
         { part: 'PART 3 · PROTOCOLS & DNS',
@@ -1348,7 +1379,13 @@ export const PHASES = [
 
         // ── PART 3 — EFFICIENCY ──
         { part: 'PART 3 · EFFICIENCY', heading: 'BIG O: COMPARING WITHOUT A STOPWATCH',
-          html: '<div class="pi-text"><strong>Big O notation</strong> describes how an algorithm\'s work grows as the input grows. <strong>O(n)</strong>: double the list, double the work (linear search). <strong>O(n²)</strong>: double the list, <em>quadruple</em> the work (bubble and insertion sort — for 10 items ~100 comparisons, for 100 items ~10,000). <strong>O(log n)</strong>: doubling the list adds just <em>one</em> step (binary search). <strong>O(n log n)</strong>: merge sort — nearly linear, even on huge data.</div>'
+          html: '<div class="pi-text"><strong>Big O notation</strong> describes how an algorithm\'s work grows as the input grows:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>O(n)</strong> — double the list, double the work (linear search).</li>'
+            + '<li><strong>O(n²)</strong> — double the list, <em>quadruple</em> the work (bubble and insertion sort: 10 items ≈ 100 comparisons, 100 items ≈ 10,000).</li>'
+            + '<li><strong>O(log n)</strong> — doubling the list adds just <em>one</em> step (binary search).</li>'
+            + '<li><strong>O(n log n)</strong> — merge sort: nearly linear, even on huge data.</li>'
+            + '</ul>'
             + '<div class="pi-text">This is why algorithm choice is a real decision: on 20 numbers, anything works; on <strong>10 million records</strong>, an O(n²) sort would take hours while merge sort finishes in seconds. Same computer — different maths.</div>' },
         { part: 'PART 3 · EFFICIENCY',
           q: { type: 'MC', title: 'Which sorting algorithm has O(n²) worst-case time complexity?',
@@ -1630,15 +1667,23 @@ export const PHASES = [
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · VON NEUMANN ARCHITECTURE</div><div class="pi-defbox-text">A computer design where <strong>program instructions and data are stored together in the same memory</strong>.</div></div>' },
         { part: 'THE BIG IDEA', heading: 'MEET THE CAST',
           html: '<div class="pi-text">Inside the CPU is a small cast, each part with one fixed job — and the exam wants you to <strong>name each one and say what it does</strong>. Meet them now; you\'ll watch them work in a moment.</div>'
-            + '<div class="pi-text"><strong>Control Unit (CU)</strong> — the director. It <strong>decodes</strong> each instruction and sends out <strong>control signals</strong> that tell every other part what to do and when, managing the flow of data through the processor and driving the whole fetch–decode–execute cycle.</div>'
-            + '<div class="pi-text"><strong>Arithmetic Logic Unit (ALU)</strong> — the calculator. It performs <strong>all arithmetic</strong> (add, subtract) and <strong>all logic</strong> (AND, OR, NOT, and comparisons such as "is A &gt; B?"), built from the very gates you met last topic. Its result is placed in the <strong>Accumulator (ACC)</strong> — a register that holds the value the CPU is currently working on.</div>'
-            + '<div class="pi-text"><strong>Registers</strong> — a handful of <strong>tiny, ultra-fast</strong> storage slots inside the CPU that hold the exact address, data or instruction in use <em>right now</em>. They are the <strong>fastest memory in the whole machine</strong> because they sit on the CPU itself — and you\'ll pin down the four key ones (PC, MAR, MDR, CIR) in Part 1.</div>',
+            + '<ul class="pi-list">'
+            + '<li><strong>Control Unit (CU)</strong> — the director. It <strong>decodes</strong> each instruction and sends out <strong>control signals</strong> that tell every other part what to do and when, driving the whole fetch–decode–execute cycle.</li>'
+            + '<li><strong>Arithmetic Logic Unit (ALU)</strong> — the calculator. It performs <strong>all arithmetic</strong> (add, subtract) and <strong>all logic</strong> (AND, OR, NOT, comparisons like "is A &gt; B?"), built from the very gates you met last topic. Its result lands in the <strong>Accumulator (ACC)</strong>.</li>'
+            + '<li><strong>Registers</strong> — a handful of <strong>tiny, ultra-fast</strong> storage slots inside the CPU holding the exact address, data or instruction in use <em>right now</em>. The fastest memory in the whole machine — you\'ll pin down the four key ones (PC, MAR, MDR, CIR) in Part 1.</li>'
+            + '</ul>',
           diagram: 'cpu-parts' },
         { part: 'THE BIG IDEA', heading: 'THE SUPPORTING CAST · CACHE, CLOCK & BUSES',
           html: '<div class="pi-text">Three more parts keep the processor fed and in step — and every one is fair game in the exam.</div>'
             + '<div class="pi-text"><strong>Cache</strong> — a small pool of <strong>very fast memory</strong> sitting between the CPU and RAM. It keeps <strong>copies of the instructions and data used most often</strong>, so the CPU rarely has to make the slow trip out to RAM. It comes in levels — <strong>L1</strong> (smallest and fastest, right on the core), then L2 and L3 (larger but slower). More cache means fewer slow RAM trips, so more instructions finished per second.</div>'
             + '<div class="pi-text"><strong>Clock</strong> — sends out a steady electrical <strong>pulse</strong> that keeps every step in time; one tick drives the cycle forward. Its <strong>clock speed</strong> is measured in <strong>hertz</strong>: a 3 GHz clock ticks <strong>3 billion times a second</strong>, so the CPU can run that many fetch–decode–execute cycles per second.</div>'
-            + '<div class="pi-text"><strong>Buses</strong> — the bundles of wires that carry everything between the CPU and memory. The <strong>address bus</strong> carries memory addresses <em>one way</em>, CPU → memory ("which location?"); the <strong>data bus</strong> carries the actual data and instructions <em>both ways</em> ("what is stored there?"); and the <strong>control bus</strong> carries the CU\'s control and timing signals. Beyond the chip sit <strong>RAM</strong> and <strong>ROM</strong> — you\'ll contrast those in Part 3.</div>'
+            + '<div class="pi-text"><strong>Buses</strong> — the bundles of wires that carry everything between the CPU and memory:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Address bus</strong> — carries memory addresses <em>one way</em>, CPU → memory ("which location?").</li>'
+            + '<li><strong>Data bus</strong> — carries the actual data and instructions <em>both ways</em> ("what is stored there?").</li>'
+            + '<li><strong>Control bus</strong> — carries the CU\'s control and timing signals.</li>'
+            + '</ul>'
+            + '<div class="pi-text">Beyond the chip sit <strong>RAM</strong> and <strong>ROM</strong> — you\'ll contrast those in Part 3.</div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · CACHE</div><div class="pi-defbox-text">A small amount of <strong>very fast memory on or near the CPU</strong> that stores <strong>frequently used instructions and data</strong>, so the CPU waits less for RAM.</div></div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · CLOCK SPEED</div><div class="pi-defbox-text">The number of <strong>fetch–decode–execute cycles per second</strong>, measured in <strong>hertz</strong> (3 GHz = 3 billion cycles per second).</div></div>' },
         { part: 'THE BIG IDEA', use: ['video'],
@@ -1650,7 +1695,13 @@ export const PHASES = [
 
         // ── PART 1 — THE COMPONENTS ──
         { part: 'PART 1 · THE COMPONENTS', heading: 'FOUR REGISTERS, FOUR JOBS',
-          html: '<div class="pi-text">The exam loves the registers, so pin down their jobs now. The <strong>Program Counter (PC)</strong> is the bookmark: it holds the <em>address of the next instruction</em> to fetch. The <strong>Memory Address Register (MAR)</strong> holds the <em>address being accessed right now</em>. The <strong>Memory Data Register (MDR)</strong> holds the <em>data or instruction that just arrived</em> from memory. And the <strong>Current Instruction Register (CIR)</strong> holds the <em>instruction being decoded and executed</em>.</div>'
+          html: '<div class="pi-text">The exam loves the registers, so pin down their jobs now:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Program Counter (PC)</strong> — the bookmark: holds the <em>address of the next instruction</em> to fetch.</li>'
+            + '<li><strong>Memory Address Register (MAR)</strong> — holds the <em>address being accessed right now</em>.</li>'
+            + '<li><strong>Memory Data Register (MDR)</strong> — holds the <em>data or instruction that just arrived</em> from memory.</li>'
+            + '<li><strong>Current Instruction Register (CIR)</strong> — holds the <em>instruction being decoded and executed</em>.</li>'
+            + '</ul>'
             + '<div class="pi-text">The trap to avoid: <strong>MAR = address, MDR = data</strong>. One says <em>where</em>, the other holds <em>what</em>. Add the CU (directs) and the ALU (calculates) and you can name every part the exam will throw at you.</div>' },
         { part: 'PART 1 · THE COMPONENTS',
           q: { type: 'MC', title: 'What does the ALU do?',
@@ -1748,7 +1799,11 @@ export const PHASES = [
 
         // ── PART 3 — MEMORY ──
         { part: 'PART 3 · MEMORY', heading: 'RAM, ROM & THE SPEED LADDER',
-          html: '<div class="pi-text">Two memories live on the motherboard, and the exam contrasts them every year. <strong>RAM</strong> is the workbench: it holds the programs and data <em>currently running</em>, it can be read <em>and</em> written, and it\'s <strong>volatile</strong> — cut the power and it\'s wiped (that\'s why unsaved work dies with a crash). <strong>ROM</strong> is the instruction card glued to the machine: tiny, <strong>read-only</strong> and <strong>non-volatile</strong>, holding the firmware/BIOS that boots the computer.</div>'
+          html: '<div class="pi-text">Two memories live on the motherboard, and the exam contrasts them every year:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>RAM</strong> — the workbench: holds the programs and data <em>currently running</em>, can be read <em>and</em> written, and is <strong>volatile</strong> — cut the power and it\'s wiped (that\'s why unsaved work dies with a crash).</li>'
+            + '<li><strong>ROM</strong> — the instruction card glued to the machine: tiny, <strong>read-only</strong> and <strong>non-volatile</strong>, holding the firmware/BIOS that boots the computer.</li>'
+            + '</ul>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · RAM</div><div class="pi-defbox-text"><strong>Volatile</strong>, read-write main memory holding the <strong>programs and data currently in use</strong>. Contents are <strong>lost when the power is turned off</strong>.</div></div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · ROM</div><div class="pi-defbox-text"><strong>Non-volatile, read-only</strong> memory storing the <strong>bootstrap/BIOS</strong> — the startup instructions that load the operating system.</div></div>'
             + '<div class="pi-text">All the storage in a computer forms a <strong>hierarchy</strong>: registers → cache → RAM → secondary storage. Each step down is <em>bigger but slower</em>. That\'s also the recipe for performance: a faster <strong>clock speed</strong>, more <strong>cores</strong> (several instructions at once) and more <strong>cache</strong> (fewer slow trips to RAM) all buy you more completed cycles per second.</div>',
@@ -2273,7 +2328,13 @@ export const PHASES = [
             answer: '128',
             explain: '7 bits → 2⁷ = <strong>128</strong> characters (codes 0–127). That limit is exactly why Unicode was needed for other languages and emoji.' } },
         { part: 'PART 1 · TEXT', heading: 'THE FULL ASCII TABLE',
-          html: '<div class="pi-text">Here it is — every one of the <strong>128</strong> codes ASCII can store. You don\'t memorise it; you learn the <strong>anchors</strong> and count on from there. Spot the patterns the exam relies on: the <strong>digits 0–9</strong> start at 48, the <strong>capitals A–Z</strong> at 65, and the <strong>lowercase a–z</strong> at 97 — exactly 32 above their capitals. The first 32 codes aren\'t letters at all; they\'re <strong>control codes</strong> like tab and line-feed.</div>',
+          html: '<div class="pi-text">Here it is — every one of the <strong>128</strong> codes ASCII can store. You don\'t memorise it; you learn the <strong>anchors</strong> and count on from there:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Digits 0–9</strong> — start at code <strong>48</strong>.</li>'
+            + '<li><strong>Capitals A–Z</strong> — start at code <strong>65</strong>.</li>'
+            + '<li><strong>Lowercase a–z</strong> — start at code <strong>97</strong>, exactly 32 above their capitals.</li>'
+            + '<li><strong>Codes 0–31</strong> — not letters at all: <strong>control codes</strong> like tab and line-feed.</li>'
+            + '</ul>',
           diagram: 'ascii-table' },
         { part: 'PART 1 · TEXT', heading: 'WATCH · A BYTE IS JUST A NUMBER',
           html: '<div class="pi-text">The big idea in action: a character is stored as a <strong>number</strong> in a byte. Watch the byte <code>01000001</code> read out to denary — it comes to <strong>65</strong>, and 65 is the ASCII code for <strong>\'A\'</strong>. It is the exact same binary-reading you already know.</div>',
@@ -2588,7 +2649,13 @@ export const PHASES = [
       pages: [
         // ── THE BIG IDEA ──
         { part: 'THE BIG IDEA', heading: 'POWER, AND RESPONSIBILITY',
-          html: '<div class="pi-text">Computing brings huge benefits — but it also causes harm, and the exam expects you to weigh both. Issues come in four flavours: <strong>legal</strong> (does it break a law?), <strong>ethical</strong> (is it <em>right</em>, even if it\'s legal?), <strong>cultural / social</strong> (how it changes the way we live and work), and <strong>environmental</strong> (energy, materials, e-waste).</div>'
+          html: '<div class="pi-text">Computing brings huge benefits — but it also causes harm, and the exam expects you to weigh both. Issues come in four flavours:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Legal</strong> — does it break a law?</li>'
+            + '<li><strong>Ethical</strong> — is it <em>right</em>, even if it\'s legal?</li>'
+            + '<li><strong>Cultural / social</strong> — how it changes the way we live and work.</li>'
+            + '<li><strong>Environmental</strong> — energy, materials, e-waste.</li>'
+            + '</ul>'
             + '<div class="pi-text">Two skills earn the marks: <strong>name the relevant UK law</strong> for a scenario, and <strong>"discuss" an impact</strong> — giving both sides and reaching a judgement. Three laws come up again and again: the <strong>Data Protection Act 2018</strong>, the <strong>Computer Misuse Act 1990</strong>, and the <strong>Copyright, Designs and Patents Act 1988</strong>.</div>' },
         { part: 'THE BIG IDEA', use: ['video'],
           check: {
@@ -2653,7 +2720,12 @@ export const PHASES = [
 
         // ── PART 2 — ETHICS, SOCIETY & THE PLANET ──
         { part: 'PART 2 · BEYOND THE LAW', heading: 'ETHICS, SOCIETY & THE PLANET',
-          html: '<div class="pi-text">Plenty of harms aren\'t about breaking a law. <strong>Privacy</strong>: personal data collected or tracked without clear consent. <strong>Employment</strong>: automation removes some jobs and creates others. And the <strong>environment</strong>: making and powering devices costs energy and materials, and discarded tech becomes <strong>e-waste</strong>.</div>'
+          html: '<div class="pi-text">Plenty of harms aren\'t about breaking a law:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Privacy</strong> — personal data collected or tracked without clear consent.</li>'
+            + '<li><strong>Employment</strong> — automation removes some jobs and creates others.</li>'
+            + '<li><strong>Environment</strong> — making and powering devices costs energy and materials, and discarded tech becomes <strong>e-waste</strong>.</li>'
+            + '</ul>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · DIGITAL DIVIDE</div><div class="pi-defbox-text">The <strong>gap</strong> between people who <strong>have good access to technology</strong> (devices, internet, skills) and those who <strong>do not</strong>.</div></div>',
           q: { type: 'MC', badge: 'PRIVACY',
             title: "Why does secretly tracking users' browsing habits raise a privacy concern?",
@@ -2742,7 +2814,14 @@ export const PHASES = [
 
         // ── PART 3 — DISCUSS THE IMPACT ──
         { part: 'PART 3 · DISCUSS THE IMPACT', heading: 'WRITING THE LONG ANSWER',
-          html: '<div class="pi-text">The big marks come from "discuss" and "evaluate" questions. A top answer has four things: <strong>range</strong> (more than one type of impact), <strong>balance</strong> (benefits AND drawbacks), the right <strong>law</strong> named and explained, and a <strong>reasoned judgement</strong> at the end — not just "it\'s bad". First, coach one with the mark scheme.</div>',
+          html: '<div class="pi-text">The big marks come from "discuss" and "evaluate" questions. A top answer has four things:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Range</strong> — more than one type of impact.</li>'
+            + '<li><strong>Balance</strong> — benefits AND drawbacks.</li>'
+            + '<li><strong>The law</strong> — the right one, named and explained.</li>'
+            + '<li><strong>A reasoned judgement</strong> — at the end, not just "it\'s bad".</li>'
+            + '</ul>'
+            + '<div class="pi-text">First, coach one with the mark scheme.</div>',
           q: { type: 'EXAMCOACH', badge: 'EXAM COACH', marks: 6,
             title: 'A social media company is found to have shared users’ personal data with advertisers without consent. Discuss the impact of this, and the law involved. [6 marks]',
             desc: 'Write a few sentences, then reveal the mark scheme and examiner guidance and mark yourself.',
@@ -2990,8 +3069,15 @@ export const PHASES = [
 
         // ── PART 1 — THE SIX JOBS ──
         { part: 'PART 1 · THE SIX JOBS', heading: 'ONE MANAGER, SIX RESPONSIBILITIES',
-          html: '<div class="pi-text">The exam wants you to name and describe the OS\'s jobs. <strong>Processor management</strong>: slice CPU time between programs (multitasking). <strong>Memory management</strong>: give each program its own space in RAM, reclaim it when they close (and use virtual memory when RAM fills). <strong>Peripheral management</strong>: talk to printers, keyboards and screens through their <strong>device drivers</strong> — small translator programs, one per device.</div>'
-            + '<div class="pi-text"><strong>File management</strong>: organise data into files and folders, control saving, moving and deleting. <strong>User management</strong>: accounts, logins and access rights (why students can\'t read staff files). And it provides the <strong>user interface</strong> — the windows, icons or command line you actually see.</div>',
+          html: '<div class="pi-text">The exam wants you to name and describe the OS\'s six jobs:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Processor management</strong> — slices CPU time between running programs (multitasking).</li>'
+            + '<li><strong>Memory management</strong> — gives each program its own space in RAM and reclaims it when they close (using virtual memory when RAM fills).</li>'
+            + '<li><strong>Peripheral management</strong> — talks to printers, keyboards and screens through their <strong>device drivers</strong> (small translator programs, one per device).</li>'
+            + '<li><strong>File management</strong> — organises data into files and folders; controls saving, moving and deleting.</li>'
+            + '<li><strong>User management</strong> — accounts, logins and access rights (why students can\'t read staff files).</li>'
+            + '<li><strong>User interface</strong> — the windows, icons or command line you actually see.</li>'
+            + '</ul>',
           diagram: 'os-jobs' },
         { part: 'PART 1 · THE SIX JOBS',
           q: { type: 'MC', title: 'You print a document while music plays and a download runs — all at once. Which OS job makes this possible?',
@@ -3037,8 +3123,18 @@ export const PHASES = [
         // ── PART 2 — UTILITY SOFTWARE ──
         { part: 'PART 2 · UTILITY SOFTWARE', heading: 'THE MAINTENANCE TOOLKIT',
           html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · UTILITY SOFTWARE</div><div class="pi-defbox-text">Small programs that <strong>maintain and look after the computer system</strong> — e.g. antivirus, backup, compression, defragmentation, encryption tools.</div></div>'
-            + '<div class="pi-text">The toolkit: <strong>Compression</strong> shrinks files; <strong>backup</strong> copies them for safe-keeping (a <strong>full</strong> backup copies everything; an <strong>incremental</strong> one copies only what changed since the last backup — faster, but restoring needs the full backup plus every increment). <strong>Antivirus</strong> scans for malware, and <strong>encryption</strong> scrambles data.</div>'
-            + '<div class="pi-text">The classic one is <strong>defragmentation</strong>: on a magnetic hard drive, files slowly get split into fragments scattered across the platters; defrag reassembles each file\'s pieces so the read/write head travels less. The exam trap you already have the knowledge for: <strong>defrag is pointless on an SSD</strong> — no moving parts means the layout doesn\'t matter, and the extra writes wear the flash.</div>' },
+            + '<div class="pi-text">The toolkit:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Compression</strong> — shrinks files to save space.</li>'
+            + '<li><strong>Backup</strong> — copies files for safe-keeping. A <strong>full</strong> backup copies everything; an <strong>incremental</strong> one copies only what changed since the last backup (faster, but restoring needs the full backup plus every increment).</li>'
+            + '<li><strong>Antivirus</strong> — scans for and removes malware.</li>'
+            + '<li><strong>Encryption</strong> — scrambles data so it can\'t be read without the key.</li>'
+            + '</ul>'
+            + '<div class="pi-text">The classic one deserves its own spotlight:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Defragmentation</strong> — on a magnetic hard drive, files slowly get split into fragments scattered across the platters. Defrag reassembles each file\'s pieces so the read/write head travels less.</li>'
+            + '<li><strong>The exam trap</strong> — defrag is <strong>pointless on an SSD</strong>: no moving parts means the layout doesn\'t matter, and the extra writes wear the flash.</li>'
+            + '</ul>' },
         { part: 'PART 2 · UTILITY SOFTWARE',
           q: { type: 'MC', title: 'What does defragmentation software do?',
             options: ['Reorganises fragmented files so the parts of each file are stored together', 'Encrypts files so they cannot be read', 'Permanently deletes unwanted files', 'Backs up files to the cloud'],
@@ -3190,7 +3286,13 @@ export const PHASES = [
         // ── THE BIG IDEA ──
         { part: 'THE BIG IDEA', heading: 'THE CPU ONLY SPEAKS BINARY',
           html: '<div class="pi-text">Remember what sat in the CIR during the fetch–decode–execute cycle? A <strong>binary instruction</strong>. That\'s <strong>machine code</strong> — patterns of 1s and 0s — and it is the <em>only</em> language a CPU can actually run. Nobody wants to build a game by typing millions of 1s and 0s.</div>'
-            + '<div class="pi-text">So programmers climbed a ladder. First <strong>assembly language</strong>: short mnemonics like <code>LDA</code> and <code>ADD</code>, one per machine instruction — readable, but still low-level and tied to one processor. Then <strong>high-level languages</strong> like Python and Java: close to English, portable, one line doing the work of many instructions. The catch: anything above the bottom rung needs a <strong>translator</strong> to turn it into machine code before the CPU can touch it.</div>',
+            + '<div class="pi-text">So programmers climbed a ladder:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Machine code</strong> — the raw binary at the bottom. The only thing the CPU runs.</li>'
+            + '<li><strong>Assembly language</strong> — short mnemonics like <code>LDA</code> and <code>ADD</code>, one per machine instruction. Readable, but still low-level and tied to one processor.</li>'
+            + '<li><strong>High-level languages</strong> — Python, Java: close to English, portable, one line doing the work of many instructions.</li>'
+            + '</ul>'
+            + '<div class="pi-text">The catch: anything above the bottom rung needs a <strong>translator</strong> to turn it into machine code before the CPU can touch it.</div>',
           diagram: 'language-levels' },
         { part: 'THE BIG IDEA', use: ['video'],
           check: {
@@ -3268,8 +3370,20 @@ export const PHASES = [
         // ── PART 3 — THE IDE ──
         { part: 'PART 3 · THE IDE', heading: 'THE PROGRAMMER\'S WORKBENCH',
           html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · IDE</div><div class="pi-defbox-text">An <strong>Integrated Development Environment</strong> — one program with the tools to write and test code: a <strong>code editor, run-time environment, translator and debugger</strong>.</div></div>'
-            + '<div class="pi-text">Real programmers don\'t juggle separate tools — they work in an IDE. A <strong>code editor</strong> with syntax highlighting and auto-complete; a <strong>run-time environment</strong> to test code instantly; a built-in <strong>translator</strong>; and <strong>error diagnostics / debugging tools</strong>.</div>'
-            + '<div class="pi-text">The debugger is the star: set a <strong>breakpoint</strong> to pause the program at a chosen line, <strong>single-step</strong> through it one line at a time, and <strong>watch variables</strong> change as it runs — the fastest way to see exactly where a program goes wrong. Examples you might meet: IDLE, Visual Studio, PyCharm.</div>' },
+            + '<div class="pi-text">Real programmers don\'t juggle separate tools — they work in an IDE, which bundles:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Code editor</strong> — with syntax highlighting and auto-complete.</li>'
+            + '<li><strong>Run-time environment</strong> — test your code instantly.</li>'
+            + '<li><strong>Translator</strong> — built in, no separate tool.</li>'
+            + '<li><strong>Error diagnostics / debugging tools</strong> — find and fix bugs.</li>'
+            + '</ul>'
+            + '<div class="pi-text">The debugger is the star:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Breakpoint</strong> — pause the program at a chosen line.</li>'
+            + '<li><strong>Single-step</strong> — run it one line at a time.</li>'
+            + '<li><strong>Variable watch</strong> — see values change as it runs.</li>'
+            + '</ul>'
+            + '<div class="pi-text">The fastest way to see exactly where a program goes wrong. Examples you might meet: IDLE, Visual Studio, PyCharm.</div>' },
         { part: 'PART 3 · THE IDE',
           q: { type: 'MC', title: 'What does an IDE (Integrated Development Environment) provide?',
             options: ['Tools such as a code editor, debugger and built-in translator in one program', 'A way to physically build computer hardware', 'A type of network cable', 'Permanent backup storage for files'],
@@ -3406,7 +3520,12 @@ export const PHASES = [
             + '<div class="pi-text">Every time you hit <strong>Save</strong>, the computer copies your work out of fragile RAM onto secondary storage — a hard drive, an SSD, a memory card. The exam calls RAM <em>primary</em> storage (small, fast, temporary) and everything below it <em>secondary</em> (huge, slower, permanent). This topic is about what that permanent layer is actually made of — and how to pick the right kind.</div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · SECONDARY STORAGE</div><div class="pi-defbox-text"><strong>Non-volatile</strong> storage for programs and data that must be kept <strong>when the power is off</strong> (e.g. HDD, SSD, optical disc).</div></div>' },
         { part: 'THE BIG IDEA', heading: 'THREE WAYS TO TRAP A BIT',
-          html: '<div class="pi-text">Engineers have found three good ways to make a bit <em>stay put</em> without power. <strong>Magnetic</strong> storage magnetises microscopic spots on a spinning metal platter — a moving head flies over it to read and write. <strong>Optical</strong> storage presses microscopic <strong>pits</strong> into a plastic disc and reads them back with a <strong>laser</strong>. <strong>Solid-state</strong> storage traps electrical charge inside <strong>flash</strong> transistors — a chip with <em>no moving parts at all</em>.</div>'
+          html: '<div class="pi-text">Engineers have found three good ways to make a bit <em>stay put</em> without power:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Magnetic</strong> — magnetises microscopic spots on a spinning metal platter; a moving head flies over it to read and write.</li>'
+            + '<li><strong>Optical</strong> — presses microscopic <strong>pits</strong> into a plastic disc and reads them back with a <strong>laser</strong>.</li>'
+            + '<li><strong>Solid-state</strong> — traps electrical charge inside <strong>flash</strong> transistors: a chip with <em>no moving parts at all</em>.</li>'
+            + '</ul>'
             + '<div class="pi-text">All three survive power-off; where they differ is <strong>speed, toughness, capacity and price</strong> — and that difference is exactly what the exam asks you to reason about.</div>',
           diagram: 'storage-tech' },
         { part: 'THE BIG IDEA', use: ['video'],
@@ -3418,8 +3537,13 @@ export const PHASES = [
 
         // ── PART 1 — THE THREE TECHNOLOGIES ──
         { part: 'PART 1 · THE THREE TECHNOLOGIES', heading: 'STRENGTHS AND WEAKNESSES',
-          html: '<div class="pi-text"><strong>Magnetic (HDD):</strong> the platters give huge capacity at the lowest price per gigabyte, but moving parts make it slower, noisier and easy to damage if dropped. Its cousin <strong>magnetic tape</strong> is slower still but incredibly cheap per terabyte — data centres use it for backups and archives.</div>'
-            + '<div class="pi-text"><strong>Optical (CD/DVD/Blu-ray):</strong> discs are cheap to press by the million and easy to post, but hold relatively little, read slowly, and scratch. <strong>Solid-state (SSD, USB sticks, SD cards):</strong> no moving parts means fast, silent, tough and low-power — the reason phones and modern laptops use flash — at a higher price per gigabyte. Now sort the hardware yourself.</div>' },
+          html: '<ul class="pi-list">'
+            + '<li><strong>Magnetic (HDD)</strong> — spinning platters give huge capacity at the lowest price per gigabyte, but moving parts make it slower, noisier and easy to damage if dropped.</li>'
+            + '<li><strong>Magnetic tape</strong> — slower still, but incredibly cheap per terabyte. Data centres use it for backups and archives.</li>'
+            + '<li><strong>Optical (CD/DVD/Blu-ray)</strong> — discs are cheap to press by the million and easy to post, but hold relatively little, read slowly, and scratch.</li>'
+            + '<li><strong>Solid-state (SSD, USB sticks, SD cards)</strong> — no moving parts means fast, silent, tough and low-power (the reason phones use flash) — at a higher price per gigabyte.</li>'
+            + '</ul>'
+            + '<div class="pi-text">Now sort the hardware yourself.</div>' },
         { part: 'PART 1 · THE THREE TECHNOLOGIES',
           q: { type: 'MC', title: 'How does a magnetic hard disk drive (HDD) store data?',
             options: ['On spinning magnetic platters, read and written by a moving head', 'In flash memory chips with no moving parts', 'As pits and lands read by a laser', 'In volatile RAM chips'],
@@ -3446,7 +3570,15 @@ export const PHASES = [
 
         // ── PART 2 — CHOOSING STORAGE ──
         { part: 'PART 2 · CHOOSING STORAGE', heading: 'THE CHARACTERISTICS CHECKLIST',
-          html: '<div class="pi-text">Exam questions rarely ask "what is an SSD?" — they hand you a <strong>scenario</strong> and ask you to choose. The trick is a checklist of <strong>characteristics</strong>: <strong>capacity</strong> (how much fits), <strong>speed</strong> (how fast it reads/writes), <strong>portability</strong> (can you carry it?), <strong>durability</strong> (does it survive knocks?), <strong>reliability</strong> (how likely to fail?) and <strong>cost per gigabyte</strong>.</div>'
+          html: '<div class="pi-text">Exam questions rarely ask "what is an SSD?" — they hand you a <strong>scenario</strong> and ask you to choose. The trick is a checklist of <strong>characteristics</strong>:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Capacity</strong> — how much fits.</li>'
+            + '<li><strong>Speed</strong> — how fast it reads and writes.</li>'
+            + '<li><strong>Portability</strong> — can you carry it?</li>'
+            + '<li><strong>Durability</strong> — does it survive knocks?</li>'
+            + '<li><strong>Reliability</strong> — how likely is it to fail?</li>'
+            + '<li><strong>Cost per gigabyte</strong> — the price of each GB stored.</li>'
+            + '</ul>'
             + '<div class="pi-text">Method: read the scenario, spot which <em>one or two characteristics matter most</em>, then pick the technology that wins them. A laptop in a school bag cares about durability and speed → <strong>SSD</strong>. A data centre archiving old records cares only about cost per TB → <strong>tape</strong>. Cheap mass mail-outs → <strong>optical</strong>.</div>' },
         { part: 'PART 2 · CHOOSING STORAGE',
           q: { type: 'MC', title: 'You want a laptop that boots fast and survives being knocked about in a bag. Which storage is best?',
@@ -3704,7 +3836,13 @@ export const PHASES = [
 
         // ── PART 2 — ASKING QUESTIONS WITH SQL ──
         { part: 'PART 2 · SQL QUERIES', heading: 'SELECT · FROM · WHERE',
-          html: '<div class="pi-text">Now the language itself. Every query has the same skeleton: <strong>SELECT</strong> the fields you want, <strong>FROM</strong> the table they live in, <strong>WHERE</strong> the condition that picks the rows. <code>SELECT Name FROM Students WHERE Year = 11</code> reads exactly like the English question it answers.</div>'
+          html: '<div class="pi-text">Now the language itself. Every query has the same skeleton:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>SELECT</strong> — the fields you want.</li>'
+            + '<li><strong>FROM</strong> — the table they live in.</li>'
+            + '<li><strong>WHERE</strong> — the condition that picks the rows.</li>'
+            + '</ul>'
+            + '<div class="pi-text"><code>SELECT Name FROM Students WHERE Year = 11</code> reads exactly like the English question it answers.</div>'
             + '<div class="pi-text">The trap the exam sets every year: <strong>SELECT chooses columns, WHERE chooses rows.</strong> Say it twice. In a moment you\'ll build queries against a live table and watch each clause do its work.</div>' },
         { part: 'PART 2 · SQL QUERIES',
           q: { type: 'MC', title: 'A school wants a list of just the NAMES of students in Year 11, from a Students table. Which SQL clause picks out only the Year 11 rows?',
@@ -3752,7 +3890,12 @@ export const PHASES = [
 
         // ── PART 3 — CHANGING THE DATA ──
         { part: 'PART 3 · CHANGING THE DATA', heading: 'INSERT · UPDATE · DELETE',
-          html: '<div class="pi-text">Reading data is half the job — the other half is changing it. <strong>INSERT INTO</strong> adds a new record: <code>INSERT INTO Students VALUES (5, \'Sam\', 11)</code>, values in column order, text in quotes. <strong>UPDATE … SET … WHERE</strong> changes existing records, and <strong>DELETE FROM … WHERE</strong> removes them.</div>'
+          html: '<div class="pi-text">Reading data is half the job — the other half is changing it:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>INSERT INTO</strong> — adds a new record: <code>INSERT INTO Students VALUES (5, \'Sam\', 11)</code>. Values in column order, text in quotes.</li>'
+            + '<li><strong>UPDATE … SET … WHERE</strong> — changes existing records.</li>'
+            + '<li><strong>DELETE FROM … WHERE</strong> — removes records.</li>'
+            + '</ul>'
             + '<div class="pi-text">The dangerous detail: for UPDATE and DELETE, <strong>the WHERE is everything</strong>. Forget it and you update or delete <em>every record in the table</em>. You\'re about to run all three on a live table — watch what each one does to the rows.</div>' },
         { part: 'PART 3 · CHANGING THE DATA',
           q: { type: 'MC', title: 'Which SQL statement adds a new record to a table?',
@@ -3942,7 +4085,13 @@ export const PHASES = [
         // ── THE BIG IDEA ──
         { part: 'THE BIG IDEA', heading: 'HACK THE HUMAN',
           html: '<div class="pi-text">Encryption protects data in transit — but attackers rarely bother breaking the maths. It\'s far easier to <strong>trick a person</strong> into opening the door: a convincing fake email, a phone call "from IT", a glance over your shoulder at a PIN pad. In real breaches, the weakest link is almost never the computer. It\'s us.</div>'
-            + '<div class="pi-text"><strong>Cyber security</strong> is the whole game of attack and defence: <strong>malware</strong> that infects the software, <strong>social engineering</strong> that manipulates the person, and <strong>direct attacks</strong> that batter the system itself. No single defence stops them all, so protection comes in <strong>layers</strong> — and the exam wants you to know both sides of the board.</div>',
+            + '<div class="pi-text"><strong>Cyber security</strong> is the whole game of attack and defence. Threats come in three families:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Malware</strong> — infects the software.</li>'
+            + '<li><strong>Social engineering</strong> — manipulates the person.</li>'
+            + '<li><strong>Direct attacks</strong> — batter the system itself.</li>'
+            + '</ul>'
+            + '<div class="pi-text">No single defence stops them all, so protection comes in <strong>layers</strong> — and the exam wants you to know both sides of the board.</div>',
           diagram: 'threat-map' },
         { part: 'THE BIG IDEA', use: ['video'],
           check: {
@@ -3954,8 +4103,14 @@ export const PHASES = [
         // ── PART 1 — MALWARE ──
         { part: 'PART 1 · MALWARE', heading: 'KNOW YOUR PARASITES',
           html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · MALWARE</div><div class="pi-defbox-text"><strong>Malicious software</strong> — software designed to damage, disrupt or gain unauthorised access to a computer system.</div></div>'
-            + '<div class="pi-text">The exam expects you to tell the family apart. A <strong>virus</strong> attaches itself to a file and spreads when that file is opened or shared. A <strong>worm</strong> is nastier: it <strong>self-replicates across the network</strong> with no user action at all. A <strong>trojan</strong> plays the Trojan-horse trick — it <em>looks</em> like a useful program, so you install it yourself.</div>'
-            + '<div class="pi-text">Then the money-makers: <strong>ransomware</strong> encrypts your files and demands payment for the key (best defence: <strong>backups</strong> — restore and never pay), and <strong>spyware</strong> quietly records what you do, including every key you press.</div>' },
+            + '<div class="pi-text">The exam expects you to tell the family apart:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Virus</strong> — attaches itself to a file and spreads when that file is opened or shared.</li>'
+            + '<li><strong>Worm</strong> — nastier: <strong>self-replicates across the network</strong> with no user action at all.</li>'
+            + '<li><strong>Trojan</strong> — the Trojan-horse trick: it <em>looks</em> like a useful program, so you install it yourself.</li>'
+            + '<li><strong>Ransomware</strong> — encrypts your files and demands payment for the key. Best defence: <strong>backups</strong> — restore and never pay.</li>'
+            + '<li><strong>Spyware</strong> — quietly records what you do, including every key you press.</li>'
+            + '</ul>' },
         { part: 'PART 1 · MALWARE',
           q: { type: 'MC', title: 'Which type of malware can spread across a network by itself, without the user doing anything?',
             options: ['A worm', 'A trojan', 'Spyware', 'Adware'],
@@ -3977,8 +4132,18 @@ export const PHASES = [
         { part: 'PART 2 · TRICKS & DIRECT ATTACKS', heading: 'CON THE PERSON, OR BATTER THE SYSTEM',
           html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · SOCIAL ENGINEERING</div><div class="pi-defbox-text"><strong>Tricking a person</strong> into giving away information or access — attacking the human, not the machine.</div></div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · PHISHING</div><div class="pi-defbox-text">Fake emails or websites that <strong>imitate a trusted organisation</strong> to trick you into revealing passwords or bank details.</div></div>'
-            + '<div class="pi-text">The other flavours: <strong>shouldering</strong> (simply watching you type your PIN) and <strong>blagging</strong> (a made-up story: "Hi, it\'s IT, I just need your password"). The defence is human: training, suspicion, never logging in through an emailed link.</div>'
-            + '<div class="pi-text">The direct attacks target the system instead. <strong>Brute force</strong>: software tries thousands of passwords a second — beaten by long passwords, account lockouts and 2FA. <strong>DDoS</strong>: a botnet of hijacked machines floods a server until real users can\'t get through. <strong>SQL injection</strong>: typing database commands into a web form so an unsanitised system executes them — beaten by input validation.</div>' },
+            + '<div class="pi-text">The other flavours:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Shouldering</strong> — simply watching you type your PIN.</li>'
+            + '<li><strong>Blagging</strong> — a made-up story: "Hi, it\'s IT, I just need your password."</li>'
+            + '</ul>'
+            + '<div class="pi-text">The defence is human: training, suspicion, never logging in through an emailed link.</div>'
+            + '<div class="pi-text">The direct attacks target the system instead:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Brute force</strong> — software tries thousands of passwords a second. Beaten by long passwords, account lockouts and 2FA.</li>'
+            + '<li><strong>DDoS</strong> — a botnet of hijacked machines floods a server until real users can\'t get through.</li>'
+            + '<li><strong>SQL injection</strong> — typing database commands into a web form so an unsanitised system executes them. Beaten by input validation.</li>'
+            + '</ul>' },
         { part: 'PART 2 · TRICKS & DIRECT ATTACKS',
           q: { type: 'MC', title: 'An email claims to be from your bank, says your account is locked, and links to a page asking for your password. What is this?',
             options: ['Phishing (social engineering)', 'A denial-of-service attack', 'A brute-force attack', 'An SQL injection'],
@@ -4028,8 +4193,14 @@ export const PHASES = [
 
         // ── PART 3 — DEFENCE IN DEPTH ──
         { part: 'PART 3 · DEFENCE IN DEPTH', heading: 'LAYER THE SHIELDS',
-          html: '<div class="pi-text">No single defence stops every attack, so real security is <strong>layered</strong>. At the network edge, a <strong>firewall</strong> filters the traffic coming in and out, blocking anything that breaks its rules. On the machines, <strong>anti-malware</strong> scans for and removes infections. Around the data, <strong>user access levels</strong> mean each person can only reach what their role needs — so one stolen login can\'t open everything.</div>'
-            + '<div class="pi-text">Then the habits: strong passwords and <strong>2FA</strong>, regular <strong>backups</strong> (the ransomware killer), software updates, staff <strong>training</strong> — and <strong>penetration testing</strong>.</div>'
+          html: '<div class="pi-text">No single defence stops every attack, so real security is <strong>layered</strong>:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Firewall</strong> — at the network edge, filters the traffic coming in and out, blocking anything that breaks its rules.</li>'
+            + '<li><strong>Anti-malware</strong> — on the machines, scans for and removes infections.</li>'
+            + '<li><strong>User access levels</strong> — each person can only reach what their role needs, so one stolen login can\'t open everything.</li>'
+            + '<li><strong>Good habits</strong> — strong passwords and <strong>2FA</strong>, regular <strong>backups</strong> (the ransomware killer), software updates, and staff <strong>training</strong>.</li>'
+            + '<li><strong>Penetration testing</strong> — attack your own system to find the holes first.</li>'
+            + '</ul>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · FIREWALL</div><div class="pi-defbox-text">Monitors and <strong>filters traffic entering and leaving</strong> a network, blocking connections that break its rules.</div></div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · PENETRATION TESTING</div><div class="pi-defbox-text">Employing people to <strong>deliberately attack your own system</strong> to find security weaknesses <strong>before criminals do</strong>.</div></div>' },
         { part: 'PART 3 · DEFENCE IN DEPTH',
@@ -4213,7 +4384,10 @@ export const PHASES = [
           html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · STAR TOPOLOGY</div><div class="pi-defbox-text">Every device connects to a <strong>central switch</strong>. A broken cable only cuts off one device — but if the <strong>centre fails, the whole network stops</strong>.</div></div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · MESH TOPOLOGY</div><div class="pi-defbox-text">Devices connect to <strong>many other devices</strong>, so there are <strong>multiple routes</strong> — a failed link is simply routed around. Resilient, but needs many more connections.</div></div>'
             + '<div class="pi-text">Star is fast and easy to manage; mesh is what hospitals and the internet use, because there\'s no single point of failure.</div>'
-            + '<div class="pi-text"><strong>Client-server:</strong> a central server holds the files, runs the email, does the backups — easy to secure and manage centrally, but the server is a single point of failure and costs. <strong>Peer-to-peer:</strong> all machines equal, sharing directly — cheap and simple for a home, but no central control, backup or security.</div>' },
+            + '<ul class="pi-list">'
+            + '<li><strong>Client-server</strong> — a central server holds the files, runs the email, does the backups. Easy to secure and manage centrally, but the server is a single point of failure and costs money.</li>'
+            + '<li><strong>Peer-to-peer</strong> — all machines equal, sharing directly. Cheap and simple for a home, but no central control, backup or security.</li>'
+            + '</ul>' },
         { part: 'PART 1 · TOPOLOGIES & ORGANISATION',
           q: { type: 'MC', title: 'In a star network topology, how are the devices connected?',
             options: ['Each device connects to a central switch or hub', 'Every device connects directly to every other device', 'The devices are connected in a single line', 'The devices form a closed loop'],
@@ -4233,7 +4407,10 @@ export const PHASES = [
 
         // ── PART 2 — HARDWARE & ADDRESSES ──
         { part: 'PART 2 · HARDWARE & ADDRESSES', heading: 'SWITCHES, WI-FI AND TWO KINDS OF ADDRESS',
-          html: '<div class="pi-text">Inside a network, the <strong>switch</strong> does the delivering — and unlike an old-fashioned hub (which shouted every message to everyone), a switch sends data <strong>only to the intended device</strong>, identified by its <strong>MAC address</strong>: the permanent, unique ID burned into every network card at the factory. A <strong>WAP (Wireless Access Point)</strong> lets devices join the wired network over Wi-Fi — convenient, but slower and less secure than a cable, so it must be encrypted.</div>'
+          html: '<ul class="pi-list">'
+            + '<li><strong>Switch</strong> — does the delivering inside a network. Unlike an old-fashioned hub (which shouted every message to everyone), it sends data <strong>only to the intended device</strong>, identified by its <strong>MAC address</strong>.</li>'
+            + '<li><strong>WAP (Wireless Access Point)</strong> — lets devices join the wired network over Wi-Fi. Convenient, but slower and less secure than a cable, so it must be encrypted.</li>'
+            + '</ul>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · MAC ADDRESS</div><div class="pi-defbox-text">A <strong>unique, permanent hardware identifier</strong> given to every network device at the factory. Used by <strong>switches</strong> inside a network.</div></div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · IP ADDRESS</div><div class="pi-defbox-text">An address that <strong>locates a device on a network</strong>. It <strong>can change</strong> (join a different network, get a different IP). Used by <strong>routers</strong> between networks.</div></div>'
             + '<div class="pi-text">And a connection\'s <strong>bandwidth</strong> is how much data it can move per second (Mbps) — more devices sharing it means less each.</div>' },
@@ -4261,8 +4438,21 @@ export const PHASES = [
 
         // ── PART 3 — PROTOCOLS & LAYERS ──
         { part: 'PART 3 · PROTOCOLS & LAYERS', heading: 'THE PROTOCOL FAMILY, ORGANISED IN LAYERS',
-          html: '<div class="pi-text">Round out the protocol family from last topic with email: <strong>SMTP sends</strong> mail to a server (M for Mail, S for Send — well, almost). To <strong>retrieve</strong> it there are two rival protocols, and the exam loves the difference: <strong>POP3</strong> downloads messages to one device and usually <strong>deletes them from the server</strong>, whereas <strong>IMAP</strong> keeps them on the server and <strong>syncs</strong> them across all your devices — so your read/unread state matches on your phone and laptop. Add HTTP(S), FTP, DNS and the core <strong>TCP</strong> (split, check, reassemble) and you have every protocol the exam names.</div>'
-            + '<div class="pi-text">Why so many? Because network software is built in <strong>layers</strong> — the TCP/IP stack: <strong>Application</strong> (what programs use: HTTP, SMTP) → <strong>Transport</strong> (TCP: packets, reliability) → <strong>Internet</strong> (IP: addressing, routing) → <strong>Link</strong> (the physical network). Each layer does one job and only talks to its neighbours — so any layer can be improved or swapped without breaking the rest. That\'s the whole point of layering.</div>' },
+          html: '<div class="pi-text">Round out the protocol family from last topic with email — the exam loves the retrieval difference:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>SMTP</strong> — <strong>sends</strong> mail to a server.</li>'
+            + '<li><strong>POP3</strong> — downloads messages to one device and usually <strong>deletes them from the server</strong>.</li>'
+            + '<li><strong>IMAP</strong> — keeps messages on the server and <strong>syncs</strong> them across all your devices, so your read/unread state matches on your phone and laptop.</li>'
+            + '</ul>'
+            + '<div class="pi-text">Add HTTP(S), FTP, DNS and the core <strong>TCP</strong> (split, check, reassemble) and you have every protocol the exam names.</div>'
+            + '<div class="pi-text">Why so many? Because network software is built in <strong>layers</strong> — the TCP/IP stack:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Application</strong> — what programs use (HTTP, SMTP).</li>'
+            + '<li><strong>Transport</strong> — TCP: packets and reliability.</li>'
+            + '<li><strong>Internet</strong> — IP: addressing and routing.</li>'
+            + '<li><strong>Link</strong> — the physical network.</li>'
+            + '</ul>'
+            + '<div class="pi-text">Each layer does one job and only talks to its neighbours — so any layer can be improved or swapped without breaking the rest. That\'s the whole point of layering.</div>' },
         { part: 'PART 3 · PROTOCOLS & LAYERS',
           q: { type: 'MATCH', pairs: [
               { left: 'SMTP', right: 'Send email to a mail server' },
@@ -4423,12 +4613,20 @@ export const PHASES = [
         { part: 'PART 1 · VARIABLES & OPERATORS', heading: 'STORE, THEN COMBINE',
           html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · VARIABLE</div><div class="pi-defbox-text">A <strong>named store for a value</strong> that <strong>can change</strong> while the program runs.</div></div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · CONSTANT</div><div class="pi-defbox-text">A named value that is <strong>set once and cannot change</strong> while the program runs (e.g. pi, VAT rate).</div></div>'
-            + '<div class="pi-text"><strong>Assignment</strong> puts a value into a variable: <code>age ← 15</code>. The arrow (or <code>=</code> in Python) always means "the right-hand side goes into the left." Re-assigning replaces the old value.</div>'
-            + '<div class="pi-text"><strong>Operators</strong> combine values: <code>+ − × ÷</code>, plus two exam favourites — <code>MOD</code> (the <em>remainder</em>: <code>17 MOD 5 = 2</code>) and <code>DIV</code> (the <em>whole-number part</em>: <code>17 DIV 5 = 3</code>). On text, <code>+</code> <strong>joins</strong> strings (concatenation) instead of adding.</div>',
-          q: { type: 'NUMBER', badge: 'REAL WORLD',
-            title: 'Trace this code: score ← 10, then score ← score + 5, then score ← score × 2. What is the final value of score?',
+            + '<div class="pi-text"><strong>Assignment</strong> puts a value into a variable: <code>age = 15</code> in Python and OCR, <code>age ← 15</code> in AQA pseudo-code. Both mean "the right-hand side goes into the left." Re-assigning replaces the old value.</div>'
+            + '<div class="pi-text"><strong>Operators</strong> combine values:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>+ − × ÷</strong> — the basics, as in maths.</li>'
+            + '<li><strong>MOD</strong> — the <em>remainder</em>: <code>17 MOD 5 = 2</code>.</li>'
+            + '<li><strong>DIV</strong> — the <em>whole-number part</em>: <code>17 DIV 5 = 3</code>.</li>'
+            + '<li><strong>+ on text</strong> — <strong>joins</strong> strings (concatenation) instead of adding.</li>'
+            + '</ul>',
+          q: { type: 'CODE_TRACE', badge: 'TRACE',
+            brief: 'A game adds a 5-point bonus to a score, then doubles it. Trace the final score the player sees.',
+            title: 'What is the final value of score?',
             desc: 'Work through one line at a time, updating the variable.',
-            answer: 30,
+            code: { AQA: 'score ← 10\nscore ← score + 5\nscore ← score * 2\nOUTPUT score', OCR: 'score = 10\nscore = score + 5\nscore = score * 2\nprint(score)', Eduqas: 'score = 10\nscore = score + 5\nscore = score * 2\nprint(score)' },
+            answer: '30',
             hints: ['Update score on each line, in order.', '10 → 15 → 30.'],
             explain: '<strong>10 → 10 + 5 = 15 → 15 × 2 = 30.</strong> Tracing a variable line by line is exactly how you predict output — and debug — real code.' } },
         { part: 'PART 1 · VARIABLES & OPERATORS',
@@ -4440,7 +4638,8 @@ export const PHASES = [
           q: { gen: 'codeModDiv', opts: { op: 'DIV' } } },
         { part: 'PART 1 · VARIABLES & OPERATORS',
           q: { type: 'CODE_FILL', badge: 'COMPLETE',
-            title: 'Complete the code so it outputs 14.',
+            brief: 'A shop till adds two prices, £10 and £4 — the display must show 14.',
+        title: 'Complete the code so it outputs 14.',
             desc: 'Pick the operator that goes in the blank.',
             code: { AQA: 'a ← 10\nb ← 4\nOUTPUT a ▢ b', OCR: 'a = 10\nb = 4\nprint(a ▢ b)', Eduqas: 'a = 10\nb = 4\nprint(a ▢ b)' },
             options: { AQA: ['+', '-', '*', 'MOD'], OCR: ['+', '-', '*', 'MOD'], Eduqas: ['+', '-', '*', '%'] },
@@ -4453,6 +4652,7 @@ export const PHASES = [
           html: '<div class="pi-text">Code rarely runs straight down. <strong>Selection</strong> (<code>IF … ELSE</code>) picks a branch based on a condition — only one branch runs. <strong>Iteration</strong> repeats: a <code>FOR</code> loop runs a set number of times, a <code>WHILE</code> loop runs until its condition turns false.</div>'
             + '<div class="pi-text">The trap in every exam is the <strong>boundary</strong> and the <strong>loop count</strong>. Does <code>≥ 70</code> include 70? (Yes.) Does <code>FOR i ← 1 TO 5</code> run 5 times? (Yes — but Python\'s <code>range(1, 5)</code> only does 4!) Trace each pass in a table and these stop catching you out.</div>',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
+            brief: 'An online quiz must flash PASS on screen when a player scores 70 or more — otherwise FAIL. Trace what this player sees.',
             title: 'What does this program output?',
             desc: 'Only one branch runs.',
             code: { AQA: 'score ← 72\nIF score ≥ 70 THEN\n  OUTPUT "PASS"\nELSE\n  OUTPUT "FAIL"\nENDIF', OCR: 'score = 72\nif score >= 70 then\n  print("PASS")\nelse\n  print("FAIL")\nendif', Eduqas: 'score = 72\nif score >= 70:\n  print("PASS")\nelse:\n  print("FAIL")' },
@@ -4465,6 +4665,7 @@ export const PHASES = [
           q: { gen: 'codeWhileCount' } },
         { part: 'PART 2 · TRACING CONTROL FLOW',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
+            brief: 'A review site builds a star rating by adding one star per loop pass. Trace how many stars this rating shows.',
             title: 'What does this program output?',
             desc: 'The + joins strings together (concatenation).',
             code: { AQA: 'stars ← ""\nFOR i ← 1 TO 3\n  stars ← stars + "*"\nENDFOR\nOUTPUT stars', OCR: 'stars = ""\nfor i = 1 to 3\n  stars = stars + "*"\nnext i\nprint(stars)', Eduqas: 'stars = ""\nfor i in range(1, 4):\n  stars = stars + "*"\nprint(stars)' },
@@ -4473,7 +4674,8 @@ export const PHASES = [
             explain: '<strong>Output: ***.</strong> <code>stars</code> starts empty. Each loop pass concatenates (joins) another "*": "*" → "**" → "***". Using <code>+</code> on text joins the strings rather than adding numbers.' } },
         { part: 'PART 2 · TRACING CONTROL FLOW',
           q: { type: 'CODE_FILL', badge: 'COMPLETE',
-            title: 'Complete the condition so it prints PASS when score is 70 or more.',
+            brief: 'The quiz PASS banner is broken: a player who scores exactly 70 must still pass.',
+        title: 'Complete the condition so it prints PASS when score is 70 or more.',
             desc: 'Pick the comparison operator for the blank.',
             code: { AQA: 'score ← 72\nIF score ▢ 70 THEN\n  OUTPUT "PASS"\nENDIF', OCR: 'score = 72\nif score ▢ 70 then\n  print("PASS")\nendif', Eduqas: 'score = 72\nif score ▢ 70:\n  print("PASS")' },
             options: { AQA: ['≥', '≤', '<', '='], OCR: ['>=', '<=', '<', '=='], Eduqas: ['>=', '<=', '<', '=='] },
@@ -4483,7 +4685,8 @@ export const PHASES = [
         { part: 'PART 2 · TRACING CONTROL FLOW', heading: 'YOUR TURN',
           html: '<div class="pi-text">Solo one — mind the upper bound. Remember AQA/OCR <code>TO n</code> includes n, but Python <code>range(1, n)</code> stops just before it.</div>',
           q: { type: 'CODE_FILL', badge: 'COMPLETE', exam: true,
-            title: 'Complete the loop so it runs exactly 5 times (i = 1 to 5).',
+            brief: 'A firework display fires one rocket per loop pass — the show needs exactly 5 rockets.',
+        title: 'Complete the loop so it runs exactly 5 times (i = 1 to 5).',
             desc: 'Watch the upper bound carefully.',
             code: { AQA: 'FOR i ← 1 TO ▢\n  OUTPUT i\nENDFOR', OCR: 'for i = 1 to ▢\n  print(i)\nnext i', Eduqas: 'for i in range(1, ▢):\n  print(i)' },
             options: { AQA: ['5', '4', '6', '1'], OCR: ['5', '4', '6', '1'], Eduqas: ['6', '5', '4', '1'] },
@@ -4496,6 +4699,16 @@ export const PHASES = [
           html: '<div class="pi-text">You\'ve traced other people\'s code — now write your own. The pattern for most short programs is the same three steps: <strong>input</strong> (get data), <strong>process</strong> (do something with it, often a decision or a calculation), <strong>output</strong> (print the result). Even/odd is a perfect example: read a number, test <code>num MOD 2 = 0</code>, print the right word.</div>',
           q: { type: 'CODE_WRITE', badge: 'WRITE CODE', marks: 4,
             title: 'Write a program that asks the user for a whole number and outputs whether it is even or odd.',
+        brief: 'You\'re making a party game: players shout a number and the app instantly announces EVEN or ODD. Your program is that announcer.',
+        steps: [
+          { text: 'Read a whole number from the user into a variable.', re: 'input|USERINPUT' },
+          { text: 'Work out the remainder when it is divided by 2 (MOD or %).', re: '(MOD|%)\\s*2' },
+          { text: 'IF the remainder is 0, output "even".', re: 'even' },
+          { text: 'ELSE output "odd".', re: 'else' },
+        ],
+        example: { note: 'A similar task, solved: announce whether a number is POSITIVE or NEGATIVE — same read → test → two-way output shape.',
+          code: { AQA: 'num ← USERINPUT\nIF num ≥ 0 THEN\n  OUTPUT "positive"\nELSE\n  OUTPUT "negative"\nENDIF', OCR: 'num = int(input())\nif num >= 0 then\n  print("positive")\nelse\n  print("negative")\nendif', Eduqas: 'num = int(input())\nif num >= 0:\n  print("positive")\nelse:\n  print("negative")' } },
+        hints: ['A number is even when dividing by 2 leaves no remainder.', 'Test num MOD 2 = 0 (Python: num % 2 == 0) in an IF, with the odd case in the ELSE.'],
             tests: ['Input 4 → outputs "even"', 'Input 7 → outputs "odd"'],
             cases: [
               { label: 'input 4 → even', stdin: ['4'], expect: 'even' },
@@ -4525,7 +4738,7 @@ export const PHASES = [
             explain: 'Use a variable for data that changes (e.g. a score); use a constant for a fixed value (e.g. VAT rate, pi). Constants make a program clearer and stop a fixed value being changed by accident.' } },
       ],
       examples: [
-        '📥 <strong>Assignment:</strong> <code>age ← 15</code> stores the value 15 in the variable <code>age</code>.',
+        '📥 <strong>Assignment:</strong> <code>age = 15</code> (Python) or <code>age ← 15</code> (AQA pseudo-code) stores 15 in the variable <code>age</code>.',
         '➗ <strong>MOD and DIV:</strong> <code>17 MOD 5</code> = 2 (the remainder), <code>17 DIV 5</code> = 3 (the whole-number part).',
         '🔁 <strong>Trace table:</strong> write each variable in a column and update it line by line — this stops silly mistakes.',
         '🖨️ <strong>OUTPUT</strong> prints a value to the screen; <code>+</code> on text joins strings together (concatenation).',
@@ -4541,10 +4754,12 @@ export const PHASES = [
       meta: 'GUIDED LESSON · VARIABLES & OPERATORS → TRACING CONTROL FLOW → WRITE & EXPLAIN',
     },
     questions: [
-      { type: 'NUMBER', badge: 'REAL WORLD', board: 'AQA · OCR · Eduqas',
-        title: 'Trace this code: score ← 10, then score ← score + 5, then score ← score × 2. What is the final value of score?',
+      { type: 'CODE_TRACE', badge: 'TRACE', board: 'AQA · OCR · Eduqas',
+        brief: 'A game adds a 5-point bonus to a score, then doubles it. Trace the final score the player sees.',
+        title: 'What is the final value of score?',
         desc: 'Work through one line at a time, updating the variable.',
-        answer: 30,
+        code: { AQA: 'score ← 10\nscore ← score + 5\nscore ← score * 2\nOUTPUT score', OCR: 'score = 10\nscore = score + 5\nscore = score * 2\nprint(score)', Eduqas: 'score = 10\nscore = score + 5\nscore = score * 2\nprint(score)' },
+        answer: '30',
         hints: ['Update score on each line, in order.', '10 → 15 → 30.'],
         explain: '<strong>10 → 10 + 5 = 15 → 15 × 2 = 30.</strong> Tracing a variable line by line is exactly how you predict output — and debug — real code.' },
       { gen: 'codeArith' },
@@ -4552,6 +4767,7 @@ export const PHASES = [
       { gen: 'codeModDiv', opts: { op: 'DIV' } },
       { gen: 'codeForSum' },
       { type: 'CODE_TRACE', badge: 'TRACE', board: 'AQA · OCR · Eduqas',
+        brief: 'An online quiz must flash PASS on screen when a player scores 70 or more — otherwise FAIL. Trace what this player sees.',
         title: 'What does this program output?',
         desc: 'Only one branch runs.',
         code: { AQA: 'score ← 72\nIF score ≥ 70 THEN\n  OUTPUT "PASS"\nELSE\n  OUTPUT "FAIL"\nENDIF', OCR: 'score = 72\nif score >= 70 then\n  print("PASS")\nelse\n  print("FAIL")\nendif', Eduqas: 'score = 72\nif score >= 70:\n  print("PASS")\nelse:\n  print("FAIL")' },
@@ -4560,6 +4776,7 @@ export const PHASES = [
         explain: '<strong>Output: PASS.</strong> The condition score ≥ 70 is 72 ≥ 70, which is true, so the THEN branch runs and "PASS" is printed. The ELSE branch is skipped.' },
       { gen: 'codeWhileCount' },
       { type: 'CODE_TRACE', badge: 'TRACE', board: 'AQA · OCR · Eduqas',
+        brief: 'A loading screen builds its progress bar one star at a time. Trace what the finished bar looks like.',
         title: 'What does this program output?',
         desc: 'The + joins strings together (concatenation).',
         code: { AQA: 'stars ← ""\nFOR i ← 1 TO 3\n  stars ← stars + "*"\nENDFOR\nOUTPUT stars', OCR: 'stars = ""\nfor i = 1 to 3\n  stars = stars + "*"\nnext i\nprint(stars)', Eduqas: 'stars = ""\nfor i in range(1, 4):\n  stars = stars + "*"\nprint(stars)' },
@@ -4567,6 +4784,7 @@ export const PHASES = [
         hints: ['Each pass adds one * to the end of stars.', 'After the 3 passes: "*", then "**", then "***".'],
         explain: '<strong>Output: ***.</strong> <code>stars</code> starts empty. Each loop pass concatenates (joins) another "*": "*" → "**" → "***". Using <code>+</code> on text joins the strings rather than adding numbers.' },
       { type: 'CODE_FILL', badge: 'COMPLETE', board: 'AQA · OCR · Eduqas',
+        brief: 'A shop till adds two prices, £10 and £4 — the display must show 14.',
         title: 'Complete the code so it outputs 14.',
         desc: 'Pick the operator that goes in the blank.',
         code: { AQA: 'a ← 10\nb ← 4\nOUTPUT a ▢ b', OCR: 'a = 10\nb = 4\nprint(a ▢ b)', Eduqas: 'a = 10\nb = 4\nprint(a ▢ b)' },
@@ -4575,6 +4793,7 @@ export const PHASES = [
         hints: ['Which operator adds two numbers together?', '10 + 4 = 14.'],
         explain: '<strong>The answer is +.</strong> a + b = 10 + 4 = 14. (− would give 6, × would give 40, and MOD / % gives the remainder 2.)' },
       { type: 'CODE_FILL', badge: 'COMPLETE', board: 'AQA · OCR · Eduqas',
+        brief: 'The quiz PASS banner is broken: a player who scores exactly 70 must still pass.',
         title: 'Complete the condition so it prints PASS when score is 70 or more.',
         desc: 'Pick the comparison operator for the blank.',
         code: { AQA: 'score ← 72\nIF score ▢ 70 THEN\n  OUTPUT "PASS"\nENDIF', OCR: 'score = 72\nif score ▢ 70 then\n  print("PASS")\nendif', Eduqas: 'score = 72\nif score ▢ 70:\n  print("PASS")' },
@@ -4583,6 +4802,7 @@ export const PHASES = [
         hints: ['"70 or more" must INCLUDE 70 itself.', 'Use "greater than or equal to", not just "greater than".'],
         explain: '<strong>The answer is "greater than or equal to" (≥ in AQA, &gt;= in OCR/Python).</strong> "70 or more" includes 70 itself, so ≥ / &gt;= is needed — plain &gt; would wrongly miss a score of exactly 70.' },
       { type: 'CODE_FILL', badge: 'COMPLETE', board: 'AQA · OCR · Eduqas',
+        brief: 'A firework display fires one rocket per loop pass — the show needs exactly 5 rockets.',
         title: 'Complete the loop so it runs exactly 5 times (i = 1 to 5).',
         desc: 'Watch the upper bound carefully.',
         code: { AQA: 'FOR i ← 1 TO ▢\n  OUTPUT i\nENDFOR', OCR: 'for i = 1 to ▢\n  print(i)\nnext i', Eduqas: 'for i in range(1, ▢):\n  print(i)' },
@@ -4592,6 +4812,16 @@ export const PHASES = [
         explain: '<strong>AQA/OCR: 5; Python: 6.</strong> In AQA/OCR, <code>FOR i ← 1 TO 5</code> includes 5, so it runs for i = 1, 2, 3, 4, 5 (5 times). In Python, <code>range(1, 6)</code> stops BEFORE 6, giving 1–5 — the upper bound is exclusive. This off-by-one difference is a classic exam slip.' },
       { type: 'CODE_WRITE', badge: 'WRITE CODE', board: 'AQA · OCR · Eduqas', marks: 4,
         title: 'Write a program that asks the user for a whole number and outputs whether it is even or odd.',
+        brief: 'You\'re making a party game: players shout a number and the app instantly announces EVEN or ODD. Your program is that announcer.',
+        steps: [
+          { text: 'Read a whole number from the user into a variable.', re: 'input|USERINPUT' },
+          { text: 'Work out the remainder when it is divided by 2 (MOD or %).', re: '(MOD|%)\\s*2' },
+          { text: 'IF the remainder is 0, output "even".', re: 'even' },
+          { text: 'ELSE output "odd".', re: 'else' },
+        ],
+        example: { note: 'A similar task, solved: announce whether a number is POSITIVE or NEGATIVE — same read → test → two-way output shape.',
+          code: { AQA: 'num ← USERINPUT\nIF num ≥ 0 THEN\n  OUTPUT "positive"\nELSE\n  OUTPUT "negative"\nENDIF', OCR: 'num = int(input())\nif num >= 0 then\n  print("positive")\nelse\n  print("negative")\nendif', Eduqas: 'num = int(input())\nif num >= 0:\n  print("positive")\nelse:\n  print("negative")' } },
+        hints: ['A number is even when dividing by 2 leaves no remainder.', 'Test num MOD 2 = 0 (Python: num % 2 == 0) in an IF, with the odd case in the ELSE.'],
         tests: ['Input 4 → outputs "even"', 'Input 7 → outputs "odd"'],
         cases: [
           { label: 'input 4 → even', stdin: ['4'], expect: 'even' },
@@ -4660,7 +4890,8 @@ export const PHASES = [
             + '<div class="pi-text"><code>IF … ELSEIF … ELSE</code> lets a program choose. The golden rule: conditions are checked <strong>from the top</strong>, and <strong>only the first true branch runs</strong> — the rest are skipped. So order matters: put the tightest condition first.</div>'
             + '<div class="pi-text">To combine conditions, use <strong>AND</strong> (both must be true) and <strong>OR</strong> (either is enough). "Between 1 and 10" means <code>x ≥ 1 AND x ≤ 10</code> — using OR there would wrongly accept everything.</div>',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
-            title: 'What does this program output?',
+            brief: 'A report-card screen turns a mark into a grade band: A at 70+, B at 50+, else C. Trace this student\'s grade.',
+        title: 'What does this program output?',
             desc: 'Only the first matching branch runs.',
             code: { AQA: 'mark ← 75\nIF mark ≥ 70 THEN\n  OUTPUT "A"\nELSEIF mark ≥ 50 THEN\n  OUTPUT "B"\nELSE\n  OUTPUT "C"\nENDIF', OCR: 'mark = 75\nif mark >= 70 then\n  print("A")\nelseif mark >= 50 then\n  print("B")\nelse\n  print("C")\nendif', Eduqas: 'mark = 75\nif mark >= 70:\n  print("A")\nelif mark >= 50:\n  print("B")\nelse:\n  print("C")' },
             answer: 'A',
@@ -4668,7 +4899,8 @@ export const PHASES = [
             explain: '<strong>Output: A.</strong> The conditions are checked from the top. 75 ≥ 70 is true, so "A" is printed and the ELSE IF / ELSE are skipped — only the FIRST matching branch runs.' } },
         { part: 'PART 1 · SELECTION',
           q: { type: 'CODE_BUILD', badge: 'BUILD',
-            title: 'Put the lines in order: print PASS if score is 50 or more, otherwise FAIL.',
+            brief: 'You\'re assembling the results screen for a driving-theory app: 50 or more is a pass.',
+        title: 'Put the lines in order: print PASS if score is 50 or more, otherwise FAIL.',
             desc: 'Drag the jumbled lines into a working order.',
             lines: { AQA: ['score ← 55', 'IF score ≥ 50 THEN', '  OUTPUT "PASS"', 'ELSE', '  OUTPUT "FAIL"', 'ENDIF'], OCR: ['score = 55', 'if score >= 50 then', '  print("PASS")', 'else', '  print("FAIL")', 'endif'], Eduqas: ['score = 55', 'if score >= 50:', '  print("PASS")', 'else:', '  print("FAIL")'] },
             hints: ['The variable must be set before the IF. The condition comes before its branches.', 'Order: set score → IF condition → PASS line → ELSE → FAIL line (→ ENDIF for AQA/OCR).'],
@@ -4676,7 +4908,8 @@ export const PHASES = [
         { part: 'PART 1 · SELECTION', heading: 'YOUR TURN',
           html: '<div class="pi-text">Your turn — pick the operator that makes "between 1 and 10" work. Both parts have to hold at once.</div>',
           q: { type: 'CODE_FILL', badge: 'COMPLETE', exam: true,
-            title: 'Complete the condition so it prints YES only when x is between 1 and 10.',
+            brief: 'A difficulty picker only accepts levels 1 to 10 — anything else must be rejected.',
+        title: 'Complete the condition so it prints YES only when x is between 1 and 10.',
             desc: 'Both parts of the condition must be true.',
             code: { AQA: 'x ← 5\nIF x ≥ 1 ▢ x ≤ 10 THEN\n  OUTPUT "YES"\nENDIF', OCR: 'x = 5\nif x >= 1 ▢ x <= 10 then\n  print("YES")\nendif', Eduqas: 'x = 5\nif x >= 1 ▢ x <= 10:\n  print("YES")' },
             options: { AQA: ['AND', 'OR', 'NOT', 'MOD'], OCR: ['AND', 'OR', 'NOT', 'MOD'], Eduqas: ['and', 'or', 'not', '%'] },
@@ -4687,8 +4920,15 @@ export const PHASES = [
         // ── PART 2 — ITERATION ──
         { part: 'PART 2 · ITERATION', heading: 'REPEATING WORK',
           html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · ITERATION</div><div class="pi-defbox-text"><strong>Repeating</strong> a block of code — a loop. <strong>Count-controlled</strong> (FOR) = a fixed number of times; <strong>condition-controlled</strong> (WHILE) = until a condition changes.</div></div>'
-            + '<div class="pi-text">A <strong>count-controlled</strong> loop repeats a <em>known</em> number of times — deal 5 cards. A <strong>condition-controlled</strong> loop repeats an <em>unknown</em> number of times — keep asking for a password until it\'s right.</div>'
-            + '<div class="pi-text">Two classic traps: a WHILE loop may run <strong>zero times</strong> if its condition starts false; and watch the <strong>bounds</strong> — AQA/OCR <code>TO 5</code> includes 5, but Python <code>range(1, 6)</code> stops before 6.</div>',
+            + '<ul class="pi-list">'
+            + '<li><strong>Count-controlled (FOR)</strong> — repeats a <em>known</em> number of times: deal 5 cards.</li>'
+            + '<li><strong>Condition-controlled (WHILE)</strong> — repeats an <em>unknown</em> number of times: keep asking for a password until it\'s right.</li>'
+            + '</ul>'
+            + '<div class="pi-text">Two classic traps:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Zero passes</strong> — a WHILE loop may run <strong>zero times</strong> if its condition starts false.</li>'
+            + '<li><strong>The bounds</strong> — AQA/OCR <code>TO 5</code> includes 5, but Python <code>range(1, 6)</code> stops before 6.</li>'
+            + '</ul>',
           q: { type: 'MC', badge: 'REAL WORLD',
             title: 'A game must keep asking for a password until the correct one is typed — however many tries that takes. Which construct fits best?',
             desc: 'Repeat an unknown number of times until a condition is met.',
@@ -4698,7 +4938,8 @@ export const PHASES = [
             explain: 'A <strong>condition-controlled loop</strong> (WHILE / REPEAT UNTIL) repeats until a condition is met — perfect when the number of attempts is unknown. A FOR loop is for a known, fixed count.' } },
         { part: 'PART 2 · ITERATION',
           q: { type: 'CODE_FILL', badge: 'COMPLETE',
-            title: 'Complete the loop so it counts up and stops, printing 5.',
+            brief: 'A lap counter ticks up once per lap and must stop the race at lap 5.',
+        title: 'Complete the loop so it counts up and stops, printing 5.',
             desc: 'Pick the comparison for the blank.',
             code: { AQA: 'count ← 0\nWHILE count ▢ 5\n  count ← count + 1\nENDWHILE\nOUTPUT count', OCR: 'count = 0\nwhile count ▢ 5\n  count = count + 1\nendwhile\nprint(count)', Eduqas: 'count = 0\nwhile count ▢ 5:\n  count = count + 1\nprint(count)' },
             options: { AQA: ['<', '>', '=', '≥'], OCR: ['<', '>', '==', '>='], Eduqas: ['<', '>', '==', '>='] },
@@ -4707,7 +4948,8 @@ export const PHASES = [
             explain: '<strong>The answer is &lt; (less than).</strong> The loop repeats while count is below 5. count reaches 5, then 5 &lt; 5 is false, so the loop stops and prints 5. (≤ would carry on to 6.)' } },
         { part: 'PART 2 · ITERATION',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
-            title: 'What does this program output?',
+            brief: 'A battery saver halves the screen brightness each minute and logs the total brightness used. Trace the log.',
+        title: 'What does this program output?',
             desc: 'x halves each time (whole-number division).',
             code: { AQA: 'x ← 10\nresult ← 0\nWHILE x > 1\n  result ← result + x\n  x ← x DIV 2\nENDWHILE\nOUTPUT result', OCR: 'x = 10\nresult = 0\nwhile x > 1\n  result = result + x\n  x = x DIV 2\nendwhile\nprint(result)', Eduqas: 'x = 10\nresult = 0\nwhile x > 1:\n  result = result + x\n  x = x // 2\nprint(result)' },
             answer: '17',
@@ -4716,7 +4958,8 @@ export const PHASES = [
         { part: 'PART 2 · ITERATION', heading: 'YOUR TURN',
           html: '<div class="pi-text">Assemble this one yourself — a countdown from 5 to 1. Mind the order inside the loop: print, then decrease.</div>',
           q: { type: 'CODE_BUILD', badge: 'BUILD', exam: true,
-            title: 'Put the lines in order to count down from 5 to 1.',
+            brief: 'Mission control needs the rocket-launch countdown: 5, 4, 3, 2, 1.',
+        title: 'Put the lines in order to count down from 5 to 1.',
             desc: 'Drag the lines into a working order.',
             lines: { AQA: ['count ← 5', 'WHILE count > 0', '  OUTPUT count', '  count ← count - 1', 'ENDWHILE'], OCR: ['count = 5', 'while count > 0', '  print(count)', '  count = count - 1', 'endwhile'], Eduqas: ['count = 5', 'while count > 0:', '  print(count)', '  count = count - 1'] },
             hints: ['Set count, then the WHILE condition, then the body (print, then decrease), then close the loop.', 'If you decreased count before printing, it would print 4 down to 0 instead.'],
@@ -4726,14 +4969,16 @@ export const PHASES = [
         { part: 'PART 3 · COMBINING & WRITING', heading: 'NESTING & BUILDING',
           html: '<div class="pi-text">The real power comes from <strong>nesting</strong> — putting one construct inside another. An <code>IF</code> inside a <code>FOR</code> lets you test each item as you loop over it (e.g. print only the even numbers). <strong>Indentation</strong> shows what sits inside what: the IF is indented inside the loop, the OUTPUT indented inside the IF.</div>',
           q: { type: 'CODE_BUILD', badge: 'BUILD',
-            title: 'Put the lines in order to print the even numbers from 1 to 5.',
+            brief: 'A raffle machine must call out only the EVEN ticket numbers from 1 to 5.',
+        title: 'Put the lines in order to print the even numbers from 1 to 5.',
             desc: 'A FOR loop with an IF inside it — watch the indentation.',
             lines: { AQA: ['FOR i ← 1 TO 5', '  IF i MOD 2 = 0 THEN', '    OUTPUT i', '  ENDIF', 'ENDFOR'], OCR: ['for i = 1 to 5', '  if i MOD 2 == 0 then', '    print(i)', '  endif', 'next i'], Eduqas: ['for i in range(1, 6):', '  if i % 2 == 0:', '    print(i)'] },
             hints: ['The FOR loop wraps the IF, which wraps the OUTPUT. Indentation shows what sits inside what.', 'The even check (MOD 2 = 0) must be inside the loop, and OUTPUT inside the IF.'],
             explain: '<strong>The FOR loop wraps the IF, which wraps the OUTPUT.</strong> Each line is indented to show what it sits inside: the IF (even check) is inside the loop, and OUTPUT is inside the IF. It prints 2 and 4.' } },
         { part: 'PART 3 · COMBINING & WRITING',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
-            title: 'What does this program output?',
+            brief: 'A username generator glues "ab" together 4 times, then the sign-up form checks its length. Trace the check.',
+        title: 'What does this program output?',
             desc: 'LEN / length / len gives the number of characters.',
             code: { AQA: 'word ← ""\nFOR i ← 1 TO 4\n  word ← word + "ab"\nENDFOR\nOUTPUT LEN(word)', OCR: 'word = ""\nfor i = 1 to 4\n  word = word + "ab"\nnext i\nprint(word.length)', Eduqas: 'word = ""\nfor i in range(1, 5):\n  word = word + "ab"\nprint(len(word))' },
             answer: '8',
@@ -4742,6 +4987,16 @@ export const PHASES = [
         { part: 'PART 3 · COMBINING & WRITING',
           q: { type: 'CODE_WRITE', badge: 'WRITE CODE', marks: 4,
             title: 'Write a program that uses a loop to add up the numbers from 1 to 10 and outputs the total.',
+        brief: 'A savings challenge: bank £1 on day 1, £2 on day 2 … £10 on day 10. The app must show the grand total at the end.',
+        steps: [
+          { text: 'Create a variable total and set it to 0 BEFORE the loop.', re: 'total\\s*(←|=)\\s*0' },
+          { text: 'Make a FOR loop that counts 1 to 10.', re: 'for' },
+          { text: 'Each pass, add the counter to total.', re: 'total\\s*(←|=)\\s*total\\s*\\+' },
+          { text: 'AFTER the loop, output total.', re: '(OUTPUT|print)' },
+        ],
+        example: { note: 'A similar task, solved: total the numbers 1 to 5 — same accumulator shape, smaller range.',
+          code: { AQA: 'total ← 0\nFOR i ← 1 TO 5\n  total ← total + i\nENDFOR\nOUTPUT total', OCR: 'total = 0\nfor i = 1 to 5\n  total = total + i\nnext i\nprint(total)', Eduqas: 'total = 0\nfor i in range(1, 6):\n  total = total + i\nprint(total)' } },
+        hints: ['Start a running total at 0, then let the loop pour each number into it.', 'The output line goes AFTER the loop ends — not inside it.'],
             tests: ['Outputs 55 (1 + 2 + … + 10)'],
             cases: [{ label: 'sum 1…10 → 55', stdin: [], expect: '55' }],
             model: {
@@ -4791,6 +5046,7 @@ export const PHASES = [
         hints: ['You don’t know how many tries it will take.', 'Loop while the password is still wrong.'],
         explain: 'A <strong>condition-controlled loop</strong> (WHILE / REPEAT UNTIL) repeats until a condition is met — perfect when the number of attempts is unknown. A FOR loop is for a known, fixed count.' },
       { type: 'CODE_TRACE', badge: 'TRACE', board: 'AQA · OCR · Eduqas',
+        brief: 'A school report program prints grade A, B or C from a mark. Trace the grade a student with 75 marks receives.',
         title: 'What does this program output?',
         desc: 'Only the first matching branch runs.',
         code: { AQA: 'mark ← 75\nIF mark ≥ 70 THEN\n  OUTPUT "A"\nELSEIF mark ≥ 50 THEN\n  OUTPUT "B"\nELSE\n  OUTPUT "C"\nENDIF', OCR: 'mark = 75\nif mark >= 70 then\n  print("A")\nelseif mark >= 50 then\n  print("B")\nelse\n  print("C")\nendif', Eduqas: 'mark = 75\nif mark >= 70:\n  print("A")\nelif mark >= 50:\n  print("B")\nelse:\n  print("C")' },
@@ -4798,12 +5054,14 @@ export const PHASES = [
         hints: ['Check the conditions from the top. Is 75 ≥ 70?', '75 ≥ 70 is true, so the first branch runs and the rest are skipped.'],
         explain: '<strong>Output: A.</strong> The conditions are checked from the top. 75 ≥ 70 is true, so "A" is printed and the ELSE IF / ELSE are skipped — only the FIRST matching branch runs.' },
       { type: 'CODE_BUILD', badge: 'BUILD', board: 'AQA · OCR · Eduqas',
+        brief: 'You\'re assembling the results screen for a driving-theory app: 50 or more is a pass.',
         title: 'Put the lines in order: print PASS if score is 50 or more, otherwise FAIL.',
         desc: 'Drag the jumbled lines into a working order.',
         lines: { AQA: ['score ← 55', 'IF score ≥ 50 THEN', '  OUTPUT "PASS"', 'ELSE', '  OUTPUT "FAIL"', 'ENDIF'], OCR: ['score = 55', 'if score >= 50 then', '  print("PASS")', 'else', '  print("FAIL")', 'endif'], Eduqas: ['score = 55', 'if score >= 50:', '  print("PASS")', 'else:', '  print("FAIL")'] },
         hints: ['The variable must be set before the IF. The condition comes before its branches.', 'Order: set score → IF condition → PASS line → ELSE → FAIL line (→ ENDIF for AQA/OCR).'],
         explain: '<strong>Set the variable, then IF the condition, the THEN line, ELSE, the ELSE line, then close the IF.</strong> The condition must come before the branches; in AQA/OCR, ENDIF closes the block (Python uses indentation instead).' },
       { type: 'CODE_FILL', badge: 'COMPLETE', board: 'AQA · OCR · Eduqas',
+        brief: 'A lap counter ticks up once per lap and must stop the race at lap 5.',
         title: 'Complete the loop so it counts up and stops, printing 5.',
         desc: 'Pick the comparison for the blank.',
         code: { AQA: 'count ← 0\nWHILE count ▢ 5\n  count ← count + 1\nENDWHILE\nOUTPUT count', OCR: 'count = 0\nwhile count ▢ 5\n  count = count + 1\nendwhile\nprint(count)', Eduqas: 'count = 0\nwhile count ▢ 5:\n  count = count + 1\nprint(count)' },
@@ -4812,6 +5070,7 @@ export const PHASES = [
         hints: ['The loop should keep going while count is below 5.', 'With <, count goes 0,1,2,3,4,5 — then 5 < 5 is false, so it stops and prints 5.'],
         explain: '<strong>The answer is &lt; (less than).</strong> The loop repeats while count is below 5. count reaches 5, then 5 &lt; 5 is false, so the loop stops and prints 5. (≤ would carry on to 6.)' },
       { type: 'CODE_TRACE', badge: 'TRACE', board: 'AQA · OCR · Eduqas',
+        brief: 'A game pays out bonus points that halve every round until they run out. Trace the total this player banks.',
         title: 'What does this program output?',
         desc: 'x halves each time (whole-number division).',
         code: { AQA: 'x ← 10\nresult ← 0\nWHILE x > 1\n  result ← result + x\n  x ← x DIV 2\nENDWHILE\nOUTPUT result', OCR: 'x = 10\nresult = 0\nwhile x > 1\n  result = result + x\n  x = x DIV 2\nendwhile\nprint(result)', Eduqas: 'x = 10\nresult = 0\nwhile x > 1:\n  result = result + x\n  x = x // 2\nprint(result)' },
@@ -4819,12 +5078,14 @@ export const PHASES = [
         hints: ['Trace x and result each pass. x halves: 10 → 5 → 2 → 1.', 'result adds 10, then 5, then 2 = 17, then x = 1 stops the loop.'],
         explain: '<strong>Output: 17.</strong> While x > 1, result adds x and x halves: x = 10 (result 10), 5 (15), 2 (17), then 1 — which is not &gt; 1, so the loop stops. Output 17.' },
       { type: 'CODE_BUILD', badge: 'BUILD', board: 'AQA · OCR · Eduqas',
+        brief: 'Mission control needs the rocket-launch countdown: 5, 4, 3, 2, 1.',
         title: 'Put the lines in order to count down from 5 to 1.',
         desc: 'Drag the lines into a working order.',
         lines: { AQA: ['count ← 5', 'WHILE count > 0', '  OUTPUT count', '  count ← count - 1', 'ENDWHILE'], OCR: ['count = 5', 'while count > 0', '  print(count)', '  count = count - 1', 'endwhile'], Eduqas: ['count = 5', 'while count > 0:', '  print(count)', '  count = count - 1'] },
         hints: ['Set count, then the WHILE condition, then the body (print, then decrease), then close the loop.', 'If you decreased count before printing, it would print 4 down to 0 instead.'],
         explain: '<strong>Set count first, then the WHILE condition, then the loop body (print, then decrease count), then close the loop.</strong> Order matters inside the loop: printing before decreasing gives 5…1; decreasing first would give 4…0.' },
       { type: 'CODE_FILL', badge: 'COMPLETE', board: 'AQA · OCR · Eduqas',
+        brief: 'A difficulty picker only accepts levels 1 to 10 — anything else must be rejected.',
         title: 'Complete the condition so it prints YES only when x is between 1 and 10.',
         desc: 'Both parts of the condition must be true.',
         code: { AQA: 'x ← 5\nIF x ≥ 1 ▢ x ≤ 10 THEN\n  OUTPUT "YES"\nENDIF', OCR: 'x = 5\nif x >= 1 ▢ x <= 10 then\n  print("YES")\nendif', Eduqas: 'x = 5\nif x >= 1 ▢ x <= 10:\n  print("YES")' },
@@ -4833,12 +5094,14 @@ export const PHASES = [
         hints: ['"Between 1 and 10" means x ≥ 1 AND x ≤ 10 — both must hold.', 'OR would also accept numbers outside the range.'],
         explain: '<strong>The answer is AND (Python: and).</strong> Both conditions must be true for "between 1 and 10", so they are joined with AND. OR would let through numbers outside the range, because only one side would need to be true.' },
       { type: 'CODE_BUILD', badge: 'BUILD', board: 'AQA · OCR · Eduqas',
+        brief: 'A raffle machine must call out only the EVEN ticket numbers from 1 to 5.',
         title: 'Put the lines in order to print the even numbers from 1 to 5.',
         desc: 'A FOR loop with an IF inside it — watch the indentation.',
         lines: { AQA: ['FOR i ← 1 TO 5', '  IF i MOD 2 = 0 THEN', '    OUTPUT i', '  ENDIF', 'ENDFOR'], OCR: ['for i = 1 to 5', '  if i MOD 2 == 0 then', '    print(i)', '  endif', 'next i'], Eduqas: ['for i in range(1, 6):', '  if i % 2 == 0:', '    print(i)'] },
         hints: ['The FOR loop wraps the IF, which wraps the OUTPUT. Indentation shows what sits inside what.', 'The even check (MOD 2 = 0) must be inside the loop, and OUTPUT inside the IF.'],
         explain: '<strong>The FOR loop wraps the IF, which wraps the OUTPUT.</strong> Each line is indented to show what it sits inside: the IF (even check) is inside the loop, and OUTPUT is inside the IF. It prints 2 and 4.' },
       { type: 'CODE_TRACE', badge: 'TRACE', board: 'AQA · OCR · Eduqas',
+        brief: 'A password generator glues the chunk "ab" on four times, then reports the length. Trace what it prints.',
         title: 'What does this program output?',
         desc: 'LEN / length / len gives the number of characters.',
         code: { AQA: 'word ← ""\nFOR i ← 1 TO 4\n  word ← word + "ab"\nENDFOR\nOUTPUT LEN(word)', OCR: 'word = ""\nfor i = 1 to 4\n  word = word + "ab"\nnext i\nprint(word.length)', Eduqas: 'word = ""\nfor i in range(1, 5):\n  word = word + "ab"\nprint(len(word))' },
@@ -4847,6 +5110,16 @@ export const PHASES = [
         explain: '<strong>Output: 8.</strong> The loop runs 4 times, each adding "ab" (2 characters), giving "abababab" — 8 characters. LEN / length / len returns that count.' },
       { type: 'CODE_WRITE', badge: 'WRITE CODE', board: 'AQA · OCR · Eduqas', marks: 4,
         title: 'Write a program that uses a loop to add up the numbers from 1 to 10 and outputs the total.',
+        brief: 'A savings challenge: bank £1 on day 1, £2 on day 2 … £10 on day 10. The app must show the grand total at the end.',
+        steps: [
+          { text: 'Create a variable total and set it to 0 BEFORE the loop.', re: 'total\\s*(←|=)\\s*0' },
+          { text: 'Make a FOR loop that counts 1 to 10.', re: 'for' },
+          { text: 'Each pass, add the counter to total.', re: 'total\\s*(←|=)\\s*total\\s*\\+' },
+          { text: 'AFTER the loop, output total.', re: '(OUTPUT|print)' },
+        ],
+        example: { note: 'A similar task, solved: total the numbers 1 to 5 — same accumulator shape, smaller range.',
+          code: { AQA: 'total ← 0\nFOR i ← 1 TO 5\n  total ← total + i\nENDFOR\nOUTPUT total', OCR: 'total = 0\nfor i = 1 to 5\n  total = total + i\nnext i\nprint(total)', Eduqas: 'total = 0\nfor i in range(1, 6):\n  total = total + i\nprint(total)' } },
+        hints: ['Start a running total at 0, then let the loop pour each number into it.', 'The output line goes AFTER the loop ends — not inside it.'],
         tests: ['Outputs 55 (1 + 2 + … + 10)'],
         cases: [{ label: 'sum 1…10 → 55', stdin: [], expect: '55' }],
         model: {
@@ -4920,7 +5193,8 @@ export const PHASES = [
             explain: 'A <strong>subroutine</strong> lets you write the calculation once and <em>call</em> it wherever needed (passing the sides as parameters). Fix it once and every call benefits — far safer than 20 copies.' } },
         { part: 'PART 1 · DEFINING & CALLING',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
-            title: 'What does this program output?',
+            brief: 'A tiling app works out how many tiles cover a square wall — side length 4.',
+        title: 'What does this program output?',
             desc: 'The function is called on the last line.',
             code: { AQA: 'SUBROUTINE square(n)\n  RETURN n * n\nENDSUBROUTINE\nOUTPUT square(4)', OCR: 'function square(n)\n  return n * n\nendfunction\nprint(square(4))', Eduqas: 'def square(n):\n  return n * n\nprint(square(4))' },
             answer: '16',
@@ -4928,7 +5202,8 @@ export const PHASES = [
             explain: '<strong>Output: 16.</strong> square(4) sets the parameter n = 4 and returns n * n = 16, which is then printed.' } },
         { part: 'PART 1 · DEFINING & CALLING',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
-            title: 'What does this program output?',
+            brief: 'A checkout totals two basket items, £3 and £7, with its add() function.',
+        title: 'What does this program output?',
             desc: 'Two parameters are passed in.',
             code: { AQA: 'SUBROUTINE add(a, b)\n  RETURN a + b\nENDSUBROUTINE\nOUTPUT add(3, 7)', OCR: 'function add(a, b)\n  return a + b\nendfunction\nprint(add(3, 7))', Eduqas: 'def add(a, b):\n  return a + b\nprint(add(3, 7))' },
             answer: '10',
@@ -4937,7 +5212,8 @@ export const PHASES = [
         { part: 'PART 1 · DEFINING & CALLING', heading: 'YOUR TURN',
           html: '<div class="pi-text">Assemble one yourself — define the subroutine fully, then call it. The definition comes first.</div>',
           q: { type: 'CODE_BUILD', badge: 'BUILD', exam: true,
-            title: 'Put the lines in order to define a function and then call it.',
+            brief: 'A chat app needs a greet() function so every new user gets a hello by name.',
+        title: 'Put the lines in order to define a function and then call it.',
             desc: 'The function must be defined before it is called.',
             lines: { AQA: ['SUBROUTINE greet(name)', '  RETURN "Hi " + name', 'ENDSUBROUTINE', 'OUTPUT greet("Sam")'], OCR: ['function greet(name)', '  return "Hi " + name', 'endfunction', 'print(greet("Sam"))'], Eduqas: ['def greet(name):', '  return "Hi " + name', 'print(greet("Sam"))'] },
             hints: ['Define the whole subroutine first (header, body, end), then call it.', 'The RETURN line sits inside the subroutine; the call comes after it is defined.'],
@@ -4948,7 +5224,8 @@ export const PHASES = [
           html: '<div class="pi-text">The keyword that makes a function useful is <strong>RETURN</strong> — it sends a value back to wherever the function was called, so the call can be <em>used in an expression</em>. That\'s the difference from OUTPUT/print, which only shows a value on screen.</div>'
             + '<div class="pi-text">Because a function call becomes its returned value, you can drop it straight into a bigger expression: <code>half(20) + half(6)</code> works out each call, then adds the results.</div>',
           q: { type: 'CODE_FILL', badge: 'COMPLETE',
-            title: 'Complete the function so it gives back (returns) n × 3.',
+            brief: 'A loyalty scheme pays triple points on Fridays — the function must hand back n × 3.',
+        title: 'Complete the function so it gives back (returns) n × 3.',
             desc: 'Which keyword sends a value back from a function?',
             code: { AQA: 'SUBROUTINE triple(n)\n  ▢ n * 3\nENDSUBROUTINE\nOUTPUT triple(5)', OCR: 'function triple(n)\n  ▢ n * 3\nendfunction\nprint(triple(5))', Eduqas: 'def triple(n):\n  ▢ n * 3\nprint(triple(5))' },
             options: { AQA: ['RETURN', 'OUTPUT', 'WHILE', 'INPUT'], OCR: ['return', 'print', 'while', 'input'], Eduqas: ['return', 'print', 'while', 'input'] },
@@ -4957,7 +5234,8 @@ export const PHASES = [
             explain: '<strong>The answer is RETURN (Python/OCR: return).</strong> RETURN sends a value back from the function so the call triple(5) can be used — here it returns 15, which is then printed.' } },
         { part: 'PART 2 · RETURN & USING RESULTS',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
-            title: 'What does this program output?',
+            brief: 'A half-price sale: the till halves £20 and halves £6, then adds the two sale prices.',
+        title: 'What does this program output?',
             desc: 'The function is used twice in one expression.',
             code: { AQA: 'SUBROUTINE half(n)\n  RETURN n DIV 2\nENDSUBROUTINE\nOUTPUT half(20) + half(6)', OCR: 'function half(n)\n  return n DIV 2\nendfunction\nprint(half(20) + half(6))', Eduqas: 'def half(n):\n  return n // 2\nprint(half(20) + half(6))' },
             answer: '13',
@@ -4966,7 +5244,8 @@ export const PHASES = [
         { part: 'PART 2 · RETURN & USING RESULTS', heading: 'YOUR TURN',
           html: '<div class="pi-text">Work this one back to front — what argument must go in to make the output 14?</div>',
           q: { type: 'CODE_FILL', badge: 'COMPLETE', exam: true,
-            title: 'Complete the function call so the program outputs 14.',
+            brief: 'A doubling machine must land exactly on 14 — choose what to feed it.',
+        title: 'Complete the function call so the program outputs 14.',
             desc: 'Pick the argument that makes it work.',
             code: { AQA: 'SUBROUTINE timesTwo(n)\n  RETURN n * 2\nENDSUBROUTINE\nOUTPUT timesTwo(▢)', OCR: 'function timesTwo(n)\n  return n * 2\nendfunction\nprint(timesTwo(▢))', Eduqas: 'def timesTwo(n):\n  return n * 2\nprint(timesTwo(▢))' },
             options: ['7', '14', '2', '28'],
@@ -4979,7 +5258,8 @@ export const PHASES = [
           html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · LOCAL VARIABLE (SCOPE)</div><div class="pi-defbox-text">A variable made <strong>inside a subroutine</strong> (including a parameter). It <strong>only exists inside</strong> that subroutine and cannot be seen or changed outside it.</div></div>'
             + '<div class="pi-text">Changing a parameter inside a subroutine does <em>not</em> change the original variable outside. This is <strong>scope</strong>, and it\'s what stops subroutines accidentally interfering with each other.</div>',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
-            title: 'What does this program output?',
+            brief: 'A power-up SHOULD add 10 health, but players report nothing happens. Trace why.',
+        title: 'What does this program output?',
             desc: 'Does changing a parameter change the original variable?',
             code: { AQA: 'SUBROUTINE addTen(x)\n  x ← x + 10\nENDSUBROUTINE\nnum ← 5\naddTen(num)\nOUTPUT num', OCR: 'procedure addTen(x)\n  x = x + 10\nendprocedure\nnum = 5\naddTen(num)\nprint(num)', Eduqas: 'def addTen(x):\n  x = x + 10\nnum = 5\naddTen(num)\nprint(num)' },
             answer: '5',
@@ -4996,6 +5276,15 @@ export const PHASES = [
         { part: 'PART 3 · SCOPE & WRITING',
           q: { type: 'CODE_WRITE', badge: 'WRITE CODE', marks: 4,
             title: 'Write a subroutine called area that takes a width and a height as parameters and returns their product (the area).',
+        brief: 'A flooring company\'s quote tool needs one reusable calculation: given a room\'s width and height, hand back its floor area.',
+        steps: [
+          { text: 'Define a subroutine named area with two parameters (width, height).', re: '(SUBROUTINE|function|def)\\s+area\\s*\\(' },
+          { text: 'Multiply the two parameters together.', re: '\\*' },
+          { text: 'RETURN the result (don\'t just print it).', re: 'return' },
+        ],
+        example: { note: 'A similar task, solved: a perimeter() subroutine — two parameters in, one value RETURNed.',
+          code: { AQA: 'SUBROUTINE perimeter(w, h)\n  RETURN 2 * (w + h)\nENDSUBROUTINE', OCR: 'function perimeter(w, h)\n  return 2 * (w + h)\nendfunction', Eduqas: 'def perimeter(w, h):\n  return 2 * (w + h)' } },
+        hints: ['The quote tool needs the value BACK — that\'s RETURN, not OUTPUT/print.', 'area(4, 3) should hand back 12; nothing should be printed inside the subroutine.'],
             tests: ['area(4, 3) returns 12', 'area(5, 5) returns 25'],
             cases: [
               { label: 'area(4, 3) → 12', harness: 'print(area(4, 3))', expect: '12' },
@@ -5048,6 +5337,7 @@ export const PHASES = [
         hints: ['Don’t Repeat Yourself.', 'A named block you call by name, passing parameters.'],
         explain: 'A <strong>subroutine</strong> lets you write the calculation once and <em>call</em> it wherever needed (passing the sides as parameters). Fix it once and every call benefits — far safer than 20 copies.' },
       { type: 'CODE_TRACE', badge: 'TRACE', board: 'AQA · OCR · Eduqas',
+        brief: 'A tile shop uses a function to work out how many tiles cover a square floor 4 tiles wide. Trace the output.',
         title: 'What does this program output?',
         desc: 'The function is called on the last line.',
         code: { AQA: 'SUBROUTINE square(n)\n  RETURN n * n\nENDSUBROUTINE\nOUTPUT square(4)', OCR: 'function square(n)\n  return n * n\nendfunction\nprint(square(4))', Eduqas: 'def square(n):\n  return n * n\nprint(square(4))' },
@@ -5055,6 +5345,7 @@ export const PHASES = [
         hints: ['Work out what square(4) returns.', 'n = 4, so n * n = 16.'],
         explain: '<strong>Output: 16.</strong> square(4) sets the parameter n = 4 and returns n * n = 16, which is then printed.' },
       { type: 'CODE_TRACE', badge: 'TRACE', board: 'AQA · OCR · Eduqas',
+        brief: 'A shop till uses a function to add two item prices. Trace what it prints for 3 and 7.',
         title: 'What does this program output?',
         desc: 'Two parameters are passed in.',
         code: { AQA: 'SUBROUTINE add(a, b)\n  RETURN a + b\nENDSUBROUTINE\nOUTPUT add(3, 7)', OCR: 'function add(a, b)\n  return a + b\nendfunction\nprint(add(3, 7))', Eduqas: 'def add(a, b):\n  return a + b\nprint(add(3, 7))' },
@@ -5062,12 +5353,14 @@ export const PHASES = [
         hints: ['The arguments fill the parameters in order: a = 3, b = 7.', '3 + 7 = 10.'],
         explain: '<strong>Output: 10.</strong> The arguments fill the parameters in order (a = 3, b = 7), so the function returns a + b = 10.' },
       { type: 'CODE_BUILD', badge: 'BUILD', board: 'AQA · OCR · Eduqas',
+        brief: 'A chat app needs a greet() function so every new user gets a hello by name.',
         title: 'Put the lines in order to define a function and then call it.',
         desc: 'The function must be defined before it is called.',
         lines: { AQA: ['SUBROUTINE greet(name)', '  RETURN "Hi " + name', 'ENDSUBROUTINE', 'OUTPUT greet("Sam")'], OCR: ['function greet(name)', '  return "Hi " + name', 'endfunction', 'print(greet("Sam"))'], Eduqas: ['def greet(name):', '  return "Hi " + name', 'print(greet("Sam"))'] },
         hints: ['Define the whole subroutine first (header, body, end), then call it.', 'The RETURN line sits inside the subroutine; the call comes after it is defined.'],
         explain: '<strong>Define the subroutine first (header → RETURN line → end), then call it.</strong> A subroutine must be defined before it is used. The call greet("Sam") would output "Hi Sam".' },
       { type: 'CODE_FILL', badge: 'COMPLETE', board: 'AQA · OCR · Eduqas',
+        brief: 'A loyalty scheme pays triple points on Fridays — the function must hand back n × 3.',
         title: 'Complete the function so it gives back (returns) n × 3.',
         desc: 'Which keyword sends a value back from a function?',
         code: { AQA: 'SUBROUTINE triple(n)\n  ▢ n * 3\nENDSUBROUTINE\nOUTPUT triple(5)', OCR: 'function triple(n)\n  ▢ n * 3\nendfunction\nprint(triple(5))', Eduqas: 'def triple(n):\n  ▢ n * 3\nprint(triple(5))' },
@@ -5076,6 +5369,7 @@ export const PHASES = [
         hints: ['You need to send the value BACK to wherever the function was called.', 'OUTPUT/print would only show it, not return it for the call to use.'],
         explain: '<strong>The answer is RETURN (Python/OCR: return).</strong> RETURN sends a value back from the function so the call triple(5) can be used — here it returns 15, which is then printed.' },
       { type: 'CODE_TRACE', badge: 'TRACE', board: 'AQA · OCR · Eduqas',
+        brief: 'A game tried to add 10 bonus points with this function — but players complain their score never changes. Trace what actually prints.',
         title: 'What does this program output?',
         desc: 'Does changing a parameter change the original variable?',
         code: { AQA: 'SUBROUTINE addTen(x)\n  x ← x + 10\nENDSUBROUTINE\nnum ← 5\naddTen(num)\nOUTPUT num', OCR: 'procedure addTen(x)\n  x = x + 10\nendprocedure\nnum = 5\naddTen(num)\nprint(num)', Eduqas: 'def addTen(x):\n  x = x + 10\nnum = 5\naddTen(num)\nprint(num)' },
@@ -5090,6 +5384,7 @@ export const PHASES = [
         hints: ['Which one gives a value BACK that you can use in an expression?', 'A procedure just does a job (e.g. prints something); a function returns a result.'],
         explain: '<strong>A function returns a value; a procedure does not.</strong> You can use a function call inside an expression (e.g. total = add(3, 4)). A procedure just performs an action. Both are subroutines and both can take parameters.' },
       { type: 'CODE_TRACE', badge: 'TRACE', board: 'AQA · OCR · Eduqas',
+        brief: 'A recipe app halves ingredient amounts using integer division. Trace the total of half(20) + half(6).',
         title: 'What does this program output?',
         desc: 'The function is used twice in one expression.',
         code: { AQA: 'SUBROUTINE half(n)\n  RETURN n DIV 2\nENDSUBROUTINE\nOUTPUT half(20) + half(6)', OCR: 'function half(n)\n  return n DIV 2\nendfunction\nprint(half(20) + half(6))', Eduqas: 'def half(n):\n  return n // 2\nprint(half(20) + half(6))' },
@@ -5097,6 +5392,7 @@ export const PHASES = [
         hints: ['Work out each call separately, then add the results.', 'half(20) = 10 and half(6) = 3, so 10 + 3 = 13.'],
         explain: '<strong>Output: 13.</strong> half(20) returns 20 DIV 2 = 10 and half(6) returns 6 DIV 2 = 3. The returned values are added: 10 + 3 = 13.' },
       { type: 'CODE_FILL', badge: 'COMPLETE', board: 'AQA · OCR · Eduqas',
+        brief: 'A doubling machine must land exactly on 14 — choose what to feed it.',
         title: 'Complete the function call so the program outputs 14.',
         desc: 'Pick the argument that makes it work.',
         code: { AQA: 'SUBROUTINE timesTwo(n)\n  RETURN n * 2\nENDSUBROUTINE\nOUTPUT timesTwo(▢)', OCR: 'function timesTwo(n)\n  return n * 2\nendfunction\nprint(timesTwo(▢))', Eduqas: 'def timesTwo(n):\n  return n * 2\nprint(timesTwo(▢))' },
@@ -5106,6 +5402,15 @@ export const PHASES = [
         explain: '<strong>The answer is 7.</strong> timesTwo doubles its argument, and 7 × 2 = 14. (Passing 14 would output 28.)' },
       { type: 'CODE_WRITE', badge: 'WRITE CODE', board: 'AQA · OCR · Eduqas', marks: 4,
         title: 'Write a subroutine called area that takes a width and a height as parameters and returns their product (the area).',
+        brief: 'A flooring company\'s quote tool needs one reusable calculation: given a room\'s width and height, hand back its floor area.',
+        steps: [
+          { text: 'Define a subroutine named area with two parameters (width, height).', re: '(SUBROUTINE|function|def)\\s+area\\s*\\(' },
+          { text: 'Multiply the two parameters together.', re: '\\*' },
+          { text: 'RETURN the result (don\'t just print it).', re: 'return' },
+        ],
+        example: { note: 'A similar task, solved: a perimeter() subroutine — two parameters in, one value RETURNed.',
+          code: { AQA: 'SUBROUTINE perimeter(w, h)\n  RETURN 2 * (w + h)\nENDSUBROUTINE', OCR: 'function perimeter(w, h)\n  return 2 * (w + h)\nendfunction', Eduqas: 'def perimeter(w, h):\n  return 2 * (w + h)' } },
+        hints: ['The quote tool needs the value BACK — that\'s RETURN, not OUTPUT/print.', 'area(4, 3) should hand back 12; nothing should be printed inside the subroutine.'],
         tests: ['area(4, 3) returns 12', 'area(5, 5) returns 25'],
         cases: [
           { label: 'area(4, 3) → 12', harness: 'print(area(4, 3))', expect: '12' },
@@ -5184,7 +5489,8 @@ export const PHASES = [
         { part: 'PART 1 · ARRAYS & INDEXING', heading: 'YOUR TURN',
           html: '<div class="pi-text">Your turn — which index picks out the <em>last</em> item? Count carefully.</div>',
           q: { type: 'CODE_FILL', badge: 'COMPLETE', exam: true,
-            title: 'Complete the code so it prints the last colour (blue).',
+            brief: 'A theme picker must load the LAST colour of the palette array.',
+        title: 'Complete the code so it prints the last colour (blue).',
             desc: 'Watch the index of the last element.',
             code: { AQA: 'colours ← ["red", "green", "blue"]\nOUTPUT colours[▢]', OCR: 'colours = ["red", "green", "blue"]\nprint(colours[▢])', Eduqas: 'colours = ["red", "green", "blue"]\nprint(colours[▢])' },
             options: ['2', '3', '1', '0'],
@@ -5197,7 +5503,8 @@ export const PHASES = [
           html: '<div class="pi-text">The real power of an array is looping over it. <code>FOR i ← 0 TO LEN(arr) − 1</code> visits every index in turn, so <code>arr[i]</code> steps through every element. Inside the loop you can total them, count the ones that match a test, or find the biggest.</div>'
             + '<div class="pi-text">The pattern for a running total is always the same: set an accumulator to 0 <em>before</em> the loop, then add <code>arr[i]</code> to it each pass.</div>',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
-            title: 'What does this program output?',
+            brief: 'A basket holds three prices in an array — the checkout must total them.',
+        title: 'What does this program output?',
             desc: 'The loop adds up every element.',
             code: { AQA: 'nums ← [3, 5, 2]\ntotal ← 0\nFOR i ← 0 TO 2\n  total ← total + nums[i]\nENDFOR\nOUTPUT total', OCR: 'nums = [3, 5, 2]\ntotal = 0\nfor i = 0 to 2\n  total = total + nums[i]\nnext i\nprint(total)', Eduqas: 'nums = [3, 5, 2]\ntotal = 0\nfor i in range(0, 3):\n  total = total + nums[i]\nprint(total)' },
             answer: '10',
@@ -5205,7 +5512,8 @@ export const PHASES = [
             explain: '<strong>Output: 10.</strong> The loop visits each index (0, 1, 2) and adds nums[i] to total: 3 + 5 + 2 = 10.' } },
         { part: 'PART 2 · LOOPING OVER ARRAYS',
           q: { type: 'CODE_BUILD', badge: 'BUILD',
-            title: 'Put the lines in order to print every score in the array.',
+            brief: 'The results screen must list every player score, in order.',
+        title: 'Put the lines in order to print every score in the array.',
             desc: 'Loop over the array from index 0.',
             lines: { AQA: ['scores ← [70, 85, 90]', 'FOR i ← 0 TO 2', '  OUTPUT scores[i]', 'ENDFOR'], OCR: ['scores = [70, 85, 90]', 'for i = 0 to 2', '  print(scores[i])', 'next i'], Eduqas: ['scores = [70, 85, 90]', 'for i in range(0, 3):', '  print(scores[i])'] },
             hints: ['Create the array first, then loop over its indexes, printing each element.', 'The OUTPUT line sits inside the FOR loop.'],
@@ -5213,7 +5521,8 @@ export const PHASES = [
         { part: 'PART 2 · LOOPING OVER ARRAYS', heading: 'YOUR TURN',
           html: '<div class="pi-text">Trace this one solo — a loop with an IF inside it, counting how many elements pass a test.</div>',
           q: { type: 'CODE_TRACE', badge: 'TRACE', exam: true,
-            title: 'What does this program output?',
+            brief: 'A stats screen counts how many of the round scores were even numbers.',
+        title: 'What does this program output?',
             desc: 'Count how many array values are even.',
             code: { AQA: 'nums ← [3, 4, 7, 8]\ncount ← 0\nFOR i ← 0 TO 3\n  IF nums[i] MOD 2 = 0 THEN\n    count ← count + 1\n  ENDIF\nENDFOR\nOUTPUT count', OCR: 'nums = [3, 4, 7, 8]\ncount = 0\nfor i = 0 to 3\n  if nums[i] MOD 2 == 0 then\n    count = count + 1\n  endif\nnext i\nprint(count)', Eduqas: 'nums = [3, 4, 7, 8]\ncount = 0\nfor i in range(0, 4):\n  if nums[i] % 2 == 0:\n    count = count + 1\nprint(count)' },
             answer: '2',
@@ -5225,7 +5534,8 @@ export const PHASES = [
           html: '<div class="pi-text">A <strong>string</strong> is an array of characters, indexed from 0 — so <code>word[0]</code> is the first character, and LEN / length / len gives how many characters there are. It\'s how programs handle usernames, messages and file names.</div>'
             + '<div class="pi-text">Go one dimension further and you get a <strong>2D array</strong> — a grid. Index it <code>grid[row][column]</code>, both starting at 0: <code>grid[1][0]</code> is row 1, column 0. Perfect for game boards, spreadsheets and images.</div>',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
-            title: 'What does this program output?',
+            brief: 'An avatar maker uses the first letter of the username as the avatar initial.',
+        title: 'What does this program output?',
             desc: 'String characters are indexed from 0.',
             code: { AQA: 'word ← "COMPUTER"\nOUTPUT word[0]', OCR: 'word = "COMPUTER"\nprint(word[0])', Eduqas: 'word = "COMPUTER"\nprint(word[0])' },
             answer: 'C',
@@ -5233,7 +5543,8 @@ export const PHASES = [
             explain: '<strong>Output: C.</strong> Strings are indexed from 0, so word[0] is the first character — "C".' } },
         { part: 'PART 3 · STRINGS, 2D & WRITING',
           q: { type: 'CODE_FILL', badge: 'COMPLETE',
-            title: 'Complete the code so it outputs the number of letters in name (6).',
+            brief: 'The sign-up form must measure how long the chosen username is.',
+        title: 'Complete the code so it outputs the number of letters in name (6).',
             desc: 'How do you get the length of a string?',
             code: { AQA: 'name ← "PYTHON"\nOUTPUT ▢', OCR: 'name = "PYTHON"\nprint(▢)', Eduqas: 'name = "PYTHON"\nprint(▢)' },
             options: { AQA: ['LEN(name)', 'name', 'name[0]', 'name * 6'], OCR: ['name.length', 'name', 'name[0]', 'len(name)'], Eduqas: ['len(name)', 'name', 'name[0]', 'name.length'] },
@@ -5242,7 +5553,8 @@ export const PHASES = [
             explain: '<strong>The length of "PYTHON" is 6.</strong> Each board has its own way to get it: AQA <code>LEN(name)</code>, OCR <code>name.length</code>, Python <code>len(name)</code>. (name[0] would give just the first letter.)' } },
         { part: 'PART 3 · STRINGS, 2D & WRITING',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
-            title: 'What does this program output?',
+            brief: 'A battleships board is a 2D grid — the game reads the cell at row 1, column 0.',
+        title: 'What does this program output?',
             desc: 'A 2D array: grid[row][column].',
             code: { AQA: 'grid ← [[1, 2], [3, 4]]\nOUTPUT grid[1][0]', OCR: 'grid = [[1, 2], [3, 4]]\nprint(grid[1][0])', Eduqas: 'grid = [[1, 2], [3, 4]]\nprint(grid[1][0])' },
             answer: '3',
@@ -5251,6 +5563,17 @@ export const PHASES = [
         { part: 'PART 3 · STRINGS, 2D & WRITING',
           q: { type: 'CODE_WRITE', badge: 'WRITE CODE', marks: 4,
             title: 'Write a program that finds and outputs the largest number in the array nums = [4, 9, 2, 7].',
+        brief: 'The leaderboard needs its HIGH SCORE: from the round scores [4, 9, 2, 7], find and show the biggest.',
+        steps: [
+          { text: 'Create the array nums = [4, 9, 2, 7].', re: '4\\s*,\\s*9\\s*,\\s*2\\s*,\\s*7' },
+          { text: 'Start a "largest so far" variable at the FIRST element.', re: '(max|largest|big)\\w*\\s*(←|=)' },
+          { text: 'Loop through the rest of the array.', re: 'for' },
+          { text: 'IF an element beats the largest so far, update it.', re: 'if' },
+          { text: 'AFTER the loop, output the largest.', re: '(OUTPUT|print)' },
+        ],
+        example: { note: 'A similar task, solved: find the SMALLEST value — identical shape, comparison flipped.',
+          code: { AQA: 'nums ← [5, 2, 8]\nmin ← nums[0]\nFOR i ← 1 TO 2\n  IF nums[i] < min THEN\n    min ← nums[i]\n  ENDIF\nENDFOR\nOUTPUT min', OCR: 'nums = [5, 2, 8]\nmin = nums[0]\nfor i = 1 to 2\n  if nums[i] < min then\n    min = nums[i]\n  endif\nnext i\nprint(min)', Eduqas: 'nums = [5, 2, 8]\nmin = nums[0]\nfor i in range(1, 3):\n  if nums[i] < min:\n    min = nums[i]\nprint(min)' } },
+        hints: ['Keep a "biggest so far" box; every element gets a chance to replace it.', 'Start the box at nums[0], loop from the second element onwards.'],
             tests: ['For [4, 9, 2, 7] → outputs 9'],
             cases: [{ label: 'largest of [4, 9, 2, 7] → 9', expect: '9' }],
             model: {
@@ -5301,6 +5624,7 @@ export const PHASES = [
         explain: 'Indexes start at <strong>0</strong>, so scores[0] = 50 and <strong>scores[1] = 80</strong> (the second element). Off-by-one mistakes here are one of the most common bugs in real code.' },
       { gen: 'codeArrayIndex' },
       { type: 'CODE_TRACE', badge: 'TRACE', board: 'AQA · OCR · Eduqas',
+        brief: 'A fitness app adds up the miles from three walks stored in a list. Trace the total it prints.',
         title: 'What does this program output?',
         desc: 'The loop adds up every element.',
         code: { AQA: 'nums ← [3, 5, 2]\ntotal ← 0\nFOR i ← 0 TO 2\n  total ← total + nums[i]\nENDFOR\nOUTPUT total', OCR: 'nums = [3, 5, 2]\ntotal = 0\nfor i = 0 to 2\n  total = total + nums[i]\nnext i\nprint(total)', Eduqas: 'nums = [3, 5, 2]\ntotal = 0\nfor i in range(0, 3):\n  total = total + nums[i]\nprint(total)' },
@@ -5308,6 +5632,7 @@ export const PHASES = [
         hints: ['Add nums[0], nums[1], nums[2] as i goes 0, 1, 2.', '3 + 5 + 2 = 10.'],
         explain: '<strong>Output: 10.</strong> The loop visits each index (0, 1, 2) and adds nums[i] to total: 3 + 5 + 2 = 10.' },
       { type: 'CODE_FILL', badge: 'COMPLETE', board: 'AQA · OCR · Eduqas',
+        brief: 'A theme picker must load the LAST colour of the palette array.',
         title: 'Complete the code so it prints the last colour (blue).',
         desc: 'Watch the index of the last element.',
         code: { AQA: 'colours ← ["red", "green", "blue"]\nOUTPUT colours[▢]', OCR: 'colours = ["red", "green", "blue"]\nprint(colours[▢])', Eduqas: 'colours = ["red", "green", "blue"]\nprint(colours[▢])' },
@@ -5316,12 +5641,14 @@ export const PHASES = [
         hints: ['There are 3 colours, but the first index is 0.', 'Indexes are 0, 1, 2 — the last one is 2, not 3.'],
         explain: '<strong>The answer is 2.</strong> The array has 3 items at indexes 0, 1, 2, so the last (blue) is colours[2]. colours[3] would be out of range — the last index is the length minus 1.' },
       { type: 'CODE_BUILD', badge: 'BUILD', board: 'AQA · OCR · Eduqas',
+        brief: 'The results screen must list every player score, in order.',
         title: 'Put the lines in order to print every score in the array.',
         desc: 'Loop over the array from index 0.',
         lines: { AQA: ['scores ← [70, 85, 90]', 'FOR i ← 0 TO 2', '  OUTPUT scores[i]', 'ENDFOR'], OCR: ['scores = [70, 85, 90]', 'for i = 0 to 2', '  print(scores[i])', 'next i'], Eduqas: ['scores = [70, 85, 90]', 'for i in range(0, 3):', '  print(scores[i])'] },
         hints: ['Create the array first, then loop over its indexes, printing each element.', 'The OUTPUT line sits inside the FOR loop.'],
         explain: '<strong>Create the array, then loop over its indexes (0 to 2), printing scores[i] each time.</strong> The OUTPUT line is indented inside the loop, so it runs once per element — printing 70, 85, 90.' },
       { type: 'CODE_TRACE', badge: 'TRACE', board: 'AQA · OCR · Eduqas',
+        brief: 'A chat app makes an avatar badge from the first letter of the username. Trace the letter it shows for COMPUTER.',
         title: 'What does this program output?',
         desc: 'String characters are indexed from 0.',
         code: { AQA: 'word ← "COMPUTER"\nOUTPUT word[0]', OCR: 'word = "COMPUTER"\nprint(word[0])', Eduqas: 'word = "COMPUTER"\nprint(word[0])' },
@@ -5329,6 +5656,7 @@ export const PHASES = [
         hints: ['word[0] is the FIRST character.', 'The first letter of "COMPUTER" is C.'],
         explain: '<strong>Output: C.</strong> Strings are indexed from 0, so word[0] is the first character — "C".' },
       { type: 'CODE_TRACE', badge: 'TRACE', board: 'AQA · OCR · Eduqas',
+        brief: 'A cinema seating tool counts how many seat numbers in the list are even. Trace the count it prints.',
         title: 'What does this program output?',
         desc: 'Count how many array values are even.',
         code: { AQA: 'nums ← [3, 4, 7, 8]\ncount ← 0\nFOR i ← 0 TO 3\n  IF nums[i] MOD 2 = 0 THEN\n    count ← count + 1\n  ENDIF\nENDFOR\nOUTPUT count', OCR: 'nums = [3, 4, 7, 8]\ncount = 0\nfor i = 0 to 3\n  if nums[i] MOD 2 == 0 then\n    count = count + 1\n  endif\nnext i\nprint(count)', Eduqas: 'nums = [3, 4, 7, 8]\ncount = 0\nfor i in range(0, 4):\n  if nums[i] % 2 == 0:\n    count = count + 1\nprint(count)' },
@@ -5336,6 +5664,7 @@ export const PHASES = [
         hints: ['MOD/% 2 = 0 means the number is even.', 'The even values are 4 and 8, so count = 2.'],
         explain: '<strong>Output: 2.</strong> The loop checks each element; nums[i] MOD 2 = 0 is true for the even values 4 and 8, so count is increased twice — giving 2.' },
       { type: 'CODE_FILL', badge: 'COMPLETE', board: 'AQA · OCR · Eduqas',
+        brief: 'The sign-up form must measure how long the chosen username is.',
         title: 'Complete the code so it outputs the number of letters in name (6).',
         desc: 'How do you get the length of a string?',
         code: { AQA: 'name ← "PYTHON"\nOUTPUT ▢', OCR: 'name = "PYTHON"\nprint(▢)', Eduqas: 'name = "PYTHON"\nprint(▢)' },
@@ -5344,6 +5673,7 @@ export const PHASES = [
         hints: ['You need the COUNT of characters in the string.', 'AQA: LEN(name); OCR: name.length; Python: len(name).'],
         explain: '<strong>The length of "PYTHON" is 6.</strong> Each board has its own way to get it: AQA <code>LEN(name)</code>, OCR <code>name.length</code>, Python <code>len(name)</code>. (name[0] would give just the first letter.)' },
       { type: 'CODE_TRACE', badge: 'TRACE', board: 'AQA · OCR · Eduqas',
+        brief: 'A battleships game reads one cell from a 2D grid — row first, then column. Trace the value it prints.',
         title: 'What does this program output?',
         desc: 'A 2D array: grid[row][column].',
         code: { AQA: 'grid ← [[1, 2], [3, 4]]\nOUTPUT grid[1][0]', OCR: 'grid = [[1, 2], [3, 4]]\nprint(grid[1][0])', Eduqas: 'grid = [[1, 2], [3, 4]]\nprint(grid[1][0])' },
@@ -5352,6 +5682,17 @@ export const PHASES = [
         explain: '<strong>Output: 3.</strong> grid[1] is the second row [3, 4]; grid[1][0] then takes its first element, 3. A 2D array is indexed as grid[row][column], both starting at 0.' },
       { type: 'CODE_WRITE', badge: 'WRITE CODE', board: 'AQA · OCR · Eduqas', marks: 4,
         title: 'Write a program that finds and outputs the largest number in the array nums = [4, 9, 2, 7].',
+        brief: 'The leaderboard needs its HIGH SCORE: from the round scores [4, 9, 2, 7], find and show the biggest.',
+        steps: [
+          { text: 'Create the array nums = [4, 9, 2, 7].', re: '4\\s*,\\s*9\\s*,\\s*2\\s*,\\s*7' },
+          { text: 'Start a "largest so far" variable at the FIRST element.', re: '(max|largest|big)\\w*\\s*(←|=)' },
+          { text: 'Loop through the rest of the array.', re: 'for' },
+          { text: 'IF an element beats the largest so far, update it.', re: 'if' },
+          { text: 'AFTER the loop, output the largest.', re: '(OUTPUT|print)' },
+        ],
+        example: { note: 'A similar task, solved: find the SMALLEST value — identical shape, comparison flipped.',
+          code: { AQA: 'nums ← [5, 2, 8]\nmin ← nums[0]\nFOR i ← 1 TO 2\n  IF nums[i] < min THEN\n    min ← nums[i]\n  ENDIF\nENDFOR\nOUTPUT min', OCR: 'nums = [5, 2, 8]\nmin = nums[0]\nfor i = 1 to 2\n  if nums[i] < min then\n    min = nums[i]\n  endif\nnext i\nprint(min)', Eduqas: 'nums = [5, 2, 8]\nmin = nums[0]\nfor i in range(1, 3):\n  if nums[i] < min:\n    min = nums[i]\nprint(min)' } },
+        hints: ['Keep a "biggest so far" box; every element gets a chance to replace it.', 'Start the box at nums[0], loop from the second element onwards.'],
         tests: ['For [4, 9, 2, 7] → outputs 9'],
         cases: [{ label: 'largest of [4, 9, 2, 7] → 9', expect: '9' }],
         model: {
@@ -5432,7 +5773,8 @@ export const PHASES = [
             explain: '<strong>Syntax</strong> errors break the language rules so the program won\'t run. <strong>Logic</strong> errors run but produce the wrong result. <strong>Runtime</strong> errors crash while running (divide by zero, bad array index, using an unset variable).' } },
         { part: 'PART 1 · ERRORS & BUGS',
           q: { type: 'CODE_FIX', badge: 'FIX THE BUG',
-            title: 'This should add up the numbers 1 to 5 (total 15) but it gives the wrong answer. Find and fix the bug.',
+            brief: 'A warehouse app should ADD each day\'s deliveries (1 to 5 crates) to the stock total — but stock keeps falling.',
+        title: 'This should add up the numbers 1 to 5 (total 15) but it gives the wrong answer. Find and fix the bug.',
             desc: 'It runs without crashing — a logic error.',
             code: { AQA: 'total ← 0\nFOR i ← 1 TO 5\n  total ← total - i\nENDFOR\nOUTPUT total', OCR: 'total = 0\nfor i = 1 to 5\n  total = total - i\nnext i\nprint(total)', Eduqas: 'total = 0\nfor i in range(1, 6):\n  total = total - i\nprint(total)' },
             buggyLine: 2,
@@ -5442,7 +5784,8 @@ export const PHASES = [
             explain: '<strong>The bug is the line that subtracts.</strong> It should be <code>total ← total + i</code> (a plus, not a minus). This is a <strong>logic error</strong>: the program runs fine but produces the wrong result (−15 instead of 15).' } },
         { part: 'PART 1 · ERRORS & BUGS',
           q: { type: 'CODE_BUG', badge: 'SPOT THE BUG',
-            title: 'An 18-year-old should be an Adult, but this prints Minor. Click the line with the bug.',
+            brief: 'A cinema\'s age gate is wrongly turning away 18-year-olds from a President-rated film.',
+        title: 'An 18-year-old should be an Adult, but this prints Minor. Click the line with the bug.',
             desc: 'A boundary / logic error.',
             code: { AQA: 'age ← 18\nIF age > 18 THEN\n  OUTPUT "Adult"\nELSE\n  OUTPUT "Minor"\nENDIF', OCR: 'age = 18\nif age > 18 then\n  print("Adult")\nelse\n  print("Minor")\nendif', Eduqas: 'age = 18\nif age > 18:\n  print("Adult")\nelse:\n  print("Minor")' },
             buggyLine: 1,
@@ -5450,7 +5793,8 @@ export const PHASES = [
             explain: '<strong>The bug is the condition.</strong> <code>age > 18</code> excludes 18, so an 18-year-old is wrongly called a Minor. It should be <code>age ≥ 18</code> (&gt;=). A classic <strong>boundary error</strong>.' } },
         { part: 'PART 1 · ERRORS & BUGS',
           q: { type: 'CODE_BUG', badge: 'SPOT THE BUG',
-            title: 'This program crashes when it runs. Click the line with the bug.',
+            brief: 'A playlist app with 3 songs crashes at the end of every playthrough.',
+        title: 'This program crashes when it runs. Click the line with the bug.',
             desc: 'It reads past the end of the array — a runtime error.',
             code: { AQA: 'nums ← [10, 20, 30]\nFOR i ← 0 TO 3\n  OUTPUT nums[i]\nENDFOR', OCR: 'nums = [10, 20, 30]\nfor i = 0 to 3\n  print(nums[i])\nnext i', Eduqas: 'nums = [10, 20, 30]\nfor i in range(0, 4):\n  print(nums[i])' },
             buggyLine: 1,
@@ -5459,7 +5803,8 @@ export const PHASES = [
         { part: 'PART 1 · ERRORS & BUGS', heading: 'YOUR TURN',
           html: '<div class="pi-text">Solo bug hunt — this one runs forever. For a WHILE loop to stop, its condition must eventually become false.</div>',
           q: { type: 'CODE_BUG', badge: 'SPOT THE BUG', exam: true,
-            title: 'This loop never stops (an infinite loop). Click the line causing it.',
+            brief: 'A download progress bar spins forever and the app has to be force-quit.',
+        title: 'This loop never stops (an infinite loop). Click the line causing it.',
             desc: 'Will the loop condition ever become false?',
             code: { AQA: 'n ← 1\nWHILE n < 5\n  OUTPUT n\n  n ← n - 1\nENDWHILE', OCR: 'n = 1\nwhile n < 5\n  print(n)\n  n = n - 1\nendwhile', Eduqas: 'n = 1\nwhile n < 5:\n  print(n)\n  n = n - 1' },
             buggyLine: 3,
@@ -5470,7 +5815,14 @@ export const PHASES = [
         { part: 'PART 2 · VALIDATION', heading: 'NEVER TRUST THE INPUT',
           html: '<div class="pi-text">The golden rule: a robust program <strong>never trusts what the user types</strong>.</div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · VALIDATION</div><div class="pi-defbox-text">Checking that input is <strong>sensible and acceptable</strong> before the program uses it — and <strong>rejecting it if not</strong>.</div></div>'
-            + '<div class="pi-text">Five checks come up: <strong>range</strong> (within limits), <strong>type</strong> (right data type), <strong>presence</strong> (something was entered), <strong>length</strong> (enough characters), and <strong>format</strong> (matches a pattern).</div>',
+            + '<div class="pi-text">Five checks come up:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Range</strong> — within limits (an age between 0 and 120).</li>'
+            + '<li><strong>Type</strong> — the right data type (a whole number, not text).</li>'
+            + '<li><strong>Presence</strong> — something was actually entered.</li>'
+            + '<li><strong>Length</strong> — enough characters (a password of 8+).</li>'
+            + '<li><strong>Format</strong> — matches a pattern (an email has an @).</li>'
+            + '</ul>',
           q: { type: 'MC', badge: 'REAL WORLD',
             title: 'A sign-up form should reject an age of 200 or −5 before saving it. What is this an example of?',
             desc: 'Stopping bad input before it is used.',
@@ -5493,7 +5845,8 @@ export const PHASES = [
             explain: '<strong>Range</strong> (within limits), <strong>length</strong> (number of characters), <strong>presence</strong> (not blank), <strong>format</strong> (matches a pattern, e.g. an email with @) and <strong>type</strong> (correct data type) checks.' } },
         { part: 'PART 2 · VALIDATION',
           q: { type: 'CODE_FILL', badge: 'COMPLETE',
-            title: 'Complete the validation so a negative age is rejected as Invalid.',
+            brief: 'A sign-up form is accepting an age of −5 — the validation must catch it.',
+        title: 'Complete the validation so a negative age is rejected as Invalid.',
             desc: 'Reject ages below zero.',
             code: { AQA: 'age ← -5\nIF age ▢ 0 THEN\n  OUTPUT "Invalid"\nENDIF', OCR: 'age = -5\nif age ▢ 0 then\n  print("Invalid")\nendif', Eduqas: 'age = -5\nif age ▢ 0:\n  print("Invalid")' },
             options: { AQA: ['<', '>', '=', '≥'], OCR: ['<', '>', '==', '>='], Eduqas: ['<', '>', '==', '>='] },
@@ -5504,7 +5857,8 @@ export const PHASES = [
           html: '<div class="pi-text">Now put a program under attack. Feed it bad data to break it, add a range check to defend it, then verify the fix holds — exactly what a real tester does.</div>',
           q: { type: 'QATEST', badge: 'QA TESTER',
             field: 'age', range: [1, 100],
-            title: 'QA TESTER: break this program with bad data, add a check, then verify it.',
+            brief: 'It\'s QA day: the sign-up form should accept ages 1-100. Your job: break it with bad data, patch it, and prove the patch holds.',
+        title: 'QA TESTER: break this program with bad data, add a check, then verify it.',
             program: {
               AQA: 'age ← USERINPUT\nOUTPUT "Welcome — age " + age',
               OCR: 'age = int(input())\nprint("Welcome — age", age)',
@@ -5554,6 +5908,16 @@ export const PHASES = [
         { part: 'PART 3 · TESTING & MAINTAINABILITY',
           q: { type: 'CODE_WRITE', badge: 'WRITE CODE', marks: 4,
             title: 'Write a program that keeps asking the user for a number until they enter one between 1 and 10 (inclusive), then outputs that number.',
+        brief: 'Your quiz app asks the player to pick a difficulty from 1 to 10. Real players type 0, 999 and worse — the app must refuse bad picks and keep asking.',
+        steps: [
+          { text: 'Read a number from the user.', re: 'input|USERINPUT' },
+          { text: 'Make a WHILE loop that repeats while the number is out of range (below 1 OR above 10).', re: 'while' },
+          { text: 'INSIDE the loop, ask again.', re: '(input|USERINPUT)[\\s\\S]*(input|USERINPUT)' },
+          { text: 'AFTER the loop, output the accepted number.', re: '(OUTPUT|print)' },
+        ],
+        example: { note: 'A similar task, solved: keep asking until the user types a POSITIVE number — same read → WHILE-bad → re-ask shape.',
+          code: { AQA: 'num ← USERINPUT\nWHILE num < 0\n  num ← USERINPUT\nENDWHILE\nOUTPUT num', OCR: 'num = int(input())\nwhile num < 0\n  num = int(input())\nendwhile\nprint(num)', Eduqas: 'num = int(input())\nwhile num < 0:\n  num = int(input())\nprint(num)' } },
+        hints: ['The loop condition describes BAD input: num < 1 OR num > 10.', 'Ask once before the loop, then again inside it — the loop only ends on a good pick.'],
             tests: ['Reject 0 and 11, then accept 5 → outputs 5', 'Accept 8 first time → outputs 8'],
             cases: [
               { label: 'reject 0 and 11, then accept 5 → 5', stdin: ['0', '11', '5'], expect: '5' },
@@ -5621,6 +5985,7 @@ export const PHASES = [
         hints: ['Syntax errors stop it running at all.', 'Logic errors run but give the wrong answer; runtime errors crash mid-execution.'],
         explain: '<strong>Syntax</strong> errors break the language rules so the program won\'t run. <strong>Logic</strong> errors run but produce the wrong result. <strong>Runtime</strong> errors crash while running (divide by zero, bad array index, using an unset variable).' },
       { type: 'CODE_FIX', badge: 'FIX THE BUG', board: 'AQA · OCR · Eduqas',
+        brief: 'A warehouse app should ADD each day\'s deliveries (1 to 5 crates) to the stock total — but stock keeps falling.',
         title: 'This should add up the numbers 1 to 5 (total 15) but it gives the wrong answer. Find and fix the bug.',
         desc: 'It runs without crashing — a logic error.',
         code: { AQA: 'total ← 0\nFOR i ← 1 TO 5\n  total ← total - i\nENDFOR\nOUTPUT total', OCR: 'total = 0\nfor i = 1 to 5\n  total = total - i\nnext i\nprint(total)', Eduqas: 'total = 0\nfor i in range(1, 6):\n  total = total - i\nprint(total)' },
@@ -5630,6 +5995,7 @@ export const PHASES = [
         hints: ['The program should be adding the numbers up.', 'Look at how total is changed each time round the loop — it should grow, not shrink.'],
         explain: '<strong>The bug is the line that subtracts.</strong> It should be <code>total ← total + i</code> (a plus, not a minus). This is a <strong>logic error</strong>: the program runs fine but produces the wrong result (−15 instead of 15).' },
       { type: 'CODE_BUG', badge: 'SPOT THE BUG', board: 'AQA · OCR · Eduqas',
+        brief: 'A cinema\'s age gate is wrongly turning away 18-year-olds from a President-rated film.',
         title: 'An 18-year-old should be an Adult, but this prints Minor. Click the line with the bug.',
         desc: 'A boundary / logic error.',
         code: { AQA: 'age ← 18\nIF age > 18 THEN\n  OUTPUT "Adult"\nELSE\n  OUTPUT "Minor"\nENDIF', OCR: 'age = 18\nif age > 18 then\n  print("Adult")\nelse\n  print("Minor")\nendif', Eduqas: 'age = 18\nif age > 18:\n  print("Adult")\nelse:\n  print("Minor")' },
@@ -5652,6 +6018,7 @@ export const PHASES = [
         explain: '<strong>Normal</strong>: typical valid values (50, 12). <strong>Boundary</strong>: the edges of the valid range (0 and 100). <strong>Erroneous</strong>: invalid data that should be rejected (−5, 200, "hello").' },
       { type: 'QATEST', badge: 'QA TESTER', board: 'AQA · OCR · Eduqas',
         field: 'age', range: [1, 100],
+        brief: 'It\'s QA day: the sign-up form should accept ages 1-100. Your job: break it with bad data, patch it, and prove the patch holds.',
         title: 'QA TESTER: break this program with bad data, add a check, then verify it.',
         program: {
           AQA: 'age ← USERINPUT\nOUTPUT "Welcome — age " + age',
@@ -5673,6 +6040,7 @@ export const PHASES = [
         fixAnswer: { AQA: 'age < 1 OR age > 100', OCR: 'age < 1 OR age > 100', Eduqas: 'age < 1 or age > 100' },
         explain: 'A <strong>range check</strong> rejects a value below the minimum (1) OR above the maximum (100). The <strong>boundary</strong> values 1 and 100 are the exact edges — they must be ACCEPTED. Erroneous / Invalid data (−5, 150, 0) is rejected once the check is in place.' },
       { type: 'CODE_BUG', badge: 'SPOT THE BUG', board: 'AQA · OCR · Eduqas',
+        brief: 'A playlist app with 3 songs crashes at the end of every playthrough.',
         title: 'This program crashes when it runs. Click the line with the bug.',
         desc: 'It reads past the end of the array — a runtime error.',
         code: { AQA: 'nums ← [10, 20, 30]\nFOR i ← 0 TO 3\n  OUTPUT nums[i]\nENDFOR', OCR: 'nums = [10, 20, 30]\nfor i = 0 to 3\n  print(nums[i])\nnext i', Eduqas: 'nums = [10, 20, 30]\nfor i in range(0, 4):\n  print(nums[i])' },
@@ -5692,6 +6060,7 @@ export const PHASES = [
         hints: ['Range = within limits; length = number of characters; presence = not blank.', 'Format = matches a pattern; type = correct data type.'],
         explain: '<strong>Range</strong> (within limits), <strong>length</strong> (number of characters), <strong>presence</strong> (not blank), <strong>format</strong> (matches a pattern, e.g. an email with @) and <strong>type</strong> (correct data type) checks.' },
       { type: 'CODE_FILL', badge: 'COMPLETE', board: 'AQA · OCR · Eduqas',
+        brief: 'A sign-up form is accepting an age of −5 — the validation must catch it.',
         title: 'Complete the validation so a negative age is rejected as Invalid.',
         desc: 'Reject ages below zero.',
         code: { AQA: 'age ← -5\nIF age ▢ 0 THEN\n  OUTPUT "Invalid"\nENDIF', OCR: 'age = -5\nif age ▢ 0 then\n  print("Invalid")\nendif', Eduqas: 'age = -5\nif age ▢ 0:\n  print("Invalid")' },
@@ -5700,6 +6069,7 @@ export const PHASES = [
         hints: ['A negative age is one that is LESS than 0.', 'age < 0 is true for −5, so it is flagged Invalid.'],
         explain: '<strong>The answer is &lt; (less than).</strong> <code>age &lt; 0</code> is true for any negative number, so −5 is correctly rejected as Invalid. This is a simple validation / range check.' },
       { type: 'CODE_BUG', badge: 'SPOT THE BUG', board: 'AQA · OCR · Eduqas',
+        brief: 'A download progress bar spins forever and the app has to be force-quit.',
         title: 'This loop never stops (an infinite loop). Click the line causing it.',
         desc: 'Will the loop condition ever become false?',
         code: { AQA: 'n ← 1\nWHILE n < 5\n  OUTPUT n\n  n ← n - 1\nENDWHILE', OCR: 'n = 1\nwhile n < 5\n  print(n)\n  n = n - 1\nendwhile', Eduqas: 'n = 1\nwhile n < 5:\n  print(n)\n  n = n - 1' },
@@ -5715,6 +6085,16 @@ export const PHASES = [
         explain: '<strong>Meaningful names and comments make code easier to read and maintain.</strong> Other aids: consistent indentation and breaking the program into subroutines. Single-letter names, no indentation, or one-line code make maintenance much harder.' },
       { type: 'CODE_WRITE', badge: 'WRITE CODE', board: 'AQA · OCR · Eduqas', marks: 4,
         title: 'Write a program that keeps asking the user for a number until they enter one between 1 and 10 (inclusive), then outputs that number.',
+        brief: 'Your quiz app asks the player to pick a difficulty from 1 to 10. Real players type 0, 999 and worse — the app must refuse bad picks and keep asking.',
+        steps: [
+          { text: 'Read a number from the user.', re: 'input|USERINPUT' },
+          { text: 'Make a WHILE loop that repeats while the number is out of range (below 1 OR above 10).', re: 'while' },
+          { text: 'INSIDE the loop, ask again.', re: '(input|USERINPUT)[\\s\\S]*(input|USERINPUT)' },
+          { text: 'AFTER the loop, output the accepted number.', re: '(OUTPUT|print)' },
+        ],
+        example: { note: 'A similar task, solved: keep asking until the user types a POSITIVE number — same read → WHILE-bad → re-ask shape.',
+          code: { AQA: 'num ← USERINPUT\nWHILE num < 0\n  num ← USERINPUT\nENDWHILE\nOUTPUT num', OCR: 'num = int(input())\nwhile num < 0\n  num = int(input())\nendwhile\nprint(num)', Eduqas: 'num = int(input())\nwhile num < 0:\n  num = int(input())\nprint(num)' } },
+        hints: ['The loop condition describes BAD input: num < 1 OR num > 10.', 'Ask once before the loop, then again inside it — the loop only ends on a good pick.'],
         tests: ['Reject 0 and 11, then accept 5 → outputs 5', 'Accept 8 first time → outputs 8'],
         cases: [
           { label: 'reject 0 and 11, then accept 5 → 5', stdin: ['0', '11', '5'], expect: '5' },
@@ -5769,7 +6149,14 @@ export const PHASES = [
         // ── THE BIG IDEA ──
         { part: 'THE BIG IDEA', heading: 'THINK FIRST, CODE SECOND',
           html: '<div class="pi-text">Welcome to the algorithms unit — where you stop learning what computers <em>are</em> and start learning how to make them <strong>solve problems</strong>. And the first tool isn\'t a programming language. Faced with "build a game" or "plan a festival", no one can solve it in one go; the professionals <strong>think the problem into shape first</strong>.</div>'
-            + '<div class="pi-text">That thinking has a name — <strong>computational thinking</strong> — and a toolkit of four moves: <strong>decomposition</strong> (break the monster into bite-size sub-problems), <strong>abstraction</strong> (throw away the detail that doesn\'t matter), <strong>pattern recognition</strong> (spot where you\'ve seen this shape before, and reuse the solution), and <strong>algorithmic thinking</strong> (write the exact steps, in order). Master these and any problem becomes a to-do list.</div>',
+            + '<div class="pi-text">That thinking has a name — <strong>computational thinking</strong> — and a toolkit of four moves:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Decomposition</strong> — break the monster into bite-size sub-problems.</li>'
+            + '<li><strong>Abstraction</strong> — throw away the detail that doesn\'t matter.</li>'
+            + '<li><strong>Pattern recognition</strong> — spot where you\'ve seen this shape before, and reuse the solution.</li>'
+            + '<li><strong>Algorithmic thinking</strong> — write the exact steps, in order.</li>'
+            + '</ul>'
+            + '<div class="pi-text">Master these and any problem becomes a to-do list.</div>',
           diagram: 'ct-toolkit' },
         { part: 'THE BIG IDEA', use: ['video'],
           check: {
@@ -5782,7 +6169,10 @@ export const PHASES = [
         { part: 'PART 1 · THE FOUR TOOLS', heading: 'FOUR MOVES, WITH EXAMPLES',
           html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · DECOMPOSITION</div><div class="pi-defbox-text"><strong>Breaking a big problem into smaller sub-problems</strong> that can be solved separately.</div></div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · ABSTRACTION</div><div class="pi-defbox-text"><strong>Removing unnecessary detail</strong> to focus on the important parts of a problem.</div></div>'
-            + '<div class="pi-text"><strong>Decomposition:</strong> "make a racing game" becomes graphics, car physics, lap timing, menus — each solvable (and testable) on its own. <strong>Abstraction:</strong> the London Tube map keeps station order and connections, and throws away real distances and streets, because travellers don\'t need them.</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Decomposition in action</strong> — "make a racing game" becomes graphics, car physics, lap timing, menus: each solvable (and testable) on its own.</li>'
+            + '<li><strong>Abstraction in action</strong> — the London Tube map keeps station order and connections, and throws away real distances and streets, because travellers don\'t need them.</li>'
+            + '</ul>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · PATTERN RECOGNITION</div><div class="pi-defbox-text"><strong>Spotting similarities</strong> between problems so an existing solution can be <strong>reused</strong>.</div></div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · ALGORITHMIC THINKING</div><div class="pi-defbox-text">Writing the <strong>exact step-by-step instructions</strong>, in order, that solve the problem.</div></div>'
             + '<div class="pi-text">Sorting a leaderboard and sorting a contact list are <em>the same problem</em> — one solution serves both. And an algorithm is a recipe precise enough that a machine (which can\'t improvise) could follow it. The exam gives you scenarios; your job is to name the move.</div>' },
@@ -6151,7 +6541,14 @@ export const PHASES = [
         // ── PART 1 — BINARY ADDITION ──
         { part: 'PART 1 · BINARY ADDITION', heading: 'ADD COLUMNS, CARRY AT TWO',
           html: '<div class="pi-text">Binary addition works <strong>exactly like the column addition</strong> you learned in primary school — you just carry at <strong>2</strong> instead of at 10, because binary only has the digits 0 and 1.</div>'
-            + '<div class="pi-text">Work from the <strong>rightmost</strong> column to the left, adding each column as you go. There are only four cases to remember: <strong>0+0 = 0</strong>, <strong>1+0 = 1</strong>, <strong>1+1 = 10</strong> (write 0, carry a 1 into the next column), and <strong>1+1+1 = 11</strong> (write 1, carry a 1). Carry exactly as you would in decimal. Step through the example below to see how the carry ripples along:</div>',
+            + '<div class="pi-text">Work from the <strong>rightmost</strong> column to the left, adding each column as you go. There are only four cases to remember:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>0 + 0 = 0</strong></li>'
+            + '<li><strong>1 + 0 = 1</strong></li>'
+            + '<li><strong>1 + 1 = 10</strong> — write 0, carry a 1 into the next column.</li>'
+            + '<li><strong>1 + 1 + 1 = 11</strong> — write 1, carry a 1.</li>'
+            + '</ul>'
+            + '<div class="pi-text">Carry exactly as you would in decimal. Step through the example below to see how the carry ripples along:</div>',
           q: { type: 'STEPADD', a: [0, 1, 0, 1], b: [0, 0, 1, 1], walk: true, title: 'Work through 0101 + 0011 (5 + 3), one column at a time.' } },
         { part: 'PART 1 · BINARY ADDITION', heading: 'YOUR TURN',
           html: '<div class="pi-text">Your go. Fill the <strong>carry row</strong> (any column that totals 2 or more carries a 1 below the next column), then the <strong>sum row</strong> — <strong>both are marked</strong>, so you practise the method, not just the answer. Work right to left.</div>',
@@ -6395,7 +6792,14 @@ export const PHASES = [
 
         // ── PART 3 — IMPACTS & EMERGING TECH ──
         { part: 'PART 3 · IMPACTS', heading: 'THE ETHICAL QUESTIONS',
-          html: '<div class="pi-text">AI is powerful, but the exam wants its <strong>impacts</strong>. Four recur: <strong>bias</strong> (unfair results from skewed data), <strong>jobs</strong> (automation replacing work), <strong>privacy</strong> (all that training data is personal), and <strong>accountability</strong> (who is responsible when an AI gets it wrong?). A strong "discuss" answer gives a benefit AND a risk.</div>',
+          html: '<div class="pi-text">AI is powerful, but the exam wants its <strong>impacts</strong>. Four recur:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Bias</strong> — unfair results from skewed data.</li>'
+            + '<li><strong>Jobs</strong> — automation replacing work.</li>'
+            + '<li><strong>Privacy</strong> — all that training data is personal.</li>'
+            + '<li><strong>Accountability</strong> — who is responsible when an AI gets it wrong?</li>'
+            + '</ul>'
+            + '<div class="pi-text">A strong "discuss" answer gives a benefit AND a risk.</div>',
           q: { type: 'MC', badge: 'ETHICS',
             title: 'An AI trained mostly on data from one group of people makes unfair decisions about others. What is this problem called?',
             desc: 'A key ethical issue with AI.',

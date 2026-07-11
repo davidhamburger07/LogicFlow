@@ -21,7 +21,7 @@
 //   fixOptions:{AQA,OCR,Eduqas}, fixAnswer:{AQA,OCR,Eduqas}, explain }
 // ============================================================
 
-import { getBoard, codePanel, forBoard } from './codeview.js';
+import { getBoard, codePanel, forBoard, missionStrip } from './codeview.js';
 
 function el(cls, tag = 'div') { const e = document.createElement(tag); if (cls) e.className = cls; return e; }
 function norm(s) { return String(s).toLowerCase().replace(/\s+/g, ' ').trim(); }
@@ -31,6 +31,7 @@ export const qatest = {
 
   render(host, question, ctx) {
     host.innerHTML = '';
+    const _mission = missionStrip(question); if (_mission) host.appendChild(_mission);
     const board = getBoard();
     const errLabel = board === 'OCR' ? 'Invalid' : 'Erroneous';   // slider: OCR = "Invalid", AQA/others = "Erroneous"
     const editable = board === 'Edexcel' || board === 'WJEC' || board === 'Eduqas';

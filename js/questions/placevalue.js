@@ -1,7 +1,7 @@
 // ============================================================
 // questions/placevalue.js — PLACEVALUE: build a binary number's denary
 // value by tapping each lit bit to collect its place value into a running
-// total. The GUIDED counterpart to the bare NUMBER pad (practice lessons
+// total. The GUIDED counterpart to the plain NUMBER input (practice lessons
 // use this; unit tests use NUMBER — scaffolding fades by context).
 //
 // Signed mode: the leftmost place value is negative (two's complement,

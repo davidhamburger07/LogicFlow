@@ -175,7 +175,7 @@ function cache() {
     'prog-fill', 'answer-area', 'workings-bar', 'workings-btn', 'timer-wrap', 'timer-fill', 'timer-num',
     'hint-bar', 'hint-btn', 'hint-icons', 'no-hint-note', 'hint-box',
     'feedback-box', 'explanation-box', 'expl-text', 'next-btn',
-    'main-menu', 'campaign-map', 'revision-hub', 'arcade-modes', 'arcade-topics', 'question-bank', 'stats', 'courses', 'settings', 'tutorial',
+    'main-menu', 'campaign-map', 'revision-hub', 'arcade-modes', 'arcade-topics', 'question-bank', 'stats', 'courses', 'settings', 'tutorial', 'board-diff',
     'phase-intro', 'phase-complete', 'gameover-screen',
     'pi-eyebrow', 'pi-title', 'pi-sub', 'pi-board-tags', 'pi-body', 'pi-meta', 'hint-refill-note',
     'pc-num', 'pc-score', 'pc-hint-bonus', 'pc-hint-bonus-label', 'pc-sub', 'pc-crown', 'pc-next-btn', 'pc-map-btn',
@@ -183,7 +183,7 @@ function cache() {
   ].forEach(id => { el[id] = document.getElementById(id); });
 }
 
-const SCREENS = ['main-menu', 'campaign-map', 'revision-hub', 'arcade-modes', 'arcade-topics', 'question-bank', 'stats', 'courses', 'settings', 'tutorial',
+const SCREENS = ['main-menu', 'campaign-map', 'revision-hub', 'arcade-modes', 'arcade-topics', 'question-bank', 'stats', 'courses', 'settings', 'tutorial', 'board-diff',
   'phase-intro', 'phase-complete', 'gameover-screen'];
 let curScreenId = null;   // the full-screen overlay showing now (null = graded gameplay / game area)
 export function getCurrentScreen() { return curScreenId; }

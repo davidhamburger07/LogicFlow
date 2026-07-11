@@ -19,7 +19,7 @@
 //   }
 // ============================================================
 
-import { codePanel, forBoard, notationCaption } from './codeview.js';
+import { codePanel, forBoard, notationCaption, missionStrip } from './codeview.js';
 
 function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
@@ -28,6 +28,7 @@ export const codefill = {
 
   render(answerHost, question, ctx) {
     answerHost.innerHTML = '';
+    const _mission = missionStrip(question); if (_mission) answerHost.appendChild(_mission);
     const code = forBoard(question.code);
     const options = forBoard(question.options) || [];
     const answer = String(forBoard(question.answer));

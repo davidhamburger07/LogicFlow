@@ -42,8 +42,9 @@ the **Courses** screen.
 
 ## 5. Deploy the standalone site
 Build with `node build.mjs` (which bundles the config), and host `dist/` on your
-domain. **For the CrazyGames upload, leave `config.js` blank** so that build has
-no accounts/payments.
+domain. **For the CrazyGames upload, build with `node build.mjs --crazygames`
+instead** — that blanks the config in `dist/` so the upload has no
+accounts/payments, regardless of what `js/config.js` holds.
 
 ---
 

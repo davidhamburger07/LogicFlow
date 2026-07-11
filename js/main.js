@@ -116,7 +116,7 @@ function wireUiScale() {
 }
 
 // ---- exam-board preference (decides programming code notation) ----
-const BOARD_OPTS = '#menu-board .board-opt, #settings-board .board-opt';
+const BOARD_OPTS = '#menu-board .board-opt, #settings-board .board-opt, #board-diff-boards .board-opt';
 function paintBoard(board) {
   document.querySelectorAll(BOARD_OPTS).forEach(btn =>
     btn.classList.toggle('active', btn.dataset.board === board));
@@ -264,6 +264,10 @@ function wire() {
   wireTheme();
   wireUiScale();
   wireBoard();
+  // board-differences screen (menu + settings entry points)
+  screens.initBoardDiff();
+  $('menu-board-diff').addEventListener('click', () => { SFX.uiClick(); screens.showBoardDiff(screens.showMainMenu); });
+  $('settings-board-diff').addEventListener('click', () => { SFX.uiClick(); screens.showBoardDiff(screens.showSettings); });
 }
 
 function boot() {
@@ -295,6 +299,11 @@ function boot() {
     import('./supabaseProvider.js').then(async sp => {
       courses.setEntitlementProvider(sp.provider);
       screens.setAuthApi(sp);
+      // feedback goes through the same backend — reveal + wire its buttons
+      screens.initFeedback();
+      const fbBtn = $('feedback-btn');
+      fbBtn.hidden = false;
+      fbBtn.addEventListener('click', () => screens.openFeedback('game'));
       await sp.initSupabase();
       // returning from a Stripe checkout — the webhook granted the course, so
       // re-read entitlements before the first render.

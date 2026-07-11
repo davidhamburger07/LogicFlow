@@ -12,7 +12,7 @@
 // (buggyLine may also be a per-board map if the line index differs.)
 // ============================================================
 
-import { codePanel, forBoard, notationCaption } from './codeview.js';
+import { codePanel, forBoard, notationCaption, missionStrip } from './codeview.js';
 
 function el(cls) { const e = document.createElement('div'); if (cls) e.className = cls; return e; }
 
@@ -21,6 +21,7 @@ export const codebug = {
 
   render(answerHost, question, ctx) {
     answerHost.innerHTML = '';
+    const _mission = missionStrip(question); if (_mission) answerHost.appendChild(_mission);
     const code = forBoard(question.code);
     const buggy = Number(forBoard(question.buggyLine));
 

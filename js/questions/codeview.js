@@ -39,6 +39,16 @@ export function highlight(line) {
   return out;
 }
 
+// the mission-briefing strip shown above a programming puzzle — every code
+// question gets a real-world scenario so the task is never a bare exam line.
+export function missionStrip(question) {
+  if (!question.brief) return null;
+  const strip = document.createElement('div');
+  strip.className = 'mission-strip';
+  strip.innerHTML = '<span class="mission-tag">📋 MISSION</span><span class="mission-text">' + question.brief + '</span>';
+  return strip;
+}
+
 export function codePanel(code) {
   const panel = document.createElement('div');
   panel.className = 'code-panel';

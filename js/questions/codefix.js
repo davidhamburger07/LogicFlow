@@ -20,7 +20,7 @@
 //     hints, explain }
 // ============================================================
 
-import { codePanel, forBoard, notationCaption, getBoard } from './codeview.js';
+import { codePanel, forBoard, notationCaption, getBoard, missionStrip } from './codeview.js';
 import { loadSkulpt, runPython } from './codewrite.js';
 
 function el(cls, tag = 'div') { const e = document.createElement(tag); if (cls) e.className = cls; return e; }
@@ -32,6 +32,7 @@ export const codefix = {
 
   render(answerHost, question, ctx) {
     answerHost.innerHTML = '';
+    const _mission = missionStrip(question); if (_mission) answerHost.appendChild(_mission);
     const board = getBoard();
     // The on-screen-coding boards actually EDIT & RUN; AQA/OCR identify the line.
     const editable = (board === 'Edexcel' || board === 'WJEC' || board === 'Eduqas') && question.cases && question.cases.length;

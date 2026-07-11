@@ -22,7 +22,7 @@
 // module owns its visual (the engine hides the read-only panel).
 // ============================================================
 
-import { codePanel, forBoard, notationCaption } from './codeview.js';
+import { codePanel, forBoard, notationCaption, missionStrip } from './codeview.js';
 import { loadSkulpt, runPython } from './codewrite.js';
 
 // lenient compare: trim, drop surrounding quotes, collapse spaces, case-insensitive
@@ -36,6 +36,7 @@ export const codetrace = {
 
   render(answerHost, question, ctx) {
     answerHost.innerHTML = '';
+    const _mission = missionStrip(question); if (_mission) answerHost.appendChild(_mission);
     const wrap = document.createElement('div');
     wrap.className = 'codetrace';
 

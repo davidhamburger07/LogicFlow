@@ -28,6 +28,7 @@
     <button id="numpad-btn" title="On-screen number pad" aria-label="Toggle the on-screen number pad" aria-pressed="false">🔢</button>
     <button id="keyboard-btn" title="On-screen keyboard" aria-label="Toggle the on-screen keyboard" aria-pressed="false">⌨️</button>
     <button id="theme-btn" title="Toggle light / dark mode" aria-label="Toggle light / dark mode">🌙</button>
+    <button id="feedback-btn" title="Send feedback" aria-label="Send feedback" hidden>💬</button>
     <div id="vol-wrap">
       <span id="vol-icon">🔊</span>
       <input type="range" id="vol-slider" min="0" max="100" value="70">
@@ -114,6 +115,7 @@
       <button class="board-opt" data-board="WJEC">WJEC</button>
       <button class="board-opt" data-board="Edexcel">Edexcel</button>
     </div>
+    <button class="menu-board-diff" id="menu-board-diff">SEE WHAT'S DIFFERENT FOR YOUR BOARD →</button>
   </div>
   <button class="menu-theme-toggle" id="menu-theme-btn">🌙 DARK MODE</button>
   <div class="menu-vol">
@@ -237,6 +239,9 @@
           <button class="board-opt" data-board="WJEC">WJEC</button>
           <button class="board-opt" data-board="Edexcel">Edexcel</button>
         </div>
+        <div class="settings-btn-row">
+          <button class="settings-btn" id="settings-board-diff">SEE WHAT'S DIFFERENT →</button>
+        </div>
       </div>
       <div class="settings-group" id="settings-cloud-group">
         <div class="settings-label">CLOUD SAVE</div>
@@ -285,6 +290,27 @@
 </div>
 
 <!-- Stats (progress report) -->
+<!-- Board differences — generated live from the content's board-gating flags -->
+<div class="fullscreen screen" id="board-diff">
+  <div class="screen-head">
+    <button class="screen-back" id="board-diff-back">← BACK</button>
+    <div class="screen-title">YOUR EXAM BOARD</div>
+    <span class="screen-head-spacer"></span>
+  </div>
+  <div class="screen-scroll">
+    <div class="board-diff-body">
+      <div class="menu-board-opts" id="board-diff-boards">
+        <button class="board-opt" data-board="AQA">AQA</button>
+        <button class="board-opt" data-board="OCR">OCR</button>
+        <button class="board-opt" data-board="Eduqas">Eduqas</button>
+        <button class="board-opt" data-board="WJEC">WJEC</button>
+        <button class="board-opt" data-board="Edexcel">Edexcel</button>
+      </div>
+      <div id="board-diff-content"></div>
+    </div>
+  </div>
+</div>
+
 <div class="fullscreen screen" id="stats">
   <div class="screen-head">
     <button class="screen-back" id="stats-back">← MENU</button>
@@ -413,6 +439,21 @@
     <div class="modal-actions">
       <button class="fs-btn" id="auth-submit">SIGN IN</button>
       <button class="fs-btn modal-cancel" id="auth-cancel">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+<!-- Feedback (standalone site — sends into the Supabase feedback table) -->
+<div id="feedback-modal">
+  <div class="modal-box">
+    <div class="modal-title">FEEDBACK</div>
+    <div class="modal-text">Spotted a mistake, or got an idea to make the game better? It goes straight to the developer.</div>
+    <textarea id="fb-message" maxlength="2000" rows="5" placeholder="What's on your mind?"></textarea>
+    <input type="email" id="fb-email" autocomplete="email" placeholder="Email for a reply (optional)">
+    <div class="auth-msg" id="fb-msg" role="status"></div>
+    <div class="modal-actions">
+      <button class="fs-btn" id="fb-send">SEND</button>
+      <button class="fs-btn modal-cancel" id="fb-cancel">CANCEL</button>
     </div>
   </div>
 </div>

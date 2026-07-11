@@ -90,7 +90,7 @@ function drawCircuit(type, active, result) {
       ctx.beginPath(); ctx.arc(x, y, r + 4 + Math.sin(pulseT * 3) * 2, 0, Math.PI * 2);
       ctx.strokeStyle = 'rgba(37,99,235,0.2)'; ctx.lineWidth = 2; ctx.stroke();
     }
-    if (lbl) { ctx.fillStyle = on ? ac : lc; ctx.font = '10px Share Tech Mono'; ctx.textAlign = 'center'; ctx.fillText(lbl, x, y - 10); }
+    if (lbl) { ctx.fillStyle = on ? ac : lc; ctx.font = '12px Share Tech Mono'; ctx.textAlign = 'center'; ctx.fillText(lbl, x, y - 10); }
   }
   function box(gx, gy, gt, res) {
     const gw = 56, gh = 36;
@@ -102,7 +102,7 @@ function drawCircuit(type, active, result) {
     else if (gt === 'not') { ctx.beginPath(); ctx.moveTo(gx - gw / 2, gy - gh / 2); ctx.lineTo(gx + gw / 2 - 8, gy); ctx.lineTo(gx - gw / 2, gy + gh / 2); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.arc(gx + gw / 2 - 4, gy, 4, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
     else { ctx.beginPath(); ctx.rect(gx - gw / 2, gy - gh / 2, gw, gh); ctx.fill(); ctx.stroke(); }
     const lmap = { and: 'AND', or: 'OR', not: 'NOT', xor: 'XOR', binary: 'REG', cpu: 'ALU', memory: 'MEM' };
-    ctx.fillStyle = res === 1 ? ac : '#aaa'; ctx.font = '9px Share Tech Mono'; ctx.textAlign = 'center'; ctx.fillText(lmap[gt] || '?', gx, gy + 4);
+    ctx.fillStyle = res === 1 ? ac : '#aaa'; ctx.font = '12px Share Tech Mono'; ctx.textAlign = 'center'; ctx.fillText(lmap[gt] || '?', gx, gy + 4);
   }
 
   // particles

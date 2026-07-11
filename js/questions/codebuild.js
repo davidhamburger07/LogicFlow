@@ -13,7 +13,7 @@
 // `lines` is given in the CORRECT order; the module shuffles for display.
 // ============================================================
 
-import { highlight, forBoard, notationCaption } from './codeview.js';
+import { highlight, forBoard, notationCaption, missionStrip } from './codeview.js';
 
 function el(cls) { const e = document.createElement('div'); if (cls) e.className = cls; return e; }
 function shuffledOrder(n) {
@@ -31,6 +31,7 @@ export const codebuild = {
 
   render(answerHost, question, ctx) {
     answerHost.innerHTML = '';
+    const _mission = missionStrip(question); if (_mission) answerHost.appendChild(_mission);
     const correct = forBoard(question.lines).map(s => String(s));
     const n = correct.length;
     let locked = false, dragRow = null;

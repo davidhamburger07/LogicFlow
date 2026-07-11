@@ -81,6 +81,17 @@ export async function claimFreeCourse(courseId) {
   } catch (e) { return { ok: false, error: 'Could not reach the server.' }; }
 }
 
+// Send player feedback into the feedback table. RLS is insert-only for
+// clients — the inbox is read in the Supabase dashboard.
+export async function sendFeedback(message, email, context) {
+  try {
+    const c = await getClient();
+    const { error } = await c.from('feedback').insert({ message, email: email || null, context: context || {} });
+    if (error) return { ok: false, error: 'Could not send right now — please try again.' };
+    return { ok: true };
+  } catch (e) { return { ok: false, error: 'Could not send right now — please try again.' }; }
+}
+
 // Start a Stripe Checkout for a paid course. The Edge Function creates the
 // session (server-side, with the price + user/course metadata); on success we
 // redirect to Stripe. The webhook grants the entitlement after payment.

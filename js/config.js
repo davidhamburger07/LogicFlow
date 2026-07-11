@@ -7,8 +7,8 @@
 // on the local entitlement provider (Computer Science free, no accounts).
 // ============================================================
 
-export const SUPABASE_URL = '';        // e.g. 'https://abcd1234.supabase.co'
-export const SUPABASE_ANON_KEY = '';   // the project's public anon/publishable key
+export const SUPABASE_URL = 'https://snhnmgkaaexoupepzint.supabase.co';
+export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNuaG5tZ2thYWV4b3VwZXB6aW50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2NTMzOTIsImV4cCI6MjA5OTIyOTM5Mn0.BpQ83jfOWmuSgfwDxkNMUVh547O1yDflLrA98ciE2Tk';
 
 // Accounts + paid courses turn on only when both keys are set. For the
 // CrazyGames build, keep these blank so it stays free + ad-supported.

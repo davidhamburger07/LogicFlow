@@ -22,7 +22,8 @@ function randInt(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
 function hex2(v) { return v.toString(16).toUpperCase().padStart(2, '0'); }
 
 // "guided in practice, bare in assessment" (scaffolding fades by context):
-// generators emit a guided interactive in practice, a bare input in tests.
+// generators emit a guided interactive in practice, a plain input in tests —
+// a test must not lay the method out for the student.
 const ASSESS = ctx => ctx === 'unit-test' || ctx === 'mock';
 
 // MSB-first bit array, e.g. 13 -> [1,1,0,1]
@@ -96,7 +97,7 @@ function binaryToDenary(opts, context) {
     hints: [`Add up the place values (${pv}) where the bit is 1.`, `${str} → ${on.join(' + ') || '0'} = ${value}.`],
     explain: `<strong>${str}</strong> → ${arr.map((b, i) => `${b}×${1 << (bits - 1 - i)}`).join(' + ')} = <strong>${value}</strong>.`,
   };
-  // assessment: bare number pad. practice: guided place-value adder (tap lit bits to total).
+  // assessment: plain typed number. practice: guided place-value adder (tap lit bits to total).
   if (ASSESS(context)) return { ...base, type: 'NUMBER', desc: 'Read the binary number and enter its denary value.', answer: value };
   return { ...base, type: 'PLACEVALUE', desc: 'Tap each lit (1) bit to add its place value into the total.', bits: arr, signed: false };
 }
@@ -142,7 +143,7 @@ function hexToDenary(opts, context) {
     hints: ['Multiply the first digit by 16 and add the second. A=10, B=11 … F=15.', `${hi}×16 + ${lo}×1 = ?`],
     explain: `<strong>${hx} = ${hi}×16 + ${lo}×1 = ${hi * 16} + ${lo} = ${value}.</strong>`,
   };
-  // assessment: bare number pad. practice: guided ×16 / ×1 breakdown.
+  // assessment: plain typed number. practice: guided ×16 / ×1 breakdown.
   if (ASSESS(context)) return { ...base, type: 'NUMBER', desc: 'Enter the denary value (first digit ×16, second ×1).', answer: value };
   return {
     ...base, type: 'CALC', desc: 'Each hex digit: A=10 … F=15. Multiply the first by 16, then add the second.',
@@ -264,7 +265,7 @@ function twosToDenary(opts, context) {
     hints: [bits[0] ? 'The leading bit is 1, so the number is negative (the -128 column is ON).' : 'The leading bit is 0, so read it as a normal positive binary number.', `Add the ON place values: ${twosSum(bits)}.`],
     explain: `<strong>${str}</strong> → ${twosSum(bits)} = <strong>${signed}</strong>.`,
   };
-  // assessment: bare signed number pad. practice: signed place-value adder (-128 column).
+  // assessment: plain typed number (may be negative). practice: signed place-value adder (-128 column).
   if (ASSESS(context)) return { ...base, type: 'NUMBER', signed: true, desc: 'Enter the denary value (it may be negative).', answer: signed };
   return { ...base, type: 'PLACEVALUE', signed: true, desc: 'Tap each lit bit to total it up — the leftmost column is worth −128.', bits };
 }
@@ -280,7 +281,7 @@ function twosNegate(opts, context) {
     hints: [`+${v} = ${posArr.join('')}.`, `Flip → ${flipOnly}, then add 1.`],
     explain: `<strong>−${v}:</strong> +${v} = ${posArr.join('')} → flip the bits → ${flipOnly} → add 1 → <strong>${negArr.join('')}</strong>.`,
   };
-  // assessment: bare bit-toggle of the answer. practice: guided flip + 1.
+  // assessment: bit-toggle the answer yourself. practice: guided flip + 1.
   if (ASSESS(context)) return { ...base, type: 'BINARY', desc: "Toggle the bits to give the two's complement.", bits: 8, answer: negArr };
   return { ...base, type: 'FLIPADD', desc: 'Flip every bit, then add 1.', pos: posArr };
 }
@@ -372,7 +373,7 @@ function fileSizeImage(opts, context) {
     hints: ['Multiply width × height to get the number of pixels.', `${w} × ${h} × ${depth} = ?`],
     explain: `<strong>${w} × ${h} × ${depth} = ${bits} bits.</strong> File size = width × height × colour depth.`,
   };
-  // assessment: bare number pad. practice: guided W × H × depth.
+  // assessment: plain typed number. practice: guided W × H × depth.
   if (ASSESS(context)) return { ...base, type: 'NUMBER', desc: 'File size (bits) = width × height × colour depth.', unit: 'bits', answer: bits };
   return {
     ...base, type: 'CALC', desc: 'File size = width × height × colour depth.',
@@ -390,10 +391,10 @@ function fileSizeImage(opts, context) {
 // notation (AQA pseudo-code / OCR ERL / Python); the answer is the
 // same for all, computed here in JS.
 // ============================================================
-function traceQ(code, answer, desc, hints, explain) {
+function traceQ(code, answer, desc, hints, explain, brief) {
   return {
     type: 'CODE_TRACE', badge: 'TRACE', board: 'AQA · OCR · Eduqas',
-    title: 'What does this program output?', desc, code, answer: String(answer), hints, explain,
+    title: 'What does this program output?', desc, code, answer: String(answer), hints, explain, brief,
   };
 }
 function codeArith() {
@@ -407,7 +408,8 @@ function codeArith() {
   return traceQ({ AQA: aqa, OCR: py, Eduqas: py }, r,
     'Work out a and b, then apply the operator.',
     [`First find a and b: a = ${a}, b = ${b}.`, `${a} ${op} ${b} = ?`],
-    `<strong>Output: ${r}.</strong> a = ${a} and b = ${b}, so a ${op} b = ${r}.`);
+    `<strong>Output: ${r}.</strong> a = ${a} and b = ${b}, so a ${op} b = ${r}.`,
+    `A score screen combines two stored values and shows the result. Trace what appears.`);
 }
 function codeModDiv(opts) {
   const op = (opts && opts.op) || (Math.random() < 0.5 ? 'MOD' : 'DIV');
@@ -418,7 +420,8 @@ function codeModDiv(opts) {
   return traceQ({ AQA: `x ← ${x}\nOUTPUT x ${op} ${y}`, OCR: `x = ${x}\nprint(x ${op} ${y})`, Eduqas: `x = ${x}\nprint(x ${pyOp} ${y})` }, r,
     op === 'MOD' ? 'MOD gives the remainder after division.' : 'DIV gives the whole-number part of a division.',
     [`Work out ${x} ÷ ${y}.`, op === 'MOD' ? `${x} = ${Math.floor(x / y)} × ${y} + ${r}, so the remainder is ${r}.` : `${x} ÷ ${y} = ${(x / y).toFixed(2)}, so the whole part is ${r}.`],
-    `<strong>Output: ${r}.</strong> ${x} ${op} ${y} = ${r} (${op === 'MOD' ? 'the remainder' : 'the whole-number part'}).`);
+    `<strong>Output: ${r}.</strong> ${x} ${op} ${y} = ${r} (${op === 'MOD' ? 'the remainder' : 'the whole-number part'}).`,
+    op === 'MOD' ? `A game shares ${x} coins between ${y} players — this code works out what's LEFT OVER.` : `A game shares ${x} coins between ${y} players — this code works out how many WHOLE coins each gets.`);
 }
 function codeForSum() {
   const n = randInt(3, 7);
@@ -429,7 +432,8 @@ function codeForSum() {
     Eduqas: `total = 0\nfor i in range(1, ${n + 1}):\n  total = total + i\nprint(total)`,
   }, sum, `The loop runs with i = 1 to ${n}.`,
     ['Add i to total each pass — make a trace table.', `1 + 2 + … + ${n} = ${sum}.`],
-    `<strong>Output: ${sum}.</strong> The loop adds 1, 2, … ${n} to total: 1 + 2 + … + ${n} = ${sum}.`);
+    `<strong>Output: ${sum}.</strong> The loop adds 1, 2, … ${n} to total: 1 + 2 + … + ${n} = ${sum}.`,
+    `A step-challenge app banks 1 point on day 1, 2 on day 2 … up to day ${n}, then shows the total.`);
 }
 function codeWhileCount() {
   const limit = [16, 20, 24, 30, 40, 50, 100][randInt(0, 6)];
@@ -441,7 +445,8 @@ function codeWhileCount() {
     Eduqas: `n = 1\ncount = 0\nwhile n < ${limit}:\n  n = n * 2\n  count = count + 1\nprint(count)`,
   }, count, 'Count how many times the loop runs before n reaches the limit.',
     ['n doubles each pass: 1, 2, 4, 8 … Track n and count.', `n must reach ${limit} or more; that takes ${count} doublings.`],
-    `<strong>Output: ${count}.</strong> n doubles each pass (1 → 2 → 4 …) and count rises each time. After ${count} passes n ≥ ${limit}, so the loop stops with count = ${count}.`);
+    `<strong>Output: ${count}.</strong> n doubles each pass (1 → 2 → 4 …) and count rises each time. After ${count} passes n ≥ ${limit}, so the loop stops with count = ${count}.`,
+    `A savings pot doubles every week — this code counts how many weeks until it reaches £${limit}.`);
 }
 function codeArrayIndex() {
   const len = randInt(3, 5);
@@ -451,7 +456,8 @@ function codeArrayIndex() {
   return traceQ({ AQA: `nums ← ${lit}\nOUTPUT nums[${idx}]`, OCR: `nums = ${lit}\nprint(nums[${idx}])`, Eduqas: `nums = ${lit}\nprint(nums[${idx}])` },
     arr[idx], 'Array indexes start at 0.',
     [`Count positions from 0: nums[0] = ${arr[0]}, nums[1] = ${arr[1]} …`, `nums[${idx}] is position ${idx}.`],
-    `<strong>Output: ${arr[idx]}.</strong> Indexes start at 0, so nums[${idx}] = ${arr[idx]}.`);
+    `<strong>Output: ${arr[idx]}.</strong> Indexes start at 0, so nums[${idx}] = ${arr[idx]}.`,
+    `A playlist stores its track lengths in an array — the app is reading the track at position ${idx}.`);
 }
 
 // ============================================================
@@ -542,7 +548,7 @@ function binarySub(opts, context) {
     ],
     explain: `<strong>${aArr.join('')} − ${bArr.join('')} = ${ansArr.join('')}.</strong> In denary: ${a} − ${b} = ${diff}. Method: two's complement of ${bArr.join('')} is ${twoC}; add it to ${aArr.join('')} and discard the carry out of bit 8.`,
   };
-  // assessment: bare bit-toggle of the result. practice: full multi-step (negate B, add, discard carry).
+  // assessment: bit-toggle the result yourself. practice: full multi-step (negate B, add, discard carry).
   if (ASSESS(context)) return { ...base, type: 'BINARY', desc: 'Toggle the bits to give the result of the subtraction.', bits, answer: ansArr };
   return { ...base, type: 'BINSUB', desc: 'Negate B (flip + 1), then add A + (−B).', a: aArr, b: bArr };
 }
@@ -584,6 +590,7 @@ function soundFileSize(opts, context) {
     hints: ['Multiply the three numbers: sample rate × bit depth × seconds.', `${rate} × ${depth} × ${seconds} = ${bits} bits.`],
     explain: `<strong>${rate} × ${depth} × ${seconds} = ${bits} bits.</strong> Sound file size = sample rate × bit depth × duration. (To convert to bytes, divide by 8 = ${bits / 8} bytes.)`,
   };
+  // assessment: plain typed number. practice: guided rate × depth × seconds.
   if (ASSESS(context)) return { ...base, type: 'NUMBER', desc: 'Sound size (bits) = sample rate × bit depth × duration.', unit: 'bits', answer: bits };
   return {
     ...base, type: 'CALC', desc: 'Sound size = sample rate × bit depth × duration (seconds).',

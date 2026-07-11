@@ -339,6 +339,14 @@ export function getMisses() {
 // ============================================================
 export const UNIT_TEST_PASS = 70;   // % needed to pass a Unit Test
 export const MOCK_PASS = 50;        // % at/above which a Mock is shown as "passed"
+
+// dev/testing: add ?unlock to the URL to open every Unit Test + Mock without
+// clearing their lessons first. Saved progress is untouched — remove the
+// param (or just open the normal URL) and the usual gating comes back.
+const DEV_UNLOCK = (() => {
+  try { return new URLSearchParams(window.location.search).has('unlock'); }
+  catch (e) { return false; }
+})();
 const CROWN_SILVER = 80;            // lesson mastery for a 2nd crown
 const CROWN_GOLD = 95;              // lesson mastery (or a flawless run) for the 3rd crown
 
@@ -442,7 +450,7 @@ export function getCampaignState(units) {
     const tr = getUnitTest(u.id);
     let testState;
     if (tr.passed) testState = 'passed';
-    else if (allCleared) testState = 'unlocked';
+    else if (allCleared || DEV_UNLOCK) testState = 'unlocked';
     else testState = 'locked';
     const test = { state: testState, best: tr.best };
     if (testState === 'unlocked' && !current) { current = { kind: 'unit-test', unitId: u.id }; test.current = true; }
@@ -455,7 +463,7 @@ export function getCampaignState(units) {
       const passed = !!(mr && mr.best >= MOCK_PASS);
       mock = {
         id: u.mock.id, name: u.mock.name, covers: coversUpTo(list, u.id),
-        state: !unitComplete ? 'locked' : (passed ? 'passed' : 'unlocked'),
+        state: !(unitComplete || DEV_UNLOCK) ? 'locked' : (passed ? 'passed' : 'unlocked'),
         best: mr ? mr.best : null, grade: mr ? mr.grade : null,
       };
     }

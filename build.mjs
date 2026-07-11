@@ -36,6 +36,20 @@ await cp('styles.css', join(DIST, 'styles.css'));
 await cp('js', join(DIST, 'js'), { recursive: true });
 console.log('copied index.html, styles.css, js/');
 
+// 2b. CrazyGames build: blank the backend config so that upload has no
+//     accounts/payments (external payment providers are not allowed there).
+//     Default build = standalone site (keeps whatever config.js holds).
+if (process.argv.includes('--crazygames')) {
+  let cfg = await readFile(join(DIST, 'js', 'config.js'), 'utf8');
+  cfg = cfg
+    .replace(/export const SUPABASE_URL = '[^']*';/, `export const SUPABASE_URL = '';`)
+    .replace(/export const SUPABASE_ANON_KEY = '[^']*';/, `export const SUPABASE_ANON_KEY = '';`);
+  await writeFile(join(DIST, 'js', 'config.js'), cfg);
+  console.log('CRAZYGAMES build: backend config blanked (free + ad-supported, no accounts)');
+} else {
+  console.log('STANDALONE SITE build: backend config kept as-is');
+}
+
 // 3. localise the Share Tech Mono font so nothing external is required
 //    (best-effort — if offline, keep the Google Fonts link; it falls back
 //     to system monospace anyway).
