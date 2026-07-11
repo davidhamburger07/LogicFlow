@@ -216,7 +216,7 @@ export const PHASES = [
         hints: ['8 bits make 1 byte, so divide the megabits by 8.', '80 ÷ 8 = 10.'],
         explain: '<strong>80 Mb/s ÷ 8 = 10 MB/s.</strong> ISPs advertise in mega<strong>bits</strong>, but files are measured in mega<strong>bytes</strong> — so your real download speed in MB is one-eighth of the headline number. That’s why a download feels slower than the advertised speed.' },
       { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 2,
-        title: 'Using 4 bits, state how many different values can be represented, and show your working.',
+        title: 'Calculate how many different values can be represented using 4 bits. Show your working.',
         markScheme: [
           'Number of values = 2⁴ (2 to the power of the number of bits).',
           '= 16 different values.',
@@ -503,14 +503,14 @@ export const PHASES = [
         ],
         explain: 'Give the output for BOTH the true case and the false case of each gate — that is how the 4 marks split.' },
       { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 2,
-        title: 'A NOT gate is given an input of 1. State its output and explain what a NOT gate does.',
+        title: 'A NOT gate is given an input of 1. State its output, and describe what a NOT gate does.',
         markScheme: [
           'Output = 0.',
           'A NOT gate inverts (flips) its single input — 1 becomes 0 and 0 becomes 1.',
         ],
         explain: 'NOT has only one input. The explanation mark is for the idea of inverting/flipping.' },
-      { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 2,
-        title: 'Explain the difference between an OR gate and an XOR gate.',
+      { type: 'EXAM', badge: 'EXAM', board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'], marks: 2,
+        title: 'Describe the difference in behaviour between an OR gate and an XOR gate.',
         markScheme: [
           'OR outputs 1 if at least one input is 1, including when both inputs are 1.',
           'XOR outputs 1 only when the inputs are different — it outputs 0 when both inputs are 1.',
@@ -549,13 +549,13 @@ export const PHASES = [
         explain: '<strong>One solution: Gate 1 = OR (1 OR 0 = 1), Gate 2 = AND (1 AND 1 = 1).</strong> Several other gate pairs also produce 1 — the simulator accepts any arrangement that hits the target. This is how real circuits chain gates together.' },
       { gen: 'boolTable' },
       { gen: 'boolTable' },
-      { type: 'TRUTHTABLE', badge: 'TRUTH TABLE', board: 'AQA · OCR · Eduqas',
+      { type: 'TRUTHTABLE', badge: 'TRUTH TABLE', board: 'Eduqas', reqBoards: ['Eduqas'],
         inputs: ['A', 'B'], rows: [[0, 0], [0, 1], [1, 0], [1, 1]], answer: [1, 1, 1, 0],
         title: 'Complete the truth table for a NAND gate: Q = NOT (A AND B).',
         desc: 'NAND = NOT AND — an AND gate with its output inverted. Set Q for each row.',
         hints: ['NAND is the opposite of AND.', 'AND is 1 only for (1,1); NAND inverts that.'],
         explain: '<strong>NAND → 1, 1, 1, 0.</strong> An AND gate with its output inverted: AND gives 1 only for (1,1), so NAND gives 0 only for (1,1) and 1 for the rest.' },
-      { type: 'TRUTHTABLE', badge: 'TRUTH TABLE', board: 'AQA · OCR · Eduqas',
+      { type: 'TRUTHTABLE', badge: 'TRUTH TABLE', board: 'Eduqas', reqBoards: ['Eduqas'],
         inputs: ['A', 'B'], rows: [[0, 0], [0, 1], [1, 0], [1, 1]], answer: [1, 0, 0, 0],
         title: 'Complete the truth table for a NOR gate: Q = NOT (A OR B).',
         desc: 'NOR = NOT OR — an OR gate with its output inverted. Set Q for each row.',
@@ -567,7 +567,7 @@ export const PHASES = [
         desc: 'Work out (NOT B) first, then AND it with A. Set Q for each row.',
         hints: ['NOT B is 1 only when B is 0.', 'Q is 1 only when A = 1 AND (NOT B) = 1.'],
         explain: '<strong>Q → 0, 0, 1, 0.</strong> NOT B is 1 only when B = 0; A AND (NOT B) is 1 only when A = 1 and B = 0.' },
-      { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 2,
+      { type: 'EXAM', badge: 'EXAM', board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'], marks: 2,
         title: 'Describe when an XOR gate outputs 1 and when it outputs 0.',
         markScheme: [
           'XOR outputs 1 when its two inputs are different (one is 0 and the other is 1).',
@@ -781,10 +781,10 @@ export const PHASES = [
         hints: ['2A = (2 × 16) + (10 × 1).', '32 + 10 = 42.'],
         explain: '<strong>2A = (2 × 16) + (10 × 1) = 32 + 10 = 42.</strong> A MAC address is just bytes written in hex, because hex is far shorter than binary to read off a router.' },
       { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 2,
-        title: 'Give one reason why programmers often use hexadecimal instead of binary.',
+        title: 'Give one reason why programmers use hexadecimal instead of binary, and explain why this helps.',
         markScheme: [
-          'Hexadecimal is more compact / shorter — one hex digit represents 4 binary bits.',
-          'It is easier for people to read and write, so there are fewer mistakes than with long binary strings.',
+          'Reason: hexadecimal is more compact / shorter — one hex digit represents 4 binary bits.',
+          'Why it helps: it is easier for people to read and write, so there are fewer mistakes than with long binary strings.',
         ],
         explain: 'Each hex digit maps to exactly 4 bits, so hex is a much shorter, more readable way to write binary values (memory addresses, colour codes) and is less error-prone than long strings of 1s and 0s.' },
       // FINALE — no hints, no method desc: convert to hex entirely on your own.
@@ -937,7 +937,7 @@ export const PHASES = [
     },
     paper: [
       { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR', marks: 3,
-        title: 'Explain how a colour is represented using a hexadecimal colour code such as #RRGGBB.',
+        title: 'Describe how a colour is represented using a hexadecimal colour code such as #RRGGBB.',
         markScheme: [
           'The code is made of three pairs of hex digits — one pair each for the Red, Green and Blue channels.',
           'Each pair ranges from 00 to FF, giving that channel an intensity from 0 to 255.',
@@ -1276,7 +1276,7 @@ export const PHASES = [
         explain: 'LAN = local, one site, usually owned and maintained by one organisation. WAN = wide, connecting sites over large distances using external/third-party infrastructure. The geographical scale is the key difference.' },
     ],
     paper: [
-      { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR', marks: 4,
+      { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 4,
         title: 'Explain the difference between a LAN and a WAN, and give an example of each.',
         markScheme: [
           'A LAN (Local Area Network) connects devices over a small geographical area (e.g. one site).',
@@ -1379,7 +1379,8 @@ export const PHASES = [
 
         // ── PART 3 — EFFICIENCY ──
         { part: 'PART 3 · EFFICIENCY', heading: 'BIG O: COMPARING WITHOUT A STOPWATCH',
-          html: '<div class="pi-text"><strong>Big O notation</strong> describes how an algorithm\'s work grows as the input grows:</div>'
+          html: '<div class="pi-specnote">⭐ <strong>STRETCH · beyond GCSE.</strong> Big O notation is A-level content — you will <strong>not</strong> be examined on it at GCSE. It is here as a head start: your exam only needs the <em>idea</em> that some algorithms scale far better than others (e.g. merge sort beats bubble sort on big lists), not the O(…) notation itself.</div>'
+            + '<div class="pi-text"><strong>Big O notation</strong> describes how an algorithm\'s work grows as the input grows:</div>'
             + '<ul class="pi-list">'
             + '<li><strong>O(n)</strong> — double the list, double the work (linear search).</li>'
             + '<li><strong>O(n²)</strong> — double the list, <em>quadruple</em> the work (bubble and insertion sort: 10 items ≈ 100 comparisons, 100 items ≈ 10,000).</li>'
@@ -1443,9 +1444,9 @@ export const PHASES = [
     ],
     // bubble-sort result + traces are GENERATED on a fresh random list each load.
     questions: [
-      { type: 'MC', badge: 'REAL WORLD', board: 'AQA · OCR · Eduqas',
+      { type: 'MC', badge: 'STRETCH · BEYOND GCSE', board: 'AQA · OCR · Eduqas',
         title: 'You need to sort 10 million records as fast as possible. Which is the better choice?',
-        desc: 'Think about how each scales as the list grows.',
+        desc: 'Stretch (beyond GCSE — the O(…) notation is not examined). Think about how each scales as the list grows.',
         options: ['Merge sort — O(n log n)', 'Bubble sort — O(n²)', 'They are equally fast', 'Neither can sort that many'],
         answer: 'Merge sort — O(n log n)',
         hints: ['Bubble sort’s time grows with n² — terrible for huge n.', 'Merge sort scales far better on large data.'],
@@ -1453,9 +1454,9 @@ export const PHASES = [
       { gen: 'bubbleResult' },
       { gen: 'bubblePass' },
       { gen: 'bubblePass' },
-      { type: 'MC', badge: 'ALGORITHM', board: 'AQA · OCR · Eduqas',
+      { type: 'MC', badge: 'STRETCH · BEYOND GCSE', board: 'AQA · OCR · Eduqas',
         title: 'Which sorting algorithm has O(n²) worst-case time complexity?',
-        desc: 'Think about how many comparisons are made for n items',
+        desc: 'Stretch (beyond GCSE — the O(…) notation is not examined). Think about how many comparisons are made for n items.',
         options: ['Bubble Sort', 'Binary Search', 'Merge Sort', 'Linear Search'], answer: 'Bubble Sort',
         hints: ['For n items, Bubble Sort does roughly n×n comparisons in the worst case.', 'Merge Sort is more efficient — it\'s O(n log n).'],
         explain: '<strong>Bubble Sort = O(n²).</strong> For 10 items: up to 100 comparisons. For 100 items: up to 10,000. This makes it impractical for large datasets. Merge Sort (O(n log n)) is much faster but harder to trace.' },
@@ -1550,8 +1551,8 @@ export const PHASES = [
             explain: '<strong>Symmetric = one shared key</strong> (fast, bulk data). <strong>Asymmetric = public locks, private unlocks</strong> (solves key exchange).' } },
         { part: 'PART 2 · MODERN KEYS',
           q: { type: 'MC', title: 'You log into your bank on café Wi-Fi and a stranger captures every packet. Why can\'t they read your password?',
-            options: ['The data is encrypted — useless without the private key', 'Wi-Fi cannot be captured', 'Passwords are too short to read', 'The bank deletes the packets'],
-            answer: 'The data is encrypted — useless without the private key',
+            options: ['The data is encrypted — meaningless without the decryption key', 'Wi-Fi cannot be captured', 'Passwords are too short to read', 'The bank deletes the packets'],
+            answer: 'The data is encrypted — meaningless without the decryption key',
             explain: '<strong>HTTPS encrypts before the data leaves your device</strong> — a captured packet is scrambled bytes without the key.' } },
         { part: 'PART 2 · MODERN KEYS', heading: 'YOUR TURN',
           html: '<div class="pi-text">All yours — the pair to keep straight: the <strong>public</strong> key only <em>locks</em>, the <strong>private</strong> key is the only thing that <em>unlocks</em>.</div>',
@@ -1587,8 +1588,8 @@ export const PHASES = [
       { type: 'MC', badge: 'REAL WORLD', board: 'AQA · OCR · Eduqas',
         title: 'You log into your bank on café Wi‑Fi. A stranger captures every packet you send. Why can’t they read your password?',
         desc: 'Think about what HTTPS does to the data.',
-        options: ['The data is encrypted — useless without the private key', 'Wi‑Fi cannot be captured', 'Passwords are too short to read', 'The bank deletes the packets'],
-        answer: 'The data is encrypted — useless without the private key',
+        options: ['The data is encrypted — meaningless without the decryption key', 'Wi‑Fi cannot be captured', 'Passwords are too short to read', 'The bank deletes the packets'],
+        answer: 'The data is encrypted — meaningless without the decryption key',
         hints: ['What does the padlock (HTTPS) do to your data?', 'A captured packet is just scrambled bytes without the key.'],
         explain: '<strong>HTTPS encrypts</strong> the data before it leaves your device, so a captured packet is just scrambled bytes. Only the bank holds the key to unscramble it — which is why banking on public Wi‑Fi is safe.' },
       { gen: 'caesarLetter' },
@@ -1619,12 +1620,12 @@ export const PHASES = [
         ],
         explain: 'A strong answer contrasts both on the same axis (number of keys, who holds them, speed). One-key vs key-pair is the headline mark.' },
       { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 4,
-        title: 'Describe two methods an organisation could use to help keep its network secure.',
+        title: 'Describe two methods an organisation could use to help keep its network secure. For each, state how it protects the network.',
         markScheme: [
-          'Encryption — scrambles data so that intercepted data cannot be understood.',
-          'Firewall — filters incoming/outgoing traffic and blocks unauthorised access.',
-          'Strong passwords / authentication / user access levels — limit who can access what.',
-          'Anti-malware software, penetration testing or physical security (any other valid method, described).',
+          'Method 1 named — e.g. firewall, encryption, strong passwords / access levels, anti-malware, penetration testing, physical security.',
+          'Method 1 — described how it protects the network (e.g. a firewall filters traffic and blocks unauthorised connections).',
+          'Method 2 named — a different valid method.',
+          'Method 2 — described how it protects the network.',
         ],
         explain: '"Describe two" = name the method (1 mark) and say what it does (1 mark), twice. A bare list of names caps at half marks.' },
       { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 3,
@@ -1942,7 +1943,7 @@ export const PHASES = [
       { type: 'MC', badge: 'CPU', board: 'AQA · OCR · Eduqas',
         title: 'Which factor does NOT directly affect CPU performance?',
         desc: 'Know what actually determines how fast a CPU runs',
-        options: ['The colour of the computer case', 'Clock speed (GHz)', 'Number of cores', 'Cache size'], answer: 'The colour of the computer case',
+        options: ['The size of the monitor', 'Clock speed (GHz)', 'Number of cores', 'Cache size'], answer: 'The size of the monitor',
         hints: ['Think about what physically affects how fast the processor runs.', 'Clock speed, cores, and cache all have a direct technical impact on performance.'],
         explain: '<strong>CPU performance is affected by:</strong> Clock speed (how many cycles per second), Number of cores (parallel processing), Cache size (faster access to frequently used data). The case colour has zero effect — a common "odd one out" question.' },
       { type: 'ORDER', badge: 'MEMORY', board: 'AQA · OCR · Eduqas',
@@ -2030,7 +2031,7 @@ export const PHASES = [
         ],
         explain: 'The safe exam wording is "<strong>can</strong> process more instructions in parallel". Doubling cores only helps when the software splits its work across them — so "always twice as fast" is wrong.' },
       { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 2,
-        title: 'Explain the roles of the MAR and the MDR in the fetch–decode–execute cycle.',
+        title: 'State the role of the MAR and the role of the MDR in the fetch–decode–execute cycle.',
         markScheme: [
           'The MAR holds the ADDRESS of the memory location being read from or written to.',
           'The MDR holds the DATA or instruction fetched from (or being written to) that location.',
@@ -2048,14 +2049,14 @@ export const PHASES = [
         ],
         explain: 'Keep the two registers separate: PC = which instruction is next; MAR = which memory address we are about to access.' },
       { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 4,
-        title: 'Explain two differences between RAM and ROM.',
+        title: 'State two differences between RAM and ROM, explaining the significance of each.',
         markScheme: [
-          'RAM is volatile (loses its contents when power is removed); ROM is non-volatile (keeps its contents).',
-          'RAM can be read from and written to; ROM is read-only (cannot normally be written to).',
-          'RAM stores currently-running programs and data; ROM stores the boot/firmware (e.g. the BIOS).',
-          'RAM is typically much larger in capacity than ROM.',
+          'Difference 1 stated — comparing RAM and ROM on the same property (e.g. RAM volatile vs ROM non-volatile).',
+          'Difference 1 — its significance explained (e.g. RAM loses data on power-off, so it only holds running programs/data).',
+          'Difference 2 stated — a different property (e.g. RAM is read/write vs ROM read-only).',
+          'Difference 2 — its significance explained (e.g. ROM safely holds fixed boot/firmware instructions).',
         ],
-        explain: 'Each difference must compare BOTH parts on the same property (e.g. "RAM is volatile whereas ROM is non-volatile") to earn the pair of marks.' },
+        explain: 'Two marks per difference: state the property comparing BOTH parts, then explain why it matters. A bare list of properties without significance caps at half marks.' },
       { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 4,
         title: 'State three factors that affect CPU performance, and briefly explain how one of them does so.',
         markScheme: [
@@ -3934,7 +3935,7 @@ export const PHASES = [
       meta: 'GUIDED LESSON · TABLES & KEYS → SQL QUERIES → CHANGING THE DATA',
     },
     questions: [
-      { type: 'MC', badge: 'REAL WORLD', board: 'AQA · OCR · Eduqas',
+      { type: 'MC', badge: 'REAL WORLD', board: 'AQA · Eduqas',
         title: 'A school wants a list of just the NAMES of students in Year 11, from a Students table. Which SQL clause picks out only the Year 11 rows?',
         desc: 'Choosing which records match.',
         options: ['WHERE Year = 11', 'SELECT Name', 'FROM Students', 'ORDER BY Name'],
@@ -5915,8 +5916,8 @@ export const PHASES = [
           { text: 'INSIDE the loop, ask again.', re: '(input|USERINPUT)[\\s\\S]*(input|USERINPUT)' },
           { text: 'AFTER the loop, output the accepted number.', re: '(OUTPUT|print)' },
         ],
-        example: { note: 'A similar task, solved: keep asking until the user types a POSITIVE number — same read → WHILE-bad → re-ask shape.',
-          code: { AQA: 'num ← USERINPUT\nWHILE num < 0\n  num ← USERINPUT\nENDWHILE\nOUTPUT num', OCR: 'num = int(input())\nwhile num < 0\n  num = int(input())\nendwhile\nprint(num)', Eduqas: 'num = int(input())\nwhile num < 0:\n  num = int(input())\nprint(num)' } },
+        example: { note: 'A similar task, solved: keep asking until the user types a number from 1 to 5 — same read → WHILE-bad → re-ask shape, with a two-sided range check (below 1 OR above 5).',
+          code: { AQA: 'num ← USERINPUT\nWHILE num < 1 OR num > 5\n  num ← USERINPUT\nENDWHILE\nOUTPUT num', OCR: 'num = int(input())\nwhile num < 1 OR num > 5\n  num = int(input())\nendwhile\nprint(num)', Eduqas: 'num = int(input())\nwhile num < 1 or num > 5:\n  num = int(input())\nprint(num)' } },
         hints: ['The loop condition describes BAD input: num < 1 OR num > 10.', 'Ask once before the loop, then again inside it — the loop only ends on a good pick.'],
             tests: ['Reject 0 and 11, then accept 5 → outputs 5', 'Accept 8 first time → outputs 8'],
             cases: [
@@ -6092,8 +6093,8 @@ export const PHASES = [
           { text: 'INSIDE the loop, ask again.', re: '(input|USERINPUT)[\\s\\S]*(input|USERINPUT)' },
           { text: 'AFTER the loop, output the accepted number.', re: '(OUTPUT|print)' },
         ],
-        example: { note: 'A similar task, solved: keep asking until the user types a POSITIVE number — same read → WHILE-bad → re-ask shape.',
-          code: { AQA: 'num ← USERINPUT\nWHILE num < 0\n  num ← USERINPUT\nENDWHILE\nOUTPUT num', OCR: 'num = int(input())\nwhile num < 0\n  num = int(input())\nendwhile\nprint(num)', Eduqas: 'num = int(input())\nwhile num < 0:\n  num = int(input())\nprint(num)' } },
+        example: { note: 'A similar task, solved: keep asking until the user types a number from 1 to 5 — same read → WHILE-bad → re-ask shape, with a two-sided range check (below 1 OR above 5).',
+          code: { AQA: 'num ← USERINPUT\nWHILE num < 1 OR num > 5\n  num ← USERINPUT\nENDWHILE\nOUTPUT num', OCR: 'num = int(input())\nwhile num < 1 OR num > 5\n  num = int(input())\nendwhile\nprint(num)', Eduqas: 'num = int(input())\nwhile num < 1 or num > 5:\n  num = int(input())\nprint(num)' } },
         hints: ['The loop condition describes BAD input: num < 1 OR num > 10.', 'Ask once before the loop, then again inside it — the loop only ends on a good pick.'],
         tests: ['Reject 0 and 11, then accept 5 → outputs 5', 'Accept 8 first time → outputs 8'],
         cases: [
@@ -6478,9 +6479,9 @@ export const PHASES = [
         desc: 'A binary search checks the middle, then discards the half that cannot contain the target, and repeats.',
         hints: ['Start by checking the middle of the whole list.', 'Middle of [1,3,5,7,9,11] is 5; 9 > 5 so search the right half [7,9,11]; its middle is 9.'],
         explain: '<strong>Check 5 (middle), then 9.</strong> 9 &gt; 5 so the left half is discarded; the middle of the remaining [7, 9, 11] is 9 — found in just 2 checks (vs up to 6 for a linear search).' },
-      { type: 'MC', badge: 'SEARCH', board: 'AQA · OCR · Eduqas',
+      { type: 'MC', badge: 'STRETCH · BEYOND GCSE', board: 'AQA · OCR · Eduqas',
         title: 'What is the time complexity of a binary search?',
-        desc: 'Big O describes how the number of checks grows with list size.',
+        desc: 'Stretch (beyond GCSE — the O(…) notation is not examined). Big O describes how the number of checks grows with list size.',
         options: ['O(log n)', 'O(n)', 'O(n²)', 'O(1)'], answer: 'O(log n)',
         hints: ['Each step halves the items still to search.', 'Doubling the list size adds only ONE more check.'],
         explain: '<strong>O(log n).</strong> Each comparison halves the remaining items, so the number of checks grows very slowly — about 20 checks for a million items. A linear search is O(n) and could need a million.' },
@@ -6676,7 +6677,7 @@ export const PHASES = [
         hints: ['Computers store numbers in a fixed number of bits (e.g. 8).', 'If two 8-bit numbers add to more than 255, the answer cannot fit.'],
         explain: '<strong>Overflow</strong> happens when an addition produces a result needing more bits than are available — e.g. two 8-bit numbers adding to more than 255. The carry out of the top bit is lost, giving an incorrect answer.' },
       { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 2,
-        title: 'Explain what happens to a binary number when it is shifted left by one place, and state the effect on its value.',
+        title: 'Describe what happens to a binary number when it is shifted left by one place, and state the effect on its value.',
         markScheme: [
           'Every bit moves one place to the left and a 0 fills the empty position on the right.',
           'This multiplies the value by 2.',

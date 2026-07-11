@@ -228,11 +228,16 @@ const GATE_INFO = {
   NOT: 'inverts its single input (1→0, 0→1)',
 };
 function logicGate() {
-  const gate = ['AND', 'OR', 'XOR', 'NOT'][randInt(0, 3)];
+  // OCR J277 examines only AND/OR/NOT; XOR is AQA/Eduqas. Restrict the gate
+  // set for OCR so a graded question can never be off-spec, and label each
+  // instance with only the boards that examine that gate.
+  const set = getBoard() === 'OCR' ? ['AND', 'OR', 'NOT'] : ['AND', 'OR', 'XOR', 'NOT'];
+  const gate = set[randInt(0, set.length - 1)];
+  const board = gate === 'XOR' ? 'AQA · Eduqas' : 'AQA · OCR · Eduqas';
   if (gate === 'NOT') {
     const a = randInt(0, 1), out = a ? 0 : 1;
     return {
-      type: 'MC', badge: 'LOGIC GATE', board: 'AQA · OCR · Eduqas',
+      type: 'MC', badge: 'LOGIC GATE', board,
       title: `NOT gate: input = ${a}. What is the output?`,
       desc: 'The NOT gate inverts (flips) its single input',
       options: ['0', '1'], answer: String(out),
@@ -243,7 +248,7 @@ function logicGate() {
   const a = randInt(0, 1), b = randInt(0, 1);
   const out = gate === 'AND' ? (a & b) : gate === 'OR' ? (a | b) : (a ^ b);
   return {
-    type: 'MC', badge: 'LOGIC GATE', board: 'AQA · OCR · Eduqas',
+    type: 'MC', badge: 'LOGIC GATE', board,
     title: `${gate} gate: A = ${a}, B = ${b}. What is the output?`,
     desc: `An ${gate} gate ${GATE_INFO[gate]}`,
     options: ['0', '1'], answer: String(out),
