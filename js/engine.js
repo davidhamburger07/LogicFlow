@@ -714,9 +714,12 @@ function loadQuestion() {
   showVisual(phase, currentQuestion);
   REGISTRY[currentQuestion.type].render(el['answer-area'], currentQuestion, ctx);
 
-  // the scratch pad is offered on EVERY question — like exam paper, always
-  // available for working out (the persistent #sketchpad keeps your drawing).
-  el['workings-bar'].style.display = 'flex';
+  // the working-out layer is offered on EVERY question — the SAME transparent,
+  // draw-anywhere exam-paper layer the lesson flow uses (it has its own docked
+  // toolbar + DRAW toggle, so the old bottom-sheet scratch pad + its toggle bar
+  // are retired here).
+  el['workings-bar'].style.display = 'none';
+  showWorkpad();
 
   if (isTimed()) startTimer(TIME_FOR[currentQuestion.type] || DEFAULT_TIME);
 }
