@@ -265,7 +265,7 @@ function twosToDenary(opts, context) {
   const signed = u >= 128 ? u - 256 : u;
   const bits = toBitsMSB(u, 8), str = bits.join('');
   const base = {
-    badge: "TWO'S COMPLEMENT", board: 'AQA · OCR',
+    badge: "TWO'S COMPLEMENT", board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'],
     title: `What is the denary value of two's complement ${str}?`,
     hints: [bits[0] ? 'The leading bit is 1, so the number is negative (the -128 column is ON).' : 'The leading bit is 0, so read it as a normal positive binary number.', `Add the ON place values: ${twosSum(bits)}.`],
     explain: `<strong>${str}</strong> → ${twosSum(bits)} = <strong>${signed}</strong>.`,
@@ -281,7 +281,7 @@ function twosNegate(opts, context) {
   const posArr = toBitsMSB(v, 8);
   const flipOnly = toBitsMSB((~v) & 255, 8).join('');
   const base = {
-    badge: "TWO'S COMPLEMENT", board: 'AQA · OCR',
+    badge: "TWO'S COMPLEMENT", board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'],
     title: `Represent −${v} in 8-bit two's complement.`,
     hints: [`+${v} = ${posArr.join('')}.`, `Flip → ${flipOnly}, then add 1.`],
     explain: `<strong>−${v}:</strong> +${v} = ${posArr.join('')} → flip the bits → ${flipOnly} → add 1 → <strong>${negArr.join('')}</strong>.`,
@@ -545,7 +545,7 @@ function binarySub(opts, context) {
   const aArr = toBitsMSB(a, bits), bArr = toBitsMSB(b, bits), ansArr = toBitsMSB(diff, bits);
   const twoC = toBitsMSB((256 - b) & 255, bits).join('');
   const base = {
-    badge: 'BINARY SUB', board: 'AQA · OCR',
+    badge: 'BINARY SUB', board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'],
     title: `Using two's complement, work out ${aArr.join('')} − ${bArr.join('')}.`,
     hints: [
       `Two's complement of ${bArr.join('')}: flip every bit, then add 1 → ${twoC}.`,
