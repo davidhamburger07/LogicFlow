@@ -2835,6 +2835,12 @@ export const PHASES = [
               'Makes a wider ethical point: users should give informed consent and be told how their data is used.',
               'Reaches a reasoned judgement (e.g. the benefits of using data do not justify breaking consent rules).',
             ],
+            levels: [
+              { band: 3, lo: 5, hi: 6, desc: 'Balanced discussion: names AND explains the Data Protection Act, gives an impact on users, states a consequence for the company, and reaches a clear reasoned judgement — points developed and linked.' },
+              { band: 2, lo: 3, hi: 4, desc: 'Some discussion with a few relevant points (e.g. the law plus one impact) and some development — but limited balance, or no clear conclusion.' },
+              { band: 1, lo: 1, hi: 2, desc: 'Basic, undeveloped points; identifies the issue but with little explanation and no judgement.' },
+              { band: 0, lo: 0, hi: 0, desc: 'Nothing creditworthy.' },
+            ],
             commonMistakes: [
               'Naming the law but not explaining what it does — you must say WHAT it covers to earn the mark.',
               'Only writing about the negatives — a top-band answer weighs the wider context or the other side.',
@@ -3007,6 +3013,12 @@ export const PHASES = [
           'States a consequence for the company: legal action or a fine (e.g. from the ICO).',
           'Makes a wider ethical point: users should give informed consent and be told how their data is used.',
           'Reaches a reasoned judgement (e.g. the benefits of using data do not justify breaking consent rules).',
+        ],
+        levels: [
+          { band: 3, lo: 5, hi: 6, desc: 'Balanced discussion: names AND explains the Data Protection Act, gives an impact on users, states a consequence for the company, and reaches a clear reasoned judgement — points developed and linked.' },
+          { band: 2, lo: 3, hi: 4, desc: 'Some discussion with a few relevant points (e.g. the law plus one impact) and some development — but limited balance, or no clear conclusion.' },
+          { band: 1, lo: 1, hi: 2, desc: 'Basic, undeveloped points; identifies the issue but with little explanation and no judgement.' },
+          { band: 0, lo: 0, hi: 0, desc: 'Nothing creditworthy.' },
         ],
         commonMistakes: [
           'Naming the law but not explaining what it does — you must say WHAT it covers to earn the mark.',

@@ -133,6 +133,7 @@ export const argue = {
       const pct = Math.round(ev.score / marks * 100);
       band.innerHTML = `<div class="arg-band-top"><span class="arg-band-num">BAND ${ev.score} / ${marks}</span>`
         + `<div class="arg-band-bar"><div class="arg-band-fill" style="width:${pct}%"></div></div></div>`
+        + `<div class="arg-band-note">Marked by <strong>levels of response</strong> — an examiner judges the whole answer against these criteria, not a point-per-mark tally.</div>`
         + `<div class="arg-pips">`
         + `<span class="arg-pip ${ev.crit.points.n >= 2 ? 'on' : ''}">${ev.crit.points.n >= 2 ? '✓' : '○'} POINTS ${ev.crit.points.n}/3</span>`
         + pip(ev.crit.balance.got, 'BOTH SIDES') + pip(ev.crit.range.got, 'RANGE')

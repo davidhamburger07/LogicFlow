@@ -873,6 +873,28 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 .exam-model-text { font-size: 12px; line-height: 1.75; color: var(--ink-2); }
 .exam-scheme .exam-submit { margin-top: 14px; }
 
+/* EXAMCOACH — indicative content (levels mode) + levels-of-response selector */
+.exam-indic { display: flex; gap: 8px; align-items: baseline; font-size: 12.5px; line-height: 1.6; color: var(--ink-3); padding: 3px 0; }
+.exam-indic-dot { color: var(--phase-color); }
+.exam-levels { margin-top: 16px; }
+.exam-levels > .exam-coach-head { color: var(--phase-color); }
+.exam-levels-note { font-size: 12px; line-height: 1.6; color: var(--ink-4); margin-bottom: 10px; }
+.exam-level { display: block; width: 100%; text-align: left; background: var(--surface); border: 1.5px solid var(--border);
+  padding: 10px 13px; margin-bottom: 7px; cursor: pointer; transition: border-color .12s, background .12s; }
+.exam-level:hover:not(:disabled) { border-color: var(--phase-color); }
+.exam-level.sel { border-color: var(--phase-color); background: var(--phase-color-light); }
+.exam-level:disabled { cursor: default; opacity: .55; }
+.exam-level.sel:disabled { opacity: 1; }
+.exam-level-band { display: block; font-family: var(--mono); font-size: 12px; letter-spacing: 1px; color: var(--phase-color); margin-bottom: 4px; }
+.exam-level-desc { display: block; font-size: 12.5px; line-height: 1.6; color: var(--ink-2); }
+.exam-mark-pick { display: flex; align-items: center; gap: 8px; margin: 10px 0 2px; flex-wrap: wrap; }
+.exam-mark-lbl { font-family: var(--mono); font-size: 12px; letter-spacing: 1px; color: var(--ink-3); }
+.exam-mark-btn { font-family: var(--mono); font-size: 15px; min-width: 38px; padding: 7px 0; background: var(--surface);
+  border: 1.5px solid var(--border); color: var(--ink); cursor: pointer; transition: border-color .1s, background .1s; }
+.exam-mark-btn:hover:not(:disabled) { border-color: var(--phase-color); }
+.exam-mark-btn.sel { border-color: var(--phase-color); background: var(--phase-color); color: #fff; }
+.exam-mark-btn:disabled { cursor: default; opacity: .6; }
+
 /* ARGUE — assemble the 8-mark "discuss" answer from modular blocks */
 .arg { display: flex; flex-direction: column; gap: 12px; max-width: 660px; }
 .arg-scenario { background: var(--panel); border-left: 3px solid var(--phase-color); padding: 12px 14px; }
@@ -884,6 +906,7 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 .arg-band-num { font-family: var(--mono); font-size: 12px; letter-spacing: 1px; color: var(--phase-color); white-space: nowrap; }
 .arg-band-bar { flex: 1; height: 8px; background: var(--panel); border: 1px solid var(--border); overflow: hidden; }
 .arg-band-fill { height: 100%; background: var(--phase-color); transition: width .3s ease; }
+.arg-band-note { font-size: 11.5px; line-height: 1.55; color: var(--ink-4); margin: 6px 0 8px; }
 .arg-pips { display: flex; flex-wrap: wrap; gap: 6px 12px; }
 .arg-pip { font-family: var(--mono); font-size: 12px; letter-spacing: .5px; color: var(--ink-4); }
 .arg-pip.on { color: var(--success-ink); }
