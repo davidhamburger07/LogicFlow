@@ -19,6 +19,7 @@ import * as engine from './engine.js';
 import { SFX } from './sound.js';
 import * as courses from './courses.js';
 import { notationTableHtml } from './notation.js';
+import { backendEnabled } from './config.js';
 
 const PHASE_IDS = PHASES.map(p => p.id);
 const PHASE_IDX_BY_ID = {};
@@ -246,9 +247,16 @@ export function initBoardDiff() {
 // ============================================================
 export function showCourses() {
   resetAccent();
+  // With a store (standalone site) we tease the whole catalogue and the "add
+  // one free / unlock later" model. With NO store (CrazyGames + local dev) there
+  // is nothing to buy, so we drop the purchase copy and hide the not-yet-built
+  // subjects — showing only what's actually playable, no "coming soon" promises.
+  const backend = backendEnabled();
   dom.coursesIntro.innerHTML =
     '<div class="courses-lead">Pick your subject.</div>'
-    + '<div class="courses-sub"><strong>Computer Science</strong> is ready to play now. Every other GCSE subject is on the way — you\'ll be able to add one free and unlock more later.</div>';
+    + '<div class="courses-sub"><strong>Computer Science</strong> is ready to play now.'
+    + (backend ? ' Every other GCSE subject is on the way — you\'ll be able to add one free and unlock more later.' : ' More GCSE subjects are on the way.')
+    + '</div>';
   const bar = accountBar();   // standalone site only (when an auth backend is wired)
   if (bar) dom.coursesIntro.prepend(bar);
 
@@ -256,6 +264,7 @@ export function showCourses() {
   const user = authApi && authApi.currentUser ? authApi.currentUser() : null;
   courses.COURSES.forEach(c => {
     const state = courses.courseState(c);   // 'play' | 'owned' | 'locked' | 'soon'
+    if (!backend && state === 'soon') return;   // no store → don't advertise unbuilt subjects
     const card = h('button', 'course-card course-' + state);
     card.type = 'button';
     let tag, action = null;

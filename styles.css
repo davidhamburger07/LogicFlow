@@ -99,6 +99,7 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 }
 .modal-title { font-size: 18px; letter-spacing: 3px; }
 .modal-text { font-size: 12px; line-height: 1.8; color: var(--ink-3); }
+.modal-fineprint { font-size: 11px; line-height: 1.55; color: var(--ink-4); margin: 2px 0 2px; }
 .modal-actions { display: flex; flex-direction: column; gap: 10px; }
 .modal-actions .fs-btn { margin-top: 0; width: 100%; }
 .modal-actions .modal-cancel { background: var(--panel); color: var(--ink); border: 1px solid var(--border); }
