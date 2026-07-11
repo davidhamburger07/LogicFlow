@@ -509,7 +509,7 @@ export const PHASES = [
           'A NOT gate inverts (flips) its single input — 1 becomes 0 and 0 becomes 1.',
         ],
         explain: 'NOT has only one input. The explanation mark is for the idea of inverting/flipping.' },
-      { type: 'EXAM', badge: 'EXAM', board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'], marks: 2,
+      { type: 'EXAM', badge: 'EXAM', board: 'AQA · Eduqas · WJEC', reqBoards: ['AQA', 'Eduqas', 'WJEC'], marks: 2,
         title: 'Describe the difference in behaviour between an OR gate and an XOR gate.',
         markScheme: [
           'OR outputs 1 if at least one input is 1, including when both inputs are 1.',
@@ -549,13 +549,13 @@ export const PHASES = [
         explain: '<strong>One solution: Gate 1 = OR (1 OR 0 = 1), Gate 2 = AND (1 AND 1 = 1).</strong> Several other gate pairs also produce 1 — the simulator accepts any arrangement that hits the target. This is how real circuits chain gates together.' },
       { gen: 'boolTable' },
       { gen: 'boolTable' },
-      { type: 'TRUTHTABLE', badge: 'TRUTH TABLE', board: 'Eduqas', reqBoards: ['Eduqas'],
+      { type: 'TRUTHTABLE', badge: 'TRUTH TABLE', board: 'Eduqas · WJEC', reqBoards: ['Eduqas', 'WJEC'],
         inputs: ['A', 'B'], rows: [[0, 0], [0, 1], [1, 0], [1, 1]], answer: [1, 1, 1, 0],
         title: 'Complete the truth table for a NAND gate: Q = NOT (A AND B).',
         desc: 'NAND = NOT AND — an AND gate with its output inverted. Set Q for each row.',
         hints: ['NAND is the opposite of AND.', 'AND is 1 only for (1,1); NAND inverts that.'],
         explain: '<strong>NAND → 1, 1, 1, 0.</strong> An AND gate with its output inverted: AND gives 1 only for (1,1), so NAND gives 0 only for (1,1) and 1 for the rest.' },
-      { type: 'TRUTHTABLE', badge: 'TRUTH TABLE', board: 'Eduqas', reqBoards: ['Eduqas'],
+      { type: 'TRUTHTABLE', badge: 'TRUTH TABLE', board: 'Eduqas · WJEC', reqBoards: ['Eduqas', 'WJEC'],
         inputs: ['A', 'B'], rows: [[0, 0], [0, 1], [1, 0], [1, 1]], answer: [1, 0, 0, 0],
         title: 'Complete the truth table for a NOR gate: Q = NOT (A OR B).',
         desc: 'NOR = NOT OR — an OR gate with its output inverted. Set Q for each row.',
@@ -567,7 +567,7 @@ export const PHASES = [
         desc: 'Work out (NOT B) first, then AND it with A. Set Q for each row.',
         hints: ['NOT B is 1 only when B is 0.', 'Q is 1 only when A = 1 AND (NOT B) = 1.'],
         explain: '<strong>Q → 0, 0, 1, 0.</strong> NOT B is 1 only when B = 0; A AND (NOT B) is 1 only when A = 1 and B = 0.' },
-      { type: 'EXAM', badge: 'EXAM', board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'], marks: 2,
+      { type: 'EXAM', badge: 'EXAM', board: 'AQA · Eduqas · WJEC', reqBoards: ['AQA', 'Eduqas', 'WJEC'], marks: 2,
         title: 'Describe when an XOR gate outputs 1 and when it outputs 0.',
         markScheme: [
           'XOR outputs 1 when its two inputs are different (one is 0 and the other is 1).',
@@ -1539,7 +1539,8 @@ export const PHASES = [
 
         // ── PART 2 — MODERN KEYS ──
         { part: 'PART 2 · MODERN KEYS', heading: 'ONE SHARED KEY — OR A PAIR',
-          html: '<div class="pi-text">Modern <strong>symmetric</strong> encryption is Caesar\'s great-grandchild: <strong>one shared key</strong> both locks and unlocks, and it\'s <em>fast</em>. But it inherits Caesar\'s real weakness — the <strong>key exchange problem</strong>. How do you get the key to the other person when someone may be listening to everything you send?</div>'
+          html: '<div class="pi-specnote">⭐ <strong>STRETCH · beyond GCSE.</strong> The symmetric-vs-asymmetric distinction and public/private keys are A-level / IGCSE content — none of AQA, OCR, Eduqas or Edexcel examine them at GCSE. Your exam only needs the general idea of encryption: scramble data with a key so intercepted data can\'t be read. This section is a head start, not required.</div>'
+            + '<div class="pi-text">Modern <strong>symmetric</strong> encryption is Caesar\'s great-grandchild: <strong>one shared key</strong> both locks and unlocks, and it\'s <em>fast</em>. But it inherits Caesar\'s real weakness — the <strong>key exchange problem</strong>. How do you get the key to the other person when someone may be listening to everything you send?</div>'
             + '<div class="pi-text"><strong>Asymmetric</strong> encryption solves it with a mathematically linked <strong>key pair</strong>: a <strong>public key</strong> you share with the world (it can only <em>lock</em>) and a <strong>private key</strong> you never share (the only thing that <em>unlocks</em>). Now strangers can send you secrets with no prior arrangement. <strong>HTTPS</strong> — the padlock — uses both: asymmetric to safely agree a fresh symmetric <em>session key</em>, then fast symmetric encryption for everything after. Best of both worlds.</div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · SYMMETRIC ENCRYPTION</div><div class="pi-defbox-text"><strong>One shared key</strong> is used to both encrypt and decrypt the data.</div></div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · ASYMMETRIC ENCRYPTION</div><div class="pi-defbox-text">Uses a <strong>key pair</strong>: the <strong>public key encrypts</strong>; only the matching <strong>private key can decrypt</strong>.</div></div>',
@@ -1595,9 +1596,9 @@ export const PHASES = [
       { gen: 'caesarLetter' },
       { gen: 'caesarDecode' },
       { gen: 'caesarDecode' },
-      { type: 'MC', badge: 'ENCRYPTION', board: 'AQA · OCR · Eduqas',
+      { type: 'MC', badge: 'STRETCH · BEYOND GCSE', board: 'AQA · OCR · Eduqas',
         title: 'What is the difference between symmetric and asymmetric encryption?',
-        desc: 'Two fundamental types of modern encryption',
+        desc: 'Stretch (beyond GCSE — symmetric/asymmetric and public/private keys are A-level, not examined). Two types of modern encryption.',
         options: ['Symmetric uses one shared key; asymmetric uses a public/private key pair', 'Symmetric is stronger; asymmetric is weaker', 'Symmetric uses more keys; asymmetric uses fewer', 'Symmetric is for files; asymmetric is for emails only'], answer: 'Symmetric uses one shared key; asymmetric uses a public/private key pair',
         hints: ['Symmetric = same key for both sides. Think "symmetrical" — both sides are the same.', 'Asymmetric uses two mathematically linked keys — public (share freely) and private (keep secret).'],
         explain: '<strong>Symmetric:</strong> one shared secret key (fast, used for bulk data). <strong>Asymmetric:</strong> public key encrypts, private key decrypts (slower, used for key exchange). HTTPS uses asymmetric to share a symmetric session key.' },
@@ -1610,7 +1611,7 @@ export const PHASES = [
         explain: 'Encryption turns plaintext into ciphertext using a key; only someone with the key can decrypt it. It protects data in transit (e.g. HTTPS) and at rest, so intercepted or stolen data is unreadable.' },
     ],
     paper: [
-      { type: 'EXAM', badge: 'EXAM', board: 'AQA · OCR · Eduqas', marks: 4,
+      { type: 'EXAM', badge: 'STRETCH · BEYOND GCSE', board: 'AQA · OCR · Eduqas', marks: 4,
         title: 'Explain the difference between symmetric and asymmetric encryption.',
         markScheme: [
           'Symmetric encryption uses a single, shared key to both encrypt and decrypt.',
@@ -2211,7 +2212,7 @@ export const PHASES = [
       meta: "GUIDED LESSON · READ → NEGATE → SUBTRACT",
     },
     paper: [
-      { type: 'EXAM', badge: 'EXAM', board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'], marks: 3,
+      { type: 'EXAM', badge: 'EXAM', board: 'AQA · Eduqas · Edexcel', reqBoards: ['AQA', 'Eduqas', 'WJEC', 'Edexcel'], marks: 3,
         title: 'Explain how two’s complement is used to represent a negative number in binary.',
         markScheme: [
           'In two’s complement the most significant (leftmost) bit has a negative place value (e.g. -128 in 8-bit).',
@@ -2219,14 +2220,14 @@ export const PHASES = [
           'To get a negative value you flip all the bits of the positive number and then add 1.',
         ],
         explain: 'MSB is negative → a leading 1 means negative → "flip the bits and add 1" to negate.' },
-      { type: 'EXAM', badge: 'EXAM', board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'], marks: 2,
+      { type: 'EXAM', badge: 'EXAM', board: 'AQA · Eduqas · Edexcel', reqBoards: ['AQA', 'Eduqas', 'WJEC', 'Edexcel'], marks: 2,
         title: 'State the range of values that can be stored using 8-bit two’s complement.',
         markScheme: [
           'Minimum value = -128.',
           'Maximum value = +127.',
         ],
         explain: 'Range is -128 to +127 (256 values, but not symmetric because 0 counts as positive).' },
-      { type: 'EXAM', badge: 'EXAM', board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'], marks: 2,
+      { type: 'EXAM', badge: 'EXAM', board: 'AQA · Eduqas · Edexcel', reqBoards: ['AQA', 'Eduqas', 'WJEC', 'Edexcel'], marks: 2,
         title: 'Explain one advantage of using two’s complement to store negative numbers.',
         markScheme: [
           'The same binary addition circuit works for both positive and negative numbers.',
@@ -2235,14 +2236,14 @@ export const PHASES = [
         explain: 'The hardware-simplicity point is the expected answer: one adder handles both add and subtract.' },
     ],
     questions: [
-      { type: 'MC', badge: "TWO'S COMPLEMENT", board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'],
+      { type: 'MC', badge: "TWO'S COMPLEMENT", board: 'AQA · Eduqas · Edexcel', reqBoards: ['AQA', 'Eduqas', 'WJEC', 'Edexcel'],
         title: 'In 8-bit two\'s complement, what is the range of values?',
         desc: 'The MSB has a place value of -128 in two\'s complement',
         options: ['-128 to +127', '-127 to +127', '-128 to +128', '0 to 255'], answer: '-128 to +127',
         hints: ['The MSB (leftmost) represents -128. All other bits ON gives +127.', 'Minimum: 10000000 = -128. Maximum: 01111111 = +127.'],
         explain: "<strong>8-bit two's complement range: -128 to +127.</strong> Minimum = 10000000 (-128). Maximum = 01111111 (+127). Note: 256 total values, but split asymmetrically due to zero being positive." },
       { gen: 'twosNegate' },
-      { type: 'MC', badge: "TWO'S COMPLEMENT", board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'],
+      { type: 'MC', badge: "TWO'S COMPLEMENT", board: 'AQA · Eduqas · Edexcel', reqBoards: ['AQA', 'Eduqas', 'WJEC', 'Edexcel'],
         title: 'In two\'s complement, how do you know a number is negative?',
         desc: 'There is a simple rule involving the most significant bit',
         diagram: 'twos-msb',
@@ -2250,20 +2251,20 @@ export const PHASES = [
         hints: ['In two\'s complement, the leftmost bit has a NEGATIVE place value.', 'If the leftmost bit is 1, it contributes a large negative value, making the whole number negative.'],
         explain: "<strong>If the MSB (leftmost bit) = 1, the number is negative</strong> in two's complement. This is because the MSB has place value -128 (in 8-bit). If it's 1, the negative component dominates. Simple rule: leading 1 = negative." },
       { gen: 'twosToDenary' },
-      { type: 'MC', badge: "TWO'S COMPLEMENT", board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'],
+      { type: 'MC', badge: "TWO'S COMPLEMENT", board: 'AQA · Eduqas · Edexcel', reqBoards: ['AQA', 'Eduqas', 'WJEC', 'Edexcel'],
         title: "Why do computers use two's complement for negative numbers?",
         desc: "Think about what hardware advantage it provides",
         options: ["The same addition circuits work for both positive and negative numbers", "It uses less memory than other methods", "It's easier for humans to read", "It allows storage of larger numbers"], answer: "The same addition circuits work for both positive and negative numbers",
         hints: ["What would you need if you stored negatives differently — extra hardware?", "With two's complement, 5 + (-5) = 0 using the same binary adder circuit."],
         explain: "<strong>Two's complement means subtraction = addition of a negative.</strong> 5 + (-5) = 00000101 + 11111011 = 00000000 (ignoring overflow). CPUs don't need separate subtraction hardware — the ALU just adds. This is why two's complement is universal." },
       { gen: 'binarySub' },
-      { type: 'NUMBER', badge: 'REAL WORLD', board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'], signed: true,
+      { type: 'NUMBER', badge: 'REAL WORLD', board: 'AQA · Eduqas · Edexcel', reqBoards: ['AQA', 'Eduqas', 'WJEC', 'Edexcel'], signed: true,
         title: 'A game stores altitude as 8-bit two’s complement (0 = sea level). A sub reads 00000011 (+3 m) then dives 7 m. What does it read now, in denary?',
         desc: 'Below sea level is negative — use the ± key.',
         answer: -4,
         hints: ['3 − 7 = −4.', 'Dropping below 0 is exactly what two’s complement is for.'],
         explain: '<strong>3 − 7 = −4.</strong> Two’s complement lets the depth reading fall below 0 (sea level) — the same maths a game uses when a character moves past coordinate 0 or takes more damage than its remaining health.' },
-      { type: 'EXAM', badge: 'EXAM', board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'], marks: 2,
+      { type: 'EXAM', badge: 'EXAM', board: 'AQA · Eduqas · Edexcel', reqBoards: ['AQA', 'Eduqas', 'WJEC', 'Edexcel'], marks: 2,
         title: 'Explain how you can tell, from its bit pattern, whether an 8-bit two\'s complement number is negative.',
         markScheme: [
           'Look at the most significant (leftmost) bit.',
@@ -3630,7 +3631,8 @@ export const PHASES = [
 
         // ── PART 3 — VIRTUAL MEMORY & CAPACITY ──
         { part: 'PART 3 · VIRTUAL MEMORY & CAPACITY', heading: 'WHEN RAM RUNS OUT — AND DOING THE MATHS',
-          html: '<div class="pi-text">Storage and RAM also work <em>together</em>. When RAM fills up (too many tabs!), the OS quietly borrows a slice of secondary storage and treats it as extra RAM — that\'s <strong>virtual memory</strong>.</div>'
+          html: '<div class="pi-specnote">📋 <strong>Board note.</strong> <strong>Virtual memory</strong> is required on <strong>OCR J277</strong> but is <strong>not</strong> on the AQA 8525 or Edexcel 1CP2 specs — if that\'s your board, it\'s useful background, not examinable. (The file-size maths later in this part is on every board. “Thrashing” is A-level everywhere.)</div>'
+            + '<div class="pi-text">Storage and RAM also work <em>together</em>. When RAM fills up (too many tabs!), the OS quietly borrows a slice of secondary storage and treats it as extra RAM — that\'s <strong>virtual memory</strong>.</div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · VIRTUAL MEMORY</div><div class="pi-defbox-text">Part of <strong>secondary storage used as if it were extra RAM</strong> when RAM is full. It lets more programs run, but is <strong>much slower</strong> than real RAM.</div></div>'
             + '<div class="pi-text">If it gets really bad, the machine spends almost all its time shuffling data between RAM and disk instead of doing useful work — a state called <strong>thrashing</strong>. The fix is usually to add more RAM.</div>'
             + '<div class="pi-text">Finally, the maths: capacity questions are just division. <strong>How many files fit = capacity ÷ file size</strong> — after converting units (remember: ×1000 per step, so 1 GB = 1,000 MB). A 32 GB card is 32,000 MB; at 5 MB a photo, that\'s 6,400 photos.</div>',
@@ -3730,7 +3732,7 @@ export const PHASES = [
         desc: 'Magnetic (spinning discs / tape), optical (lasers on a disc), or solid-state (flash, no moving parts).',
         hints: ['Magnetic = spinning platters or tape; optical = read by a laser; solid-state = flash, no moving parts.', 'SSDs, USB sticks and SD cards are all flash (solid-state).'],
         explain: '<strong>Magnetic</strong> = HDD and tape (spinning/moving magnetic media). <strong>Optical</strong> = CD/DVD/Blu-ray (read by laser). <strong>Solid-state</strong> = SSD, USB sticks, SD cards (flash memory, no moving parts).' },
-      { type: 'MC', badge: 'MEMORY', board: 'AQA · OCR · Eduqas',
+      { type: 'MC', badge: 'MEMORY', board: 'OCR · Eduqas · WJEC', reqBoards: ['OCR', 'Eduqas', 'WJEC'],
         title: 'What is virtual memory?',
         desc: 'Used when RAM becomes full',
         options: ['Part of secondary storage used as extra RAM when the real RAM is full', 'A faster type of RAM built into the CPU', 'Memory that stores the BIOS permanently', 'A backup copy of files kept in the cloud'],

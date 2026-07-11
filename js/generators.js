@@ -228,12 +228,13 @@ const GATE_INFO = {
   NOT: 'inverts its single input (1→0, 0→1)',
 };
 function logicGate() {
-  // OCR J277 examines only AND/OR/NOT; XOR is AQA/Eduqas. Restrict the gate
-  // set for OCR so a graded question can never be off-spec, and label each
-  // instance with only the boards that examine that gate.
-  const set = getBoard() === 'OCR' ? ['AND', 'OR', 'NOT'] : ['AND', 'OR', 'XOR', 'NOT'];
+  // XOR is not on the OCR J277 or Edexcel 1CP2 spec (AND/OR/NOT only); it IS on
+  // AQA / Eduqas / WJEC. Restrict the gate set so a graded question can never be
+  // off-spec, and label each instance with only the boards that examine it.
+  const noXor = getBoard() === 'OCR' || getBoard() === 'Edexcel';
+  const set = noXor ? ['AND', 'OR', 'NOT'] : ['AND', 'OR', 'XOR', 'NOT'];
   const gate = set[randInt(0, set.length - 1)];
-  const board = gate === 'XOR' ? 'AQA · Eduqas' : 'AQA · OCR · Eduqas';
+  const board = gate === 'XOR' ? 'AQA · Eduqas · WJEC' : 'AQA · OCR · Eduqas';
   if (gate === 'NOT') {
     const a = randInt(0, 1), out = a ? 0 : 1;
     return {
@@ -265,7 +266,7 @@ function twosToDenary(opts, context) {
   const signed = u >= 128 ? u - 256 : u;
   const bits = toBitsMSB(u, 8), str = bits.join('');
   const base = {
-    badge: "TWO'S COMPLEMENT", board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'],
+    badge: "TWO'S COMPLEMENT", board: 'AQA · Eduqas · Edexcel', reqBoards: ['AQA', 'Eduqas', 'WJEC', 'Edexcel'],
     title: `What is the denary value of two's complement ${str}?`,
     hints: [bits[0] ? 'The leading bit is 1, so the number is negative (the -128 column is ON).' : 'The leading bit is 0, so read it as a normal positive binary number.', `Add the ON place values: ${twosSum(bits)}.`],
     explain: `<strong>${str}</strong> → ${twosSum(bits)} = <strong>${signed}</strong>.`,
@@ -281,7 +282,7 @@ function twosNegate(opts, context) {
   const posArr = toBitsMSB(v, 8);
   const flipOnly = toBitsMSB((~v) & 255, 8).join('');
   const base = {
-    badge: "TWO'S COMPLEMENT", board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'],
+    badge: "TWO'S COMPLEMENT", board: 'AQA · Eduqas · Edexcel', reqBoards: ['AQA', 'Eduqas', 'WJEC', 'Edexcel'],
     title: `Represent −${v} in 8-bit two's complement.`,
     hints: [`+${v} = ${posArr.join('')}.`, `Flip → ${flipOnly}, then add 1.`],
     explain: `<strong>−${v}:</strong> +${v} = ${posArr.join('')} → flip the bits → ${flipOnly} → add 1 → <strong>${negArr.join('')}</strong>.`,
@@ -545,7 +546,7 @@ function binarySub(opts, context) {
   const aArr = toBitsMSB(a, bits), bArr = toBitsMSB(b, bits), ansArr = toBitsMSB(diff, bits);
   const twoC = toBitsMSB((256 - b) & 255, bits).join('');
   const base = {
-    badge: 'BINARY SUB', board: 'AQA · Eduqas', reqBoards: ['AQA', 'Eduqas'],
+    badge: 'BINARY SUB', board: 'AQA · Eduqas · Edexcel', reqBoards: ['AQA', 'Eduqas', 'WJEC', 'Edexcel'],
     title: `Using two's complement, work out ${aArr.join('')} − ${bArr.join('')}.`,
     hints: [
       `Two's complement of ${bArr.join('')}: flip every bit, then add 1 → ${twoC}.`,
