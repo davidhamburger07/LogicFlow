@@ -365,7 +365,7 @@ const TUT_SLIDES = [
     body: 'Tap your board below — <strong>AQA</strong>, <strong>OCR</strong>, <strong>Eduqas</strong>, <strong>WJEC</strong> or <strong>Edexcel</strong>. The lessons then switch to your board’s <strong>programming notation</strong> and cover the exact topics and logic gates it examines. You can change it any time in <strong>Settings</strong>.' },
   { eyebrow: 'THE CAMPAIGN', heading: 'FOLLOW THE <em>SIGNAL</em>',
     visual: '<div class="tut-map"><span class="tut-node test">▶<small>TOPIC</small></span><span class="tut-wire"></span><span class="tut-node test">◆<small>UNIT TEST</small></span><span class="tut-wire"></span><span class="tut-node lock">🔒<small>NEXT</small></span></div>',
-    body: 'Work along the circuit, unit by unit. Each <strong>topic</strong> is one continuous flow — it teaches the idea, walks an example, then hands you the questions. <strong>Clear each topic to unlock the next</strong>; clear a whole unit to open its <strong>unit test</strong>, with <strong>mock checkpoints</strong> to tie it together.' },
+    body: 'Work along the circuit, unit by unit. Each <strong>topic</strong> is one continuous flow — it teaches the idea, walks an example, then hands you the questions. <strong>Clear each topic to unlock the next</strong>; clear a whole unit to open its <strong>unit test</strong>, then <strong>pass it to unlock the next unit</strong> — with <strong>mock checkpoints</strong> to tie it together.' },
   { eyebrow: 'INSIDE A LESSON', heading: 'TEACH, THEN <em>YOUR TURN</em>',
     visual: '<div class="tut-card-demo"><div class="tut-demo-pv"><b class="lit">8</b><b>4</b><b class="lit">2</b><b>1</b></div><div class="tut-demo-sum">8 + 2 = <span class="tut-demo-in">?</span></div></div>',
     body: 'A lesson explains the idea, walks through a worked example, then hands you a real question to try. The scaffolding <strong>fades</strong> as you go — guided at first, then all you.' },
@@ -472,7 +472,7 @@ export function showCampaign() {
 
   const path = h('div', 'cmp');
   path.appendChild(h('div', 'cmp-intro',
-    'Follow the signal in order — clear each lesson to unlock the next. Clear every lesson in a unit to open its unit test. Replay a cleared lesson flawlessly to earn all 3 ★. (Need a topic out of order? The Revision hub has every one, unlocked.)'));
+    'Follow the signal in order — clear each lesson to unlock the next. Clear a unit\'s lessons to open its unit test, then pass it to unlock the next unit. Replay a cleared lesson flawlessly to earn all 3 ★. (Need a topic out of order? The Revision hub has every one, unlocked.)'));
 
   state.units.forEach(u => {
     path.appendChild(unitHeader(u));

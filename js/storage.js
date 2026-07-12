@@ -327,13 +327,15 @@ export function getMisses() {
 // Unlock rules (computed in getCampaignState, which takes the UNITS
 // topology so storage stays decoupled from units.js's specific data):
 //   - the campaign is SEQUENTIAL: a lesson unlocks only once the previous
-//     lesson (in order, across units) has been cleared. The first uncleared
-//     lesson is the "you are here" frontier; everything past it is locked.
-//     (A student who needs a specific topic out of order can still reach it
-//     freely from the Revision hub — the campaign is the guided path, not the
-//     only door — so no topic is ever truly walled off.)
-//   - a Unit Test still unlocks only once every lesson in its unit is
-//     cleared (a test over unlearned content helps nobody)
+//     lesson has been cleared, AND a new unit unlocks only once the previous
+//     unit's Unit Test has been PASSED. The first locked-out step is the "you
+//     are here" frontier; everything past it is locked. (A student who needs a
+//     specific topic out of order can still reach it freely from the Revision
+//     hub — the campaign is the guided path, not the only door — so no topic
+//     is ever truly walled off.)
+//   - a Unit Test unlocks once every lesson in its unit is cleared (a test
+//     over unlearned content helps nobody); passing it (>= UNIT_TEST_PASS)
+//     is what opens the next unit
 //   - a unit is COMPLETE when all its lessons are cleared AND its test
 //     is passed
 //   - a Mock unlocks when its unit completes; Mocks are OPTIONAL — they
@@ -465,6 +467,10 @@ export function getCampaignState(units) {
     else testState = 'locked';
     const test = { state: testState, best: tr.best };
     if (testState === 'unlocked' && !current) { current = { kind: 'unit-test', unitId: u.id }; test.current = true; }
+
+    // the Unit Test gates the NEXT unit: even with every lesson cleared, the
+    // next unit stays locked until this test has been passed.
+    if (!DEV_UNLOCK && !tr.passed) unlockNext = false;
 
     const unitComplete = allCleared && tr.passed;
     const unitReached = lessons.some(l => l.state !== 'locked');   // any playable/cleared lesson
