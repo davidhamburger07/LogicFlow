@@ -326,10 +326,12 @@ export function getMisses() {
 //
 // Unlock rules (computed in getCampaignState, which takes the UNITS
 // topology so storage stays decoupled from units.js's specific data):
-//   - the campaign is OPEN: every unit and every lesson is playable in
-//     any order (it's a revision tool — never wall off a topic a student
-//     needs today). The linear order survives as a RECOMMENDATION: the
-//     "you are here" pointer + CONTINUE still walk the path in sequence.
+//   - the campaign is SEQUENTIAL: a lesson unlocks only once the previous
+//     lesson (in order, across units) has been cleared. The first uncleared
+//     lesson is the "you are here" frontier; everything past it is locked.
+//     (A student who needs a specific topic out of order can still reach it
+//     freely from the Revision hub — the campaign is the guided path, not the
+//     only door — so no topic is ever truly walled off.)
 //   - a Unit Test still unlocks only once every lesson in its unit is
 //     cleared (a test over unlearned content helps nobody)
 //   - a unit is COMPLETE when all its lessons are cleared AND its test
@@ -431,6 +433,12 @@ export function getCampaignState(units) {
   const list = Array.isArray(units) ? units : [];
   const out = [];
   let current = null;
+  // sequential gate: a lesson is playable only once the previous lesson (in
+  // campaign order, across units) has been cleared. `unlockNext` stays true
+  // while we're still inside the cleared prefix; the first uncleared lesson is
+  // the frontier ("you are here") and closes the gate, so everything after is
+  // locked until it's beaten. (?unlock / DEV_UNLOCK opens everything for QA.)
+  let unlockNext = true;
 
   for (const u of list) {
     const lessons = [];
@@ -439,12 +447,15 @@ export function getCampaignState(units) {
     for (const pid of (u.lessons || [])) {
       const ts = getTopicStats(pid);
       const cleared = ts.cleared;
-      // open campaign: every lesson is playable — cleared or ready, never locked
-      const state = cleared ? 'cleared' : 'unlocked';
+      let state;
+      if (DEV_UNLOCK) state = cleared ? 'cleared' : 'unlocked';
+      else if (!unlockNext) state = 'locked';       // past the frontier
+      else if (cleared) state = 'cleared';
+      else state = 'unlocked';                       // the frontier itself
       const node = { phaseId: pid, state, crown: getCrown(pid), mastery: ts.mastery, started: ts.started };
       if (state === 'unlocked' && !current) { current = { kind: 'lesson', unitId: u.id, phaseId: pid }; node.current = true; }
       lessons.push(node);
-      if (!cleared) allCleared = false;
+      if (!cleared) { allCleared = false; unlockNext = false; }
     }
 
     const tr = getUnitTest(u.id);
@@ -456,6 +467,7 @@ export function getCampaignState(units) {
     if (testState === 'unlocked' && !current) { current = { kind: 'unit-test', unitId: u.id }; test.current = true; }
 
     const unitComplete = allCleared && tr.passed;
+    const unitReached = lessons.some(l => l.state !== 'locked');   // any playable/cleared lesson
 
     let mock = null;
     if (u.mock) {
@@ -470,7 +482,7 @@ export function getCampaignState(units) {
 
     out.push({
       id: u.id, name: u.name, color: u.color, blurb: u.blurb,
-      state: unitComplete ? 'complete' : 'unlocked',
+      state: !unitReached ? 'locked' : (unitComplete ? 'complete' : 'unlocked'),
       lessons, test, mock,
     });
   }
