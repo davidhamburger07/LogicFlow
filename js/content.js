@@ -3555,8 +3555,9 @@ export const PHASES = [
             + '<li><strong>Magnetic (HDD)</strong> — spinning platters give huge capacity at the lowest price per gigabyte, but moving parts make it slower, noisier and easy to damage if dropped.</li>'
             + '<li><strong>Magnetic tape</strong> — slower still, but incredibly cheap per terabyte. Data centres use it for backups and archives.</li>'
             + '<li><strong>Optical (CD/DVD/Blu-ray)</strong> — discs are cheap to press by the million and easy to post, but hold relatively little, read slowly, and scratch.</li>'
-            + '<li><strong>Solid-state (SSD, USB sticks, SD cards)</strong> — no moving parts means fast, silent, tough and low-power (the reason phones use flash) — at a higher price per gigabyte.</li>'
+            + '<li><strong>Solid-state (SSD, USB sticks, SD cards)</strong> — no moving parts means fast, silent, tough and low-power (the reason phones use flash) — but at a higher price per gigabyte, and the flash <strong>wears out</strong>: each memory cell survives only a limited number of writes, so an SSD has a finite lifespan.</li>'
             + '</ul>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM POINT · SSD DISADVANTAGES</div><div class="pi-defbox-text">An SSD costs <strong>more per gigabyte</strong> than a hard drive, and has a <strong>limited number of read/write cycles</strong> — the flash wears out over time, giving it a finite lifespan.</div></div>'
             + '<div class="pi-text">Now sort the hardware yourself.</div>' },
         { part: 'PART 1 · THE THREE TECHNOLOGIES',
           q: { type: 'MC', title: 'How does a magnetic hard disk drive (HDD) store data?',
@@ -4662,8 +4663,54 @@ export const PHASES = [
             hints: ['Which operator adds two numbers together?', '10 + 4 = 14.'],
             explain: '<strong>The answer is +.</strong> a + b = 10 + 4 = 14. (− would give 6, × would give 40, and MOD / % gives the remainder 2.)' } },
 
-        // ── PART 2 — TRACING CONTROL FLOW ──
-        { part: 'PART 2 · TRACING CONTROL FLOW', heading: 'DECISIONS & REPETITION',
+        // ── PART 2 — DATA TYPES & CASTING ──
+        { part: 'PART 2 · DATA TYPES & CASTING', heading: 'WHAT KIND OF VALUE?',
+          html: '<div class="pi-text">Every variable holds a value of a particular <strong>data type</strong>. The type tells the computer <strong>how to store</strong> the value and <strong>what you can do</strong> with it — you can add two integers, but not two names. The exam expects you to know these five.</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Integer</strong> — a whole number, positive or negative (e.g. 42, −7). For counting, scores, ages.</li>'
+            + '<li><strong>Real</strong> (also called <strong>float</strong>) — a number with a decimal part (e.g. 3.14, 2.99). For prices, measurements.</li>'
+            + '<li><strong>Boolean</strong> — one of only two values: <strong>True</strong> or <strong>False</strong>. For yes/no conditions and flags.</li>'
+            + '<li><strong>Character</strong> (char) — a single symbol (e.g. \'A\', \'?\', \'7\').</li>'
+            + '<li><strong>String</strong> — a sequence of characters (e.g. "hello", "GCSE"). For words, names, even phone numbers.</li>'
+            + '</ul>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · DATA TYPE</div><div class="pi-defbox-text">A classification that tells the computer <strong>what kind of value</strong> a variable holds and <strong>how to store it</strong> — e.g. integer, real, Boolean, character or string.</div></div>'
+            + '<div class="pi-text">💡 A phone number is a <strong>string</strong>, not an integer — you never do maths on it, and it can start with a 0 that an integer would lose.</div>' },
+        { part: 'PART 2 · DATA TYPES & CASTING',
+          q: { type: 'MC', badge: 'DATA TYPE', board: 'AQA · OCR · Eduqas',
+            brief: 'A shopping app stores each product\'s price, like £2.99.',
+            title: 'Which data type should store a price like 2.99?',
+            desc: 'Which type holds numbers with a decimal part?',
+            options: ['Real (float)', 'Integer', 'Boolean', 'String'], answer: 'Real (float)',
+            hints: ['A price has a decimal part.', 'Integers can only hold whole numbers.'],
+            explain: '<strong>Real (float).</strong> A price like 2.99 has a decimal part, so it needs a real / float type — an integer can only store whole numbers.' } },
+        { part: 'PART 2 · DATA TYPES & CASTING',
+          q: { type: 'MC', badge: 'DATA TYPE', board: 'AQA · OCR · Eduqas',
+            brief: 'A game records whether the player has unlocked the final level — yes or no.',
+            title: 'Which data type best stores a simple yes/no value?',
+            desc: 'Only two possible values are ever needed.',
+            options: ['Boolean', 'Integer', 'String', 'Character'], answer: 'Boolean',
+            hints: ['Yes / no is one of exactly two values.', 'True or False.'],
+            explain: '<strong>Boolean.</strong> It holds one of only two values — True or False — which is exactly right for a yes/no flag.' } },
+        { part: 'PART 2 · DATA TYPES & CASTING', heading: 'CHANGING THE TYPE — CASTING',
+          html: '<div class="pi-text"><strong>Casting</strong> means converting a value from one data type to another. You meet it the moment you read input: <strong>everything typed on the keyboard arrives as a string</strong> — even digits. The "5" a user types is the <em>text</em> "5", not the <em>number</em> 5.</div>'
+            + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · CASTING</div><div class="pi-defbox-text">Converting a value from <strong>one data type to another</strong> — e.g. turning the string "5" into the integer 5 so you can do arithmetic with it.</div></div>'
+            + '<div class="pi-text">The type decides what an operator actually does:</div>'
+            + '<ul class="pi-list">'
+            + '<li><code>"5" + "3"</code> <strong>joins</strong> the strings → <strong>"53"</strong> (concatenation).</li>'
+            + '<li><code>5 + 3</code> <strong>adds</strong> the numbers → <strong>8</strong>.</li>'
+            + '</ul>'
+            + '<div class="pi-text">So to do maths on a number the user typed, you first <strong>cast it to an integer</strong> (in Python, <code>int(input())</code>). To drop a number into a message, you cast it back to a <strong>string</strong>.</div>' },
+        { part: 'PART 2 · DATA TYPES & CASTING', heading: 'YOUR TURN',
+          q: { type: 'MC', badge: 'CASTING', board: 'AQA · OCR · Eduqas',
+            brief: 'A quiz app asks the user for their age, then needs to add 1 to it.',
+            title: 'The user types their age. What must happen before you can add 1 to it?',
+            desc: 'Remember what type keyboard input arrives as.',
+            options: ['Cast the input from a string to an integer', 'Cast the input to a Boolean', 'Nothing — keyboard input is already a number', 'Cast the age to a string first'], answer: 'Cast the input from a string to an integer',
+            hints: ['Keyboard input always arrives as a string.', 'You cannot do arithmetic on text.'],
+            explain: '<strong>Cast it to an integer.</strong> Keyboard input arrives as a string, and you can\'t do arithmetic on text — so you convert "16" into the number 16 first (e.g. int(input())).' } },
+
+        // ── PART 3 — TRACING CONTROL FLOW ──
+        { part: 'PART 3 · TRACING CONTROL FLOW', heading: 'DECISIONS & REPETITION',
           html: '<div class="pi-text">Code rarely runs straight down. <strong>Selection</strong> (<code>IF … ELSE</code>) picks a branch based on a condition — only one branch runs. <strong>Iteration</strong> repeats: a <code>FOR</code> loop runs a set number of times, a <code>WHILE</code> loop runs until its condition turns false.</div>'
             + '<div class="pi-text">The trap in every exam is the <strong>boundary</strong> and the <strong>loop count</strong>. Does <code>≥ 70</code> include 70? (Yes.) Does <code>FOR i ← 1 TO 5</code> run 5 times? (Yes — but Python\'s <code>range(1, 5)</code> only does 4!) Trace each pass in a table and these stop catching you out.</div>',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
@@ -4674,11 +4721,11 @@ export const PHASES = [
             answer: 'PASS',
             hints: ['Is 72 greater than or equal to 70?', '72 ≥ 70 is true, so the THEN branch runs.'],
             explain: '<strong>Output: PASS.</strong> The condition score ≥ 70 is 72 ≥ 70, which is true, so the THEN branch runs and "PASS" is printed. The ELSE branch is skipped.' } },
-        { part: 'PART 2 · TRACING CONTROL FLOW',
+        { part: 'PART 3 · TRACING CONTROL FLOW',
           q: { gen: 'codeForSum' } },
-        { part: 'PART 2 · TRACING CONTROL FLOW',
+        { part: 'PART 3 · TRACING CONTROL FLOW',
           q: { gen: 'codeWhileCount' } },
-        { part: 'PART 2 · TRACING CONTROL FLOW',
+        { part: 'PART 3 · TRACING CONTROL FLOW',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
             brief: 'A review site builds a star rating by adding one star per loop pass. Trace how many stars this rating shows.',
             title: 'What does this program output?',
@@ -4687,7 +4734,7 @@ export const PHASES = [
             answer: '***',
             hints: ['Each pass adds one * to the end of stars.', 'After the 3 passes: "*", then "**", then "***".'],
             explain: '<strong>Output: ***.</strong> <code>stars</code> starts empty. Each loop pass concatenates (joins) another "*": "*" → "**" → "***". Using <code>+</code> on text joins the strings rather than adding numbers.' } },
-        { part: 'PART 2 · TRACING CONTROL FLOW',
+        { part: 'PART 3 · TRACING CONTROL FLOW',
           q: { type: 'CODE_FILL', badge: 'COMPLETE',
             brief: 'The quiz PASS banner is broken: a player who scores exactly 70 must still pass.',
         title: 'Complete the condition so it prints PASS when score is 70 or more.',
@@ -4697,7 +4744,7 @@ export const PHASES = [
             answer: { AQA: '≥', OCR: '>=', Eduqas: '>=' },
             hints: ['"70 or more" must INCLUDE 70 itself.', 'Use "greater than or equal to", not just "greater than".'],
             explain: '<strong>The answer is "greater than or equal to" (≥ in AQA, &gt;= in OCR/Python).</strong> "70 or more" includes 70 itself, so ≥ / &gt;= is needed — plain &gt; would wrongly miss a score of exactly 70.' } },
-        { part: 'PART 2 · TRACING CONTROL FLOW', heading: 'YOUR TURN',
+        { part: 'PART 3 · TRACING CONTROL FLOW', heading: 'YOUR TURN',
           html: '<div class="pi-text">Solo one — mind the upper bound. Remember AQA/OCR <code>TO n</code> includes n, but Python <code>range(1, n)</code> stops just before it.</div>',
           q: { type: 'CODE_FILL', badge: 'COMPLETE', exam: true,
             brief: 'A firework display fires one rocket per loop pass — the show needs exactly 5 rockets.',
@@ -4709,8 +4756,8 @@ export const PHASES = [
             hints: ['AQA/OCR "TO 5" includes 5; Python "range(1, n)" stops BEFORE n.', 'For Python, range(1, 6) gives 1, 2, 3, 4, 5.'],
             explain: '<strong>AQA/OCR: 5; Python: 6.</strong> In AQA/OCR, <code>FOR i ← 1 TO 5</code> includes 5, so it runs for i = 1, 2, 3, 4, 5 (5 times). In Python, <code>range(1, 6)</code> stops BEFORE 6, giving 1–5 — the upper bound is exclusive. This off-by-one difference is a classic exam slip.' } },
 
-        // ── PART 3 — WRITE & EXPLAIN ──
-        { part: 'PART 3 · WRITE & EXPLAIN', heading: 'FROM READING TO WRITING',
+        // ── PART 4 — WRITE & EXPLAIN ──
+        { part: 'PART 4 · WRITE & EXPLAIN', heading: 'FROM READING TO WRITING',
           html: '<div class="pi-text">You\'ve traced other people\'s code — now write your own. The pattern for most short programs is the same three steps: <strong>input</strong> (get data), <strong>process</strong> (do something with it, often a decision or a calculation), <strong>output</strong> (print the result). Even/odd is a perfect example: read a number, test <code>num MOD 2 = 0</code>, print the right word.</div>',
           q: { type: 'CODE_WRITE', badge: 'WRITE CODE', marks: 4,
             title: 'Write a program that asks the user for a whole number and outputs whether it is even or odd.',
@@ -4742,7 +4789,7 @@ export const PHASES = [
               'Outputs "even" when the remainder is 0, "odd" otherwise',
             ],
             explain: 'A number is even when it divides by 2 with no remainder. Read the input, test <code>number MOD 2 = 0</code>, and use IF…ELSE to output the right word.' } },
-        { part: 'PART 3 · WRITE & EXPLAIN', heading: 'YOUR TURN',
+        { part: 'PART 4 · WRITE & EXPLAIN', heading: 'YOUR TURN',
           html: '<div class="pi-text">Finish on a 2-marker in your own words — the difference between a variable and a constant.</div>',
           q: { type: 'EXAM', badge: 'EXAM', marks: 2,
             title: 'Explain the difference between a variable and a constant in a program.',

@@ -5,6 +5,10 @@
 # Dev / QA screenshots (generated locally by the screenshot workflow)
 temporary screenshots/
 
+# Third-party video transcripts (working reference for content gap-checks only —
+# do NOT commit other creators' transcripts to the repo)
+video-transcripts/
+
 # Ad-hoc verification & capture scripts (temporary, deleted after use)
 verify_*.mjs
 capture_*.mjs
