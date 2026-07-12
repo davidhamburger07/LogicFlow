@@ -271,6 +271,12 @@ function wire() {
 }
 
 function boot() {
+  // Kick the CrazyGames SDK off FIRST: initSdk fires loadingStart the moment
+  // init resolves (the earliest the SDK allows), and its network fetch overlaps
+  // the rest of boot. loadingStop is sent once the menu is interactive (below).
+  // Off CrazyGames every SDK call safely no-ops.
+  const sdkReady = cg.initSdk();
+
   const v = store.getVolume();
   SFX.setVol(v);
   MUSIC.setVol(v);
@@ -288,9 +294,10 @@ function boot() {
   if (!store.getTutorialSeen()) screens.showTutorial(screens.showMainMenu);
   else screens.showMainMenu();   // boot straight into the menu (no power-on screen)
 
-  // CrazyGames SDK: init (non-blocking), signal the game has loaded, then start
-  // cloud save. Off CrazyGames all of this no-ops and the game runs local-only.
-  cg.initSdk().then(() => cg.gameLoadingStop());
+  // menu is up and interactive → tell CrazyGames loading is done (this closes
+  // the loadingStart window opened at the top of boot), then start cloud save
+  // (reuses the same SDK instance). Off CrazyGames all of this no-ops.
+  sdkReady.then(() => cg.gameLoadingStop());
   cloud.initCloud();
 
   // Standalone-site backend (accounts + paid courses). Only when configured in
