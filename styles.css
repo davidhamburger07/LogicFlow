@@ -2647,14 +2647,14 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 .tut-skip { position: absolute; top: 20px; right: 24px; background: none; border: none; font-family: var(--mono); font-size: 12px; letter-spacing: 2px; color: var(--ink-4); cursor: pointer; padding: 8px 10px; transition: color .15s; }
 .tut-skip:hover { color: var(--ink-2); }
 .tut-skip:focus-visible { outline: none; color: var(--ink-2); text-decoration: underline; }
-.tut-stage { max-width: 540px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.tut-stage { max-width: 580px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .tut-stage.tut-in { animation: tutIn .42s cubic-bezier(.2,.7,.3,1); }
 @keyframes tutIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 .tut-visual { min-height: 148px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; width: 100%; }
-.tut-eyebrow { font-size: 12px; letter-spacing: 5px; color: var(--phase-color); }
-.tut-heading { font-size: 23px; letter-spacing: 2px; line-height: 1.32; }
+.tut-eyebrow { font-size: 13px; letter-spacing: 5px; color: var(--phase-color); }
+.tut-heading { font-size: 28px; letter-spacing: 2px; line-height: 1.28; }
 .tut-heading em { font-style: normal; color: var(--phase-color); }
-.tut-body { font-size: 12px; line-height: 1.85; color: var(--ink-2); max-width: 460px; }
+.tut-body { font-size: 15.5px; line-height: 1.72; color: var(--ink-2); max-width: 508px; }
 .tut-body strong { color: var(--ink); }
 .tut-nav { display: flex; align-items: center; justify-content: center; gap: 22px; width: 100%; max-width: 540px; }
 .tut-back { background: none; border: 1px solid var(--border); padding: 12px 20px; font-family: var(--mono); font-size: 12px; letter-spacing: 2px; color: var(--ink-3); cursor: pointer; transition: border-color .15s, color .15s; }
@@ -2690,8 +2690,10 @@ body { font-family: var(--mono); background: var(--bg); color: var(--ink); heigh
 .tut-stars { font-size: 18px; letter-spacing: 3px; color: var(--warn-ink); }
 .tut-mode { font-size: 12px; letter-spacing: 2px; border: 1.5px solid var(--border); padding: 10px 14px; color: var(--ink-2); }
 /* exam-board chip selector — like picking a chip on the board */
-.tut-boards { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; justify-content: center; }
-.tut-board { font-family: var(--mono); font-size: 12px; letter-spacing: 1px; padding: 9px 12px; border: 1.5px solid var(--border); color: var(--ink-4); background: var(--surface); }
+.tut-boards { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: center; }
+.tut-board { font-family: var(--mono); font-size: 14px; letter-spacing: 1px; padding: 11px 16px; border: 1.5px solid var(--border); border-radius: 0; color: var(--ink-4); background: var(--surface); cursor: pointer; transition: border-color .12s, color .12s, background .12s, box-shadow .12s; }
+.tut-board:hover:not(.on) { border-color: var(--phase-color); color: var(--ink); }
+.tut-board:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
 .tut-board.on { border-color: var(--phase-color); color: var(--phase-color); background: var(--phase-color-light); box-shadow: 0 0 0 3px var(--phase-color-light); }
 /* the interactions — a small board of components, one mini-game per topic */
 .tut-mechanics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; width: 100%; max-width: 330px; }

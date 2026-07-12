@@ -361,9 +361,8 @@ const TUT_SLIDES = [
   { eyebrow: 'WELCOME', heading: 'LEARN GCSE COMP-SCI BY <em>DOING</em>',
     visual: '<div class="tut-logo">LOG<em>IC</em>FLOW</div>',
     body: 'LOGICFLOW turns the AQA, OCR, Eduqas, WJEC and Edexcel spec into something you <strong>play</strong>. Every topic teaches the method, then makes you use it — because doing beats reading. Here’s the quick tour.' },
-  { eyebrow: 'FIRST, YOUR SPEC', heading: 'SET YOUR <em>EXAM BOARD</em>',
-    visual: '<div class="tut-boards"><span class="tut-board on">AQA</span><span class="tut-board">OCR</span><span class="tut-board">Eduqas</span><span class="tut-board">WJEC</span><span class="tut-board">Edexcel</span></div>',
-    body: 'Pick your board on the menu — <strong>AQA</strong>, <strong>OCR</strong>, <strong>Eduqas</strong>, <strong>WJEC</strong> or <strong>Edexcel</strong>. The lessons then switch to your board’s <strong>programming notation</strong> and cover the exact topics and logic gates it examines. Set it once and everything follows.' },
+  { eyebrow: 'FIRST, YOUR SPEC', heading: 'SET YOUR <em>EXAM BOARD</em>', pickBoard: true,
+    body: 'Tap your board below — <strong>AQA</strong>, <strong>OCR</strong>, <strong>Eduqas</strong>, <strong>WJEC</strong> or <strong>Edexcel</strong>. The lessons then switch to your board’s <strong>programming notation</strong> and cover the exact topics and logic gates it examines. You can change it any time in <strong>Settings</strong>.' },
   { eyebrow: 'THE CAMPAIGN', heading: 'FOLLOW THE <em>SIGNAL</em>',
     visual: '<div class="tut-map"><span class="tut-node test">▶<small>TOPIC</small></span><span class="tut-wire"></span><span class="tut-node test">◆<small>UNIT TEST</small></span><span class="tut-wire"></span><span class="tut-node lock">🔒<small>NEXT</small></span></div>',
     body: 'Work along the circuit, unit by unit. Each <strong>topic</strong> is one continuous flow — it teaches the idea, walks an example, then hands you the questions. Clear a unit\'s topics to open its <strong>unit test</strong>, with <strong>mock checkpoints</strong> to tie it together — or jump straight to any topic you need.' },
@@ -392,16 +391,41 @@ const TUT_SLIDES = [
     visual: '<div class="tut-logo small">LOG<em>IC</em>FLOW</div><div class="tut-ready">✓ READY</div>',
     body: 'That’s it. Start with <strong>Binary Basics</strong> and follow the signal. You can reopen this guide any time from <strong>HOW TO PLAY</strong> on the menu — good luck.' },
 ];
-let tutPos = 0, tutReturn = null;
+let tutPos = 0, tutReturn = null, tutBoardWired = false;
+const TUT_BOARDS = ['AQA', 'OCR', 'Eduqas', 'WJEC', 'Edexcel'];
+// live exam-board picker for the onboarding "SET YOUR EXAM BOARD" slide —
+// tapping a chip sets the board immediately (the menu/settings selectors,
+// which share store.getBoard(), repaint themselves when next shown).
+function tutBoardHTML() {
+  const cur = store.getBoard();
+  return '<div class="tut-boards" role="group" aria-label="Choose your exam board">'
+    + TUT_BOARDS.map(b => `<button type="button" class="tut-board${b === cur ? ' on' : ''}" data-board="${b}">${b}</button>`).join('')
+    + '</div>';
+}
+function wireTutBoards() {
+  if (tutBoardWired) return;
+  const vis = document.getElementById('tut-visual');
+  if (!vis) return;
+  tutBoardWired = true;
+  vis.addEventListener('click', e => {
+    const btn = e.target.closest('.tut-board[data-board]');
+    if (!btn) return;
+    SFX.uiClick();
+    store.setBoard(btn.dataset.board);
+    const cur = store.getBoard();
+    vis.querySelectorAll('.tut-board').forEach(x => x.classList.toggle('on', x.dataset.board === cur));
+  });
+}
 export function showTutorial(returnFn) {
   tutReturn = returnFn || showMainMenu;
   tutPos = 0;
+  wireTutBoards();
   renderTut();
   engine.showScreen('tutorial');
 }
 function renderTut() {
   const s = TUT_SLIDES[tutPos];
-  document.getElementById('tut-visual').innerHTML = s.visual || '';
+  document.getElementById('tut-visual').innerHTML = s.pickBoard ? tutBoardHTML() : (s.visual || '');
   document.getElementById('tut-eyebrow').textContent = s.eyebrow || '';
   document.getElementById('tut-heading').innerHTML = s.heading || '';
   document.getElementById('tut-body').innerHTML = s.body || '';
