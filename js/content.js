@@ -1037,7 +1037,8 @@ export const PHASES = [
             + '<div class="pi-text">There are two sizes of network, and you must know both. Your school\'s network is a <strong>LAN</strong> — everything is in one place, and the school owns the equipment. The <strong>internet</strong> is the opposite: it connects computers across the whole world.</div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · LAN (LOCAL AREA NETWORK)</div><div class="pi-defbox-text">A network that covers a <strong>small geographical area</strong>, usually one site — like a school, office or home. The organisation usually <strong>owns the hardware</strong>.</div></div>'
             + '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · WAN (WIDE AREA NETWORK)</div><div class="pi-defbox-text">A network that covers a <strong>large geographical area</strong>, connecting LANs together. The connections are usually <strong>hired from telecom companies</strong> (phone lines, undersea cables). The internet is the biggest WAN.</div></div>'
-            + '<div class="pi-text">So the internet is really a <strong>network of networks</strong> — millions of LANs, all joined by a WAN.</div>',
+            + '<div class="pi-text">So the internet is really a <strong>network of networks</strong> — millions of LANs, all joined by a WAN.</div>'
+            + '<div class="pi-text">Networks bring clear <strong>benefits</strong>: sharing files and hardware (one printer for everyone), central backups and software updates, and easy communication. But there are <strong>trade-offs</strong> too — they cost money to set up and need an expert to run and maintain, and a <strong>virus or hacker can spread across every connected machine</strong>.</div>',
           diagram: 'lan-wan' },
         { part: 'THE BIG IDEA', use: ['video'],
           check: {
@@ -3090,7 +3091,14 @@ export const PHASES = [
             + '<li><strong>Peripheral management</strong> — talks to printers, keyboards and screens through their <strong>device drivers</strong> (small translator programs, one per device).</li>'
             + '<li><strong>File management</strong> — organises data into files and folders; controls saving, moving and deleting.</li>'
             + '<li><strong>User management</strong> — accounts, logins and access rights (why students can\'t read staff files).</li>'
-            + '<li><strong>User interface</strong> — the windows, icons or command line you actually see.</li>'
+            + '<li><strong>User interface</strong> — how you actually interact with the machine (it comes in a few types — see below).</li>'
+            + '</ul>'
+            + '<div class="pi-text">That last job — the <strong>user interface</strong> — comes in forms the exam may ask you to compare:</div>'
+            + '<ul class="pi-list">'
+            + '<li><strong>Graphical (GUI)</strong> — windows, icons, menus and a pointer (WIMP). Intuitive for beginners, but heavier on memory and processing.</li>'
+            + '<li><strong>Command line (CLI)</strong> — you type text commands. Fast and lightweight, but you must know the commands — it suits advanced users.</li>'
+            + '<li><strong>Menu-driven</strong> — pick an option from menus at each step (a cash machine, a phone menu). Simple and hard to get wrong.</li>'
+            + '<li><strong>Natural language</strong> — you speak or type in plain English and it responds (Siri, Alexa).</li>'
             + '</ul>',
           diagram: 'os-jobs' },
         { part: 'PART 1 · THE SIX JOBS',
@@ -4950,7 +4958,8 @@ export const PHASES = [
         { part: 'PART 1 · SELECTION', heading: 'MAKING DECISIONS',
           html: '<div class="pi-defbox"><div class="pi-defbox-label">📖 EXAM DEFINITION · SELECTION</div><div class="pi-defbox-text">Choosing which code to run <strong>based on a condition</strong> — <code>IF … ELSE</code>.</div></div>'
             + '<div class="pi-text"><code>IF … ELSEIF … ELSE</code> lets a program choose. The golden rule: conditions are checked <strong>from the top</strong>, and <strong>only the first true branch runs</strong> — the rest are skipped. So order matters: put the tightest condition first.</div>'
-            + '<div class="pi-text">To combine conditions, use <strong>AND</strong> (both must be true) and <strong>OR</strong> (either is enough). "Between 1 and 10" means <code>x ≥ 1 AND x ≤ 10</code> — using OR there would wrongly accept everything.</div>',
+            + '<div class="pi-text">To combine conditions, use <strong>AND</strong> (both must be true) and <strong>OR</strong> (either is enough). "Between 1 and 10" means <code>x ≥ 1 AND x ≤ 10</code> — using OR there would wrongly accept everything.</div>'
+            + '<div class="pi-text">When you\'re checking one variable against <strong>several fixed values</strong>, a <strong>switch / case</strong> statement is tidier than a long <code>IF … ELSEIF</code> chain — it inspects the variable and runs the matching <code>case</code>. Python has no <code>switch</code>, but <strong>OCR</strong> exam pseudo-code uses it, so you should be able to read one.</div>',
           q: { type: 'CODE_TRACE', badge: 'TRACE',
             brief: 'A report-card screen turns a mark into a grade band: A at 70+, B at 50+, else C. Trace this student\'s grade.',
         title: 'What does this program output?',
