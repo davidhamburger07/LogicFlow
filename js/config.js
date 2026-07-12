@@ -15,3 +15,9 @@ export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 export function backendEnabled() {
   return !!(SUPABASE_URL && SUPABASE_ANON_KEY);
 }
+
+// Embed the YouTube lesson videos. ON for the standalone site and local dev;
+// the CrazyGames build sets this to false (build.mjs --crazygames), because the
+// platform disallows external content/ads. The lessons teach the content on
+// their own, so stripping the videos there loses no learning.
+export const EMBED_VIDEOS = true;

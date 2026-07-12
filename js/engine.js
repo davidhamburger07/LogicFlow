@@ -100,6 +100,7 @@ import { qatest } from './questions/qatest.js';
 import { generateQuestion } from './generators.js';
 import { initSketchpad, toggleSketchpad, closeSketchpad } from './sketchpad.js';
 import { initWorkpad, showWorkpad, hideWorkpad } from './workpad.js';
+import { EMBED_VIDEOS } from './config.js';
 import { SVG_DIAGRAMS } from './diagrams.js';
 import { notationTableHtml } from './notation.js';
 
@@ -456,7 +457,12 @@ function exampleBlock(intro, i, label) {
 function buildLessonPages(phase) {
   const intro = phase.intro;
   if (Array.isArray(intro.pages) && intro.pages.length) {
-    return intro.pages.filter(p => !p.onlyBoards || p.onlyBoards.includes(store.getBoard())).map(p => {
+    return intro.pages
+      .filter(p => !p.onlyBoards || p.onlyBoards.includes(store.getBoard()))
+      // CrazyGames build (no videos): drop the video-only "watch + from-the-video
+      // check" pages entirely — the lesson teaches the content on its own.
+      .filter(p => EMBED_VIDEOS || !((p.use || []).includes('video') && !p.html && p.example == null && !p.q))
+      .map(p => {
       const parts = [];
       // board-conditional spec flag: content for a gate the player's board doesn't require
       if (p.specGate && !store.boardRequiresGate(p.specGate)) {
@@ -477,7 +483,9 @@ function buildLessonPages(phase) {
   // auto-paginate: why+watch · what+facts · one example per page · exam tips
   const pages = [];
   const hook = ['task', 'realWorld', 'video'].map(k => standardBlock(k, intro)).filter(Boolean);
-  if (hook.length) pages.push({ html: hook.join(''), check: intro.watchCheck });
+  // No video on this build → drop the "from the video" check (it sits before any
+  // teaching, so it would be unanswerable without the clip).
+  if (hook.length) pages.push({ html: hook.join(''), check: EMBED_VIDEOS ? intro.watchCheck : undefined });
   const explainKeys = intro.walkthrough ? ['what', 'walkthrough', 'keyFacts'] : ['what', 'diagram', 'keyFacts'];
   const explain = explainKeys.map(k => standardBlock(k, intro)).filter(Boolean);
   if (explain.length) pages.push({ html: explain.join('') });
@@ -1167,6 +1175,7 @@ function realWorldCard(rw) {
 // player taps it (fast first paint, no autoplay, privacy-friendly nocookie host).
 // intro.video = { id: '<youtube id>', title, by? }.
 function videoBlock(v) {
+  if (!EMBED_VIDEOS) return '';   // CrazyGames build: no external YouTube embeds/thumbnails
   const by = v.by ? ` <span class="pi-video-by">· ${v.by}</span>` : '';
   const frame = `<div class="pi-video-frame" data-vid="${v.id}" role="button" tabindex="0" aria-label="Play video: ${v.title || ''}">`
     + `<img class="pi-video-thumb" src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="" loading="lazy">`

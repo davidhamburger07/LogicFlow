@@ -43,9 +43,10 @@ if (process.argv.includes('--crazygames')) {
   let cfg = await readFile(join(DIST, 'js', 'config.js'), 'utf8');
   cfg = cfg
     .replace(/export const SUPABASE_URL = '[^']*';/, `export const SUPABASE_URL = '';`)
-    .replace(/export const SUPABASE_ANON_KEY = '[^']*';/, `export const SUPABASE_ANON_KEY = '';`);
+    .replace(/export const SUPABASE_ANON_KEY = '[^']*';/, `export const SUPABASE_ANON_KEY = '';`)
+    .replace(/export const EMBED_VIDEOS = true;/, `export const EMBED_VIDEOS = false;`);
   await writeFile(join(DIST, 'js', 'config.js'), cfg);
-  console.log('CRAZYGAMES build: backend config blanked (free + ad-supported, no accounts)');
+  console.log('CRAZYGAMES build: backend config blanked + YouTube videos stripped (no external content/ads)');
 } else {
   console.log('STANDALONE SITE build: backend config kept as-is');
 }
