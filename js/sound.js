@@ -6,7 +6,10 @@
 // ============================================================
 
 export const SFX = (() => {
-  let ac = null, masterGain = null, vol = 0.7, muted = false;
+  // `muted` = the in-game setting; `platformMuted` = the CrazyGames site mute,
+  // which takes priority. Effective silence when either is on.
+  let ac = null, masterGain = null, vol = 0.7, muted = false, platformMuted = false;
+  const silent = () => muted || platformMuted;
 
   function init() {
     if (ac) return;
@@ -16,9 +19,10 @@ export const SFX = (() => {
     masterGain.connect(ac.destination);
   }
   function resume() { if (ac && ac.state === 'suspended') ac.resume(); }
+  function applyGain() { if (masterGain) masterGain.gain.value = silent() ? 0 : vol; }
 
   function tone({ freq = 440, type = 'sine', gain = 0.3, attack = 0.01, decay = 0.1, release = 0.15, duration = 0.25, detune = 0 } = {}) {
-    if (muted) return;
+    if (silent()) return;
     try {
       init(); resume();
       const osc = ac.createOscillator(), env = ac.createGain();
@@ -36,7 +40,7 @@ export const SFX = (() => {
     notes.forEach(([f, d, o], i) => setTimeout(() => tone({ freq: f, duration: d, ...(o || {}) }), i * gap * 1000));
   }
   function noise({ gain = 0.15, duration = 0.12, freq = 120, type = 'sawtooth' } = {}) {
-    if (muted) return;
+    if (silent()) return;
     try {
       init(); resume();
       const osc = ac.createOscillator(), filt = ac.createBiquadFilter(), env = ac.createGain();
@@ -50,9 +54,10 @@ export const SFX = (() => {
   }
 
   return {
-    setVol(v) { vol = v / 100; if (masterGain) masterGain.gain.value = muted ? 0 : vol; },
-    toggleMute() { muted = !muted; if (masterGain) masterGain.gain.value = muted ? 0 : vol; return muted; },
-    setMuted(m) { muted = !!m; if (masterGain) masterGain.gain.value = muted ? 0 : vol; },
+    setVol(v) { vol = v / 100; applyGain(); },
+    toggleMute() { muted = !muted; applyGain(); return muted; },
+    setMuted(m) { muted = !!m; applyGain(); },
+    setPlatformMute(m) { platformMuted = !!m; applyGain(); },   // CrazyGames site mute — overrides the in-game setting
     isMuted() { return muted; },
     powerOn() { seq([[110, .08, { type: 'square', gain: .12 }], [220, .08, { type: 'square', gain: .12 }], [440, .12, { type: 'square', gain: .15 }], [880, .18, { type: 'sine', gain: .18 }]], .07); },
     correct() { seq([[523, .06, { type: 'sine', gain: .22 }], [659, .06, { type: 'sine', gain: .22 }], [784, .14, { type: 'sine', gain: .25 }]], .07); },

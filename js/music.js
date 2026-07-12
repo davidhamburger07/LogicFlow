@@ -25,9 +25,9 @@ export const MUSIC = (() => {
   const LEVEL = 0.16;               // music sits far below SFX (master fraction)
   const SCALE = [110, 130.81, 146.83, 164.81, 196, 220, 261.63, 329.63]; // A2 pent + upper A/C/E
   let ac = null, bus = null, lp = null, droneOsc = [], droneGain = null, lfo = null;
-  let timer = null, vol = 0.7, muted = false, playing = false;
+  let timer = null, vol = 0.7, muted = false, platformMuted = false, playing = false;
 
-  function gainNow() { return muted ? 0 : vol * LEVEL; }
+  function gainNow() { return (muted || platformMuted) ? 0 : vol * LEVEL; }
   function applyGain(ramp = 0.6) {
     if (!bus) return;
     try { bus.gain.cancelScheduledValues(ac.currentTime); bus.gain.linearRampToValueAtTime(gainNow(), ac.currentTime + ramp); } catch (e) {}
@@ -95,7 +95,8 @@ export const MUSIC = (() => {
     isPlaying() { return playing; },
     setVol(v) { vol = Math.min(100, Math.max(0, Number(v) || 0)) / 100; if (playing) applyGain(0.3); },
     setMuted(m) { muted = !!m; if (playing) applyGain(0.3); },
+    setPlatformMute(m) { platformMuted = !!m; if (playing) applyGain(0.3); },   // CrazyGames site mute — overrides the in-game setting
     // for tests/diagnostics
-    _state() { return { playing, muted, vol, acState: ac && ac.state, busGain: bus && bus.gain.value }; },
+    _state() { return { playing, muted, platformMuted, vol, acState: ac && ac.state, busGain: bus && bus.gain.value }; },
   };
 })();

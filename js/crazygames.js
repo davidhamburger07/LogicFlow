@@ -58,6 +58,8 @@ export function initSdk() {
     } catch (e) { sdk = null; }
     if (sdk) {
       gameLoadingStart();
+      applyPlatformMute();                                              // honour the site mute now…
+      try { sdk.game.addSettingsChangeListener(applyPlatformMute); } catch (e) {}   // …and on every change
       document.addEventListener('visibilitychange', applyGameplay);
     }
     return sdk;
@@ -66,6 +68,17 @@ export function initSdk() {
 }
 
 export function getSdk() { return sdk; }
+
+// Mirror the CrazyGames site mute button onto our audio. Their `muteAudio`
+// setting must take priority over the in-game mute, so it's applied as a
+// separate override layer (SFX/MUSIC.setPlatformMute). No-op without the SDK.
+function applyPlatformMute() {
+  try {
+    const m = !!(sdk && sdk.game && sdk.game.settings && sdk.game.settings.muteAudio);
+    SFX.setPlatformMute(m);
+    MUSIC.setPlatformMute(m);
+  } catch (e) {}
+}
 
 // ---- required game events (all guarded; no-op without the SDK) ----
 export function gameLoadingStart() { try { if (sdk && sdk.game && sdk.game.loadingStart) sdk.game.loadingStart(); } catch (e) {} }
